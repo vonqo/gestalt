@@ -1,7 +1,8 @@
 # Gestalt - Moodbar
 
-Forked from [exaile/moodbar](https://github.com/exaile/moodbar)
-Made little update for more readable code color:
+Forked from [exaile/moodbar](https://github.com/exaile/moodbar).
+
+And made little update for more readable code color:
 
 ```c
 for(unsigned int i = 0; i < data.size(); i++){
