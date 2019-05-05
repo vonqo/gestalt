@@ -1,7 +1,10 @@
 package mn.von.gestalt.qrfractal;
 
+import java.awt.*;
+import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  QR Fractal zooming
@@ -10,13 +13,15 @@ import java.util.Arrays;
  @version $Revision: 1.0
  @see [https://github.com/lupino22/gestalt]
  **/
-public class QRFractal implements Runnable{
+public class QRFractal extends Canvas {
 
     private ArrayList<QRCode> qrs;
     private ArrayList<String> textBank;
+    private Thread thread;
+    private AtomicBoolean RENDERING = new AtomicBoolean(true);
 
     public QRFractal() {
-        this.initializeTextBank();
+
     }
 
     private void initializeTextBank() {
@@ -29,7 +34,66 @@ public class QRFractal implements Runnable{
     }
 
     @Override
-    public void run() {
+    public Dimension getPreferredSize() {
+        return new Dimension(200, 200);
+    }
 
+    public void stop() {
+        if (thread != null) {
+            RENDERING.set(false);
+            try {
+                thread.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void start() {
+        this.initializeTextBank();
+        RENDERING.set(true);
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                createBufferStrategy(3);
+                do {
+                    BufferStrategy bs = getBufferStrategy();
+                    while (bs == null) {
+                        bs = getBufferStrategy();
+                    }
+                    do {
+                        // The following loop ensures that the contents of the drawing buffer
+                        // are consistent in case the underlying surface was recreated
+                        do {
+                            // Get a new graphics context every time through the loop
+                            // to make sure the strategy is validated
+                            System.out.println("draw");
+                            Graphics graphics = bs.getDrawGraphics();
+
+                            // Render to graphics
+                            // ...
+                            graphics.setColor(Color.RED);
+                            graphics.fillRect(0, 0, 100, 100);
+                            // Dispose the graphics
+                            graphics.dispose();
+
+                            // Repeat the rendering if the drawing buffer contents
+                            // were restored
+                        } while (bs.contentsRestored());
+
+                        System.out.println("show");
+                        // Display the buffer
+                        bs.show();
+                    } while (bs.contentsLost());
+                    System.out.println("done");
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                } while (RENDERING.get());
+            }
+        });
+        thread.start();
     }
 }

@@ -3,6 +3,8 @@ package mn.von.gestalt;
 import mn.von.gestalt.qrfractal.QRFractal;
 import org.opencv.core.Core;
 
+import javax.swing.*;
+
 /**
  This is the place where all magic works
 
@@ -18,8 +20,21 @@ public class Orchestrator {
     }
 
     public static void main(String args[]) {
-        QRFractal fractal = new QRFractal();
-        fractal.run();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                QRFractal canvas = new QRFractal();
+
+                JFrame frame = new JFrame();
+                frame.add(canvas);
+                frame.setTitle("Test");
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                canvas.start();
+            }
+        });
     }
 
 }
