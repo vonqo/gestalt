@@ -2,6 +2,7 @@ package mn.von.gestalt.qrfractal;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,6 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  **/
 public class QRFractal extends Canvas {
 
+    int i = 0;
+    private Integer WINDOW_SIZE = 800;
     private ArrayList<QRCode> qrs;
     private ArrayList<String> textBank;
     private Thread thread;
@@ -35,7 +38,7 @@ public class QRFractal extends Canvas {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(200, 200);
+        return new Dimension(WINDOW_SIZE, WINDOW_SIZE);
     }
 
     public void stop() {
@@ -50,6 +53,7 @@ public class QRFractal extends Canvas {
     }
 
     public void start() {
+
         this.initializeTextBank();
         RENDERING.set(true);
         thread = new Thread(new Runnable() {
@@ -81,7 +85,7 @@ public class QRFractal extends Canvas {
                             // were restored
                         } while (bs.contentsRestored());
 
-                        System.out.println("show");
+                        System.out.println(LocalDateTime.now().getSecond() + " show " + (i++));
                         // Display the buffer
                         bs.show();
                     } while (bs.contentsLost());
