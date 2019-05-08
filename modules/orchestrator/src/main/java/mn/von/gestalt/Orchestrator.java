@@ -14,10 +14,10 @@ import javax.swing.*;
  **/
 public class Orchestrator {
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        nu.pattern.OpenCV.loadShared();
-    }
+//    static {
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        nu.pattern.OpenCV.loadShared();
+//    }
 
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {

@@ -10,7 +10,9 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.util.EnumMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  QR Element
@@ -24,7 +26,7 @@ public class QRCode implements Serializable {
     private String TEXT;
     private Integer SIZE;
     private BitMatrix byteMatrix;
-    private Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap;
+    private Map<EncodeHintType, Object> hintMap;
     private BufferedImage image;
     private static QRCodeWriter qrCodeWriter;
 
@@ -32,8 +34,19 @@ public class QRCode implements Serializable {
         super();
         this.TEXT = TEXT;
         this.SIZE= SIZE;
-        hintMap = new Hashtable<>();
+        hintMap = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+        hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        hintMap.put(EncodeHintType.MARGIN, 0);
         qrCodeWriter = new QRCodeWriter();
+        try {
+            this.generateMatrix();
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resizeMatrix(Integer NEW_SIZE) throws WriterException {
+        // byteMatrix = qrCodeWriter.encode(TEXT, BarcodeFormat.QR_CODE, NEW_SIZE, NEW_SIZE, hintMap);
     }
 
     public void generateMatrix() throws WriterException {
