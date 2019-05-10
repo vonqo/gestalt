@@ -1,6 +1,7 @@
 package mn.von.gestalt;
 
 import mn.von.gestalt.qrfractal.QRFractal;
+import mn.von.gestalt.qrfractal.QRFractalP3;
 import org.opencv.core.Core;
 
 import javax.swing.*;
@@ -20,21 +21,27 @@ public class Orchestrator {
 //    }
 
     public static void main(String args[]) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                QRFractal canvas = new QRFractal();
 
-                JFrame frame = new JFrame();
-                frame.add(canvas);
-                frame.setTitle("Test");
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
+        // Example of running QRFractal (DEPRECIATED)
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                QRFractal canvas = new QRFractal();
+//
+//                JFrame frame = new JFrame();
+//                frame.add(canvas);
+//                frame.setTitle("Test");
+//                frame.pack();
+//                frame.setLocationRelativeTo(null);
+//                frame.setVisible(true);
+//
+//                canvas.start();
+//            }
+//        });
 
-                canvas.start();
-            }
-        });
+        // Example of running QRFractalP3
+        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
+        QRFractalP3.main(appletArgs);
     }
 
 }

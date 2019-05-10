@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- QR Fractal zooming
+ QR Fractal zooming (DEPRECIATED)
 
  @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
  @version $Revision: 1.0
@@ -84,11 +84,6 @@ public class QRFractal extends Canvas {
                             graphics.setColor(Color.WHITE);
                             graphics.fillRect(0, 0, WINDOW_SIZE, WINDOW_SIZE);
                             QRCode qrCode = qrBuffer.peek();
-                            try {
-                                qrCode.resizeMatrix(800);
-                            } catch (WriterException e) {
-                                e.printStackTrace();
-                            }
                             graphics.setColor(Color.BLACK);
                             for (int i = 0; i < WINDOW_SIZE; i++) {
                                 for (int j = 0; j < WINDOW_SIZE; j++) {
