@@ -14,7 +14,7 @@ import java.util.*;
  **/
 public class QRFractalP3 extends PApplet {
 
-    private Integer WINDOW_SIZE = 800;
+    private Integer WINDOW_SIZE = 250;
     private Queue<PImage> qrBuffer;
     private Random randomGenerator;
     private ArrayList<String> textBank;
@@ -27,11 +27,10 @@ public class QRFractalP3 extends PApplet {
     private void initializeTextBankAndImages() {
         randomGenerator = new Random();
         String[] texts = {
-                "1 1 1 1 1 1 1 1 dsa sadasK LJFS FJASKLF JSLDK;F SADJFLKSDFKJ LSDJ FSFKLJDSLK;FJLS;KDJ FLK;JS FSDFSAD",
+                "1",
         };
         textBank = new ArrayList<String>(Arrays.asList(texts));
         qrBuffer = new LinkedList<PImage>();
-        qrBuffer.add(new QRCode(getRandomString(), WINDOW_SIZE).getAsPImage());
         qrBuffer.add(new QRCode(getRandomString(), WINDOW_SIZE).getAsPImage());
     }
 
@@ -41,8 +40,10 @@ public class QRFractalP3 extends PApplet {
 
     public void draw(){
         background(255);
-        ellipse(mouseX, mouseY, 20, 20);
-        image(qrBuffer.peek(), 0, 0);
+        PImage image = qrBuffer.peek();
+        image.resize(WINDOW_SIZE, WINDOW_SIZE);
+        image(image, 0, 0);
+        // System.out.println(frameRate);
     }
 
 }
