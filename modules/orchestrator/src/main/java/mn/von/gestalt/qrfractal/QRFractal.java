@@ -1,14 +1,16 @@
 package mn.von.gestalt.qrfractal;
 
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- QR Fractal zooming
+ QR Fractal zooming (DEPRECIATED)
 
  @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
  @version $Revision: 1.0
@@ -18,22 +20,34 @@ public class QRFractal extends Canvas {
 
     int i = 0;
     private Integer WINDOW_SIZE = 800;
-    private ArrayList<QRCode> qrs;
+    private Queue<QRCode> qrBuffer;
+    private BitMatrix matrixBuffer;
+    private Random randomGenerator;
     private ArrayList<String> textBank;
     private Thread thread;
     private AtomicBoolean RENDERING = new AtomicBoolean(true);
 
     public QRFractal() {
+        randomGenerator = new Random();
+        qrBuffer = new LinkedList<QRCode>();
+        matrixBuffer = new BitMatrix(WINDOW_SIZE);
 
+        this.initializeTextBank();
+
+
+        qrBuffer.add(new QRCode(this.getRandomString(), WINDOW_SIZE));
+        qrBuffer.add(new QRCode(this.getRandomString(), WINDOW_SIZE));
     }
 
     private void initializeTextBank() {
         String[] texts = {
-                "dsdadasda",
-                "test-me",
-                "test-me-again",
+                "Then you can't directly instantiate the interface Queue<E>. But, you still can refer to an object that implements the Queue interface by the type of the interface, like:",
         };
         textBank = new ArrayList<String>(Arrays.asList(texts));
+    }
+
+    private String getRandomString() {
+        return textBank.get(randomGenerator.nextInt(textBank.size()));
     }
 
     @Override
@@ -53,8 +67,6 @@ public class QRFractal extends Canvas {
     }
 
     public void start() {
-
-        this.initializeTextBank();
         RENDERING.set(true);
         thread = new Thread(new Runnable() {
             @Override
@@ -66,26 +78,26 @@ public class QRFractal extends Canvas {
                         bs = getBufferStrategy();
                     }
                     do {
-                        // The following loop ensures that the contents of the drawing buffer
-                        // are consistent in case the underlying surface was recreated
                         do {
-                            // Get a new graphics context every time through the loop
-                            // to make sure the strategy is validated
                             System.out.println("draw");
                             Graphics graphics = bs.getDrawGraphics();
-
-                            // Render to graphics
-                            // ...
-                            graphics.setColor(Color.RED);
-                            graphics.fillRect(0, 0, 100, 100);
-                            // Dispose the graphics
+                            graphics.setColor(Color.WHITE);
+                            graphics.fillRect(0, 0, WINDOW_SIZE, WINDOW_SIZE);
+                            QRCode qrCode = qrBuffer.peek();
+                            graphics.setColor(Color.BLACK);
+                            for (int i = 0; i < WINDOW_SIZE; i++) {
+                                for (int j = 0; j < WINDOW_SIZE; j++) {
+                                    if (qrCode.getByteMatrix().get(i, j)) {
+                                        graphics.fillRect(i, j, 1, 1);
+                                    }
+                                }
+                            }
                             graphics.dispose();
 
-                            // Repeat the rendering if the drawing buffer contents
-                            // were restored
                         } while (bs.contentsRestored());
 
                         System.out.println(LocalDateTime.now().getSecond() + " show " + (i++));
+
                         // Display the buffer
                         bs.show();
                     } while (bs.contentsLost());
