@@ -11,6 +11,7 @@ import processing.core.PImage;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.List;
@@ -31,8 +32,12 @@ public class QRCode implements Serializable {
     private Integer BORDER_SPACE;
     private Map<EncodeHintType, Object> HINT_MAP;
     private List<Integer> RANDOM_UNIT_LIST;
-    private BufferedImage BIMAGE;
     private static QRCodeWriter QR_WRITER;
+
+    // -----------------------------------
+    private PImage PIMAGE;
+    private BufferedImage BIMAGE;
+    // -----------------------------------
 
     public QRCode(String TEXT, Integer SIZE) {
         super();
@@ -45,6 +50,7 @@ public class QRCode implements Serializable {
         try {
             this.generateMatrix();
             this.normalizeRandomList();
+            this.buildImages();
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -65,29 +71,22 @@ public class QRCode implements Serializable {
                 break;
             }
         }
-        System.out.println("unit size: "+UNIT_SIZE);
     }
 
-    private List<Integer> normalizeRandomList() {
+    private void normalizeRandomList() {
         int size = BYTE_MATRIX.getWidth() - BORDER_SPACE - 1;
-        System.out.println("border space: "+BORDER_SPACE);
-        System.out.println("actual size: "+BYTE_MATRIX.getWidth());
-        System.out.println("size: "+size);
-        for(int x = BORDER_SPACE; x < size; x += UNIT_SIZE) {
-            for(int y = BORDER_SPACE; y < size; y += UNIT_SIZE) {
-                if(BYTE_MATRIX.get(x,y)) {
-                    System.out.print("#");
-                } else {
-                    System.out.print("_");
-                }
+        List<Integer> normalized = new ArrayList<Integer>();
+        for(int x = BORDER_SPACE, e = 0; x < size; x += UNIT_SIZE) {
+            for(int y = BORDER_SPACE; y < size; y += UNIT_SIZE, e++) {
+                if(BYTE_MATRIX.get(x,y)) normalized.add(e);
             }
-            System.out.println();
         }
-        return null;
+        this.RANDOM_UNIT_LIST = normalized;
     }
 
-    public BufferedImage getAsImage() {
+    private void buildImages() {
         int size = BYTE_MATRIX.getWidth() - (BORDER_SPACE * 2) - 1;
+        if ((size & 1) != 0) { size -= 1; }
         BIMAGE = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
         BIMAGE.createGraphics();
         Graphics2D graphics = (Graphics2D) BIMAGE.getGraphics();
@@ -99,19 +98,26 @@ public class QRCode implements Serializable {
         for (int x = BORDER_SPACE, x2 = 0; x < size; x++, x2++) {
             for (int y = BORDER_SPACE, y2 = 0; y < size; y++, y2++) {
                 if (BYTE_MATRIX.get(x, y)) {
-                    graphics.fillRect(x2, y2, 1, 1);
+                    graphics.fillRect(y2, x2, 1, 1);
                 }
             }
         }
-        return BIMAGE;
+
+        PIMAGE = new PImage(BIMAGE.getWidth(),BIMAGE.getHeight(), PConstants.ARGB);
+        BIMAGE.getRGB(0, 0, PIMAGE.width, PIMAGE.height, PIMAGE.pixels, 0, PIMAGE.width);
+        PIMAGE.updatePixels();
+    }
+
+    public BufferedImage getAsImage() {
+        return this.BIMAGE;
     }
 
     public PImage getAsPImage() {
-        BufferedImage image = getAsImage();
-        PImage img=new PImage(image.getWidth(),image.getHeight(), PConstants.ARGB);
-        image.getRGB(0, 0, img.width, img.height, img.pixels, 0, img.width);
-        img.updatePixels();
-        return img;
+        return this.PIMAGE;
+    }
+
+    public List<Integer> getRANDOM_UNIT_LIST() {
+        return RANDOM_UNIT_LIST;
     }
 
     public Integer getUNIT_SIZE() {
