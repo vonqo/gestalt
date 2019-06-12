@@ -2,9 +2,11 @@ package mn.von.gestalt.moodbar;
 
 import org.apache.commons.io.IOUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
@@ -34,7 +36,7 @@ public class MoodbarAdapter {
 
         String line = null;
         while ((line = reader.readLine()) != null) {
-            if(!line.equals("")) moodbar.add(colorize(line));
+            if(!"".equals(line)) moodbar.add(colorize(line));
         }
 
         try{
@@ -46,7 +48,6 @@ public class MoodbarAdapter {
             Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // System.out.println(moodbar.size());
         return moodbar;
     }
 
@@ -69,6 +70,20 @@ public class MoodbarAdapter {
         }
         ctx.dispose();
         return bar;
+    }
+
+    public static void moodToImage(Vector<Color> MOOD, int HEIGHT, File OUTPUT) throws IOException {
+        BufferedImage bar = new BufferedImage(MOOD.size(),HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics ctx = bar.getGraphics();
+
+        Iterator<Color> itr = MOOD.iterator();
+        for(int i = 0; itr.hasNext(); i++){
+            ctx.drawRect(i, 0, 1, HEIGHT);
+            ctx.setColor(itr.next());
+        }
+        ctx.dispose();
+        ImageIO.write(bar, "png", OUTPUT);
+        Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.INFO, "Mood Image Ready!");
     }
 
 }
