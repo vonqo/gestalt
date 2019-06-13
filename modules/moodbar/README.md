@@ -2,7 +2,7 @@
 
 Forked from [exaile/moodbar](https://github.com/exaile/moodbar).
 
-And made little update for more readable code color:
+And made little update for more readable code color (**lupino22 edit**):
 
 ```c
 for(unsigned int i = 0; i < data.size(); i++){
@@ -11,12 +11,17 @@ for(unsigned int i = 0; i < data.size(); i++){
 }
 ```
 
-
 ## Requirements
 
-* FFTW 3
+* FFTW 3 
 * GStreamer 1
   * GStreamer Base Plugins
+
+### Requirement installation guide on debian package (**lupino22 edit**)
+```sh
+sudo apt-get install fftw3 fftw3-dev pkg-config
+sudo apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+```
 
 For building:
 
