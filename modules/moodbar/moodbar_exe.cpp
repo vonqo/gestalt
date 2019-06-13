@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   const auto &data = mood.data();
-  std::cout << "size: " << data.size();
+  // std::cout << "size: " << data.size();
 
   // Enkh-Amar edit for more readable color code
   for(unsigned int i = 0; i < data.size(); i++){
