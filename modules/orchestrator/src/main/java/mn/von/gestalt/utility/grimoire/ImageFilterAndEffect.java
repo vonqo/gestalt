@@ -1,4 +1,4 @@
-package mn.von.gestalt.utility.image;
+package mn.von.gestalt.utility.grimoire;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

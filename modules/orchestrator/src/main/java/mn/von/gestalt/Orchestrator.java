@@ -3,6 +3,8 @@ package mn.von.gestalt;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
 import mn.von.gestalt.qrfractal.QRFractal;
 import mn.von.gestalt.qrfractal.QRFractalP3;
+import mn.von.gestalt.spectogram.Spectrogram;
+import mn.von.gestalt.spectogram.Wave;
 import org.opencv.core.Core;
 
 import javax.swing.*;
@@ -43,9 +45,16 @@ public class Orchestrator {
 //        });
 
         // Example of running QRFractalP3
-        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
-        QRFractalP3.main(appletArgs);
+//        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
+//        QRFractalP3.main(appletArgs);
 
+
+        Spectrogram spectrogram = new Spectrogram(new Wave("/home/enkh-amar/Desktop/mood_test/wavtest.wav"));
+        double[][] data = spectrogram.getNormalizedSpectrogramData();
+        System.out.println(data.length);
+        System.out.println(data[0].length);
+        System.out.println(data[1].length);
+        System.out.println(data[2].length);
 //        try {
 //            // J.Chuluun - Uran Khas
 //            MoodbarAdapter.moodToImage(
