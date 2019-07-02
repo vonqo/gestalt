@@ -1,4 +1,4 @@
-package mn.von.gestalt.utility;
+package mn.von.gestalt.utility.image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

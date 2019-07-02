@@ -43,31 +43,69 @@ public class Orchestrator {
 //        });
 
         // Example of running QRFractalP3
-//        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
-//        QRFractalP3.main(appletArgs);
+        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
+        QRFractalP3.main(appletArgs);
 
-        try {
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/moodbar/bar.mp3", "tmp1"),
-                    150,
-                    new File("/home/enkh-amar/Desktop/moodbar/bar.png")
-            );
-
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/moodbar/bar.mp3", "tmp2"),
-                    150,
-                    new File("/home/enkh-amar/Desktop/moodbar/bar.png")
-            );
-
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/moodbar/bar.mp3", "tmp3"),
-                    150,
-                    new File("/home/enkh-amar/Desktop/moodbar/bar.png")
-            );
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            // J.Chuluun - Uran Khas
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/urankhas.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/urankhas"),
+//                            150,
+//                            new File("/home/enkh-amar/Desktop/mood_test/urankhas.png")
+//            );
+//
+//            // Aphex Twin - Xtal
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/xtal.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/xtal"),
+//                            150,
+//                            new File("/home/enkh-amar/Desktop/mood_test/xtal.png")
+//            );
+//
+//            // Crystal Castle - Kept
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/kept.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/kept"),
+//                            150,
+//                            new File("/home/enkh-amar/Desktop/mood_test/kept.png")
+//            );
+//
+//            // Magnolian - Uvuljuu
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/magnolian.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/magnolian"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/magnolian.png")
+//            );
+//
+//            // Daft Punk - Harder, Better, Faster, Stronger
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/daftpunk.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/daftpunk"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/daftpunk.png")
+//            );
+//
+//            // Mohanik - Zuulun Misheel
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/mohanik.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/mohanik"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/mohanik.png")
+//            );
+//
+//
+//            // The Hu - Yuve Yuve
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/yuve.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/yuve"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/yuve.png")
+//            );
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
 }
