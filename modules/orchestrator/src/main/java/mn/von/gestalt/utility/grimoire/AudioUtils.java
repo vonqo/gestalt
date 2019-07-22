@@ -1,11 +1,10 @@
 package mn.von.gestalt.utility.grimoire;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 /**
  Audio utility functions
@@ -39,6 +38,25 @@ public class AudioUtils {
                 return baos.toByteArray();
             }
         }
+    }
+
+    public static void mp3ToWav(File mp3Data, String filePath) throws UnsupportedAudioFileException, IOException {
+        // open stream
+        AudioInputStream mp3Stream = AudioSystem.getAudioInputStream(mp3Data);
+        AudioFormat sourceFormat = mp3Stream.getFormat();
+        // create audio format object for the desired stream/audio format
+        // this is *not* the same as the file format (wav)
+        System.out.println("sample rate: "+sourceFormat.getSampleRate());
+        AudioFormat convertFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                sourceFormat.getSampleRate(), 16,
+                sourceFormat.getChannels(),
+                sourceFormat.getChannels() * 2,
+                sourceFormat.getSampleRate(),
+                false);
+        // create stream that delivers the desired format
+        AudioInputStream converted = AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
+        // write stream into a file with file format wav
+        AudioSystem.write(converted, AudioFileFormat.Type.WAVE, new File(filePath));
     }
 
 }

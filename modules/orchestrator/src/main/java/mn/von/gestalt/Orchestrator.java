@@ -1,15 +1,7 @@
 package mn.von.gestalt;
 
-import mn.von.gestalt.moodbar.MoodbarAdapter;
-import mn.von.gestalt.qrfractal.QRFractal;
-import mn.von.gestalt.qrfractal.QRFractalP3;
-import mn.von.gestalt.spectogram.Spectrogram;
-import mn.von.gestalt.spectogram.Wave;
-import org.opencv.core.Core;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
+import mn.von.gestalt.spectogram.dl4jDataVec.Spectrogram;
+import mn.von.gestalt.spectogram.dl4jDataVec.Wave;
 
 /**
  This is the place where all magic works
@@ -49,12 +41,31 @@ public class Orchestrator {
 //        QRFractalP3.main(appletArgs);
 
 
-        Spectrogram spectrogram = new Spectrogram(new Wave("/home/enkh-amar/Desktop/mood_test/wavtest.wav"));
+        String pathMp3 = "/Users/eirenevon/Desktop/test.mp3";
+        String pathWav = "/Users/eirenevon/Desktop/test.wav";
+//        try {
+//            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+//        } catch (UnsupportedAudioFileException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        Wave wav = new Wave(pathWav);
+        Spectrogram spectrogram = new Spectrogram(wav, 2048, 0);
         double[][] data = spectrogram.getNormalizedSpectrogramData();
-        System.out.println(data.length);
+
+        System.out.println("=======================");
+        System.out.println(wav.length());
+        System.out.println(wav.size());
+        System.out.println("=======================");
+        System.out.println("data.len: "+data.length);
         System.out.println(data[0].length);
         System.out.println(data[1].length);
         System.out.println(data[2].length);
+        System.out.println(data[3].length); //772 813
+
+
 //        try {
 //            // J.Chuluun - Uran Khas
 //            MoodbarAdapter.moodToImage(
