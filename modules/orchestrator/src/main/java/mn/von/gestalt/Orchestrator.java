@@ -1,15 +1,7 @@
 package mn.von.gestalt;
 
-import mn.von.gestalt.moodbar.MoodbarAdapter;
-import mn.von.gestalt.qrfractal.QRFractal;
-import mn.von.gestalt.qrfractal.QRFractalP3;
-import mn.von.gestalt.spectogram.Spectrogram;
-import mn.von.gestalt.spectogram.Wave;
-import org.opencv.core.Core;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
+import mn.von.gestalt.spectogram.dl4jDataVec.Spectrogram;
+import mn.von.gestalt.spectogram.dl4jDataVec.Wave;
 
 /**
  This is the place where all magic works
@@ -48,75 +40,91 @@ public class Orchestrator {
 //        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
 //        QRFractalP3.main(appletArgs);
 
+        String pathMp3 = "/Users/eirenevon/Desktop/test.mp3";
+        String pathWav = "/Users/eirenevon/Desktop/test.wav";
+//        try {
+//            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+//        } catch (UnsupportedAudioFileException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-//        Spectrogram spectrogram = new Spectrogram(new Wave("/home/enkh-amar/Desktop/mood_test/wavtest.wav"));
-//        double[][] data = spectrogram.getNormalizedSpectrogramData();
-//        System.out.println(data.length);
-//        System.out.println(data[0].length);
-//        System.out.println(data[1].length);
-//        System.out.println(data[2].length);
-        String path = "/home/enkh-amar/Desktop/mood_test/yuno/";
+        Wave wav = new Wave(pathWav);
+        Spectrogram spectrogram = new Spectrogram(wav, 2048, 0);
+        double[][] data = spectrogram.getNormalizedSpectrogramData();
 
-        try {
-            // antidote
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"antidote.mp3",
-                            path+"antidote"),
-                            150,
-                            new File(path+"antidote.png")
-            );
+        System.out.println("=======================");
+        System.out.println(wav.length());
+        System.out.println(wav.size());
+        System.out.println("=======================");
+        System.out.println("data.len: "+data.length);
+        System.out.println(data[0].length);
+        System.out.println(data[1].length);
+        System.out.println(data[2].length);
+        System.out.println(data[3].length); //772 813
 
-            // er_ni_iim_bn
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"er_ni_iim_bn.mp3",
-                            path+"er_ni_iim_bn"),
-                    150,
-                    new File(path+"er_ni_iim_bn.png")
-            );
 
-            // frequency
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"frequency.mp3",
-                            path+"frequency"),
-                    150,
-                    new File(path+"frequency.png")
-            );
-
-            // haaya
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"haaya.mp3",
-                            path+"haaya"),
-                    150,
-                    new File(path+"haaya.png")
-            );
-
-            // pointless
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"pointless.mp3",
-                            path+"pointless"),
-                    150,
-                    new File(path+"pointless.png")
-            );
-
-            // toosontsor
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"toosontsor.mp3",
-                            path+"toosontsor"),
-                    150,
-                    new File(path+"toosontsor.png")
-            );
-
-            // zuudnii_uneg
-            MoodbarAdapter.moodToImage(
-                    MoodbarAdapter.buildMoodbar(path+"zuudnii_uneg.mp3",
-                            path+"zuudnii_uneg"),
-                    150,
-                    new File(path+"zuudnii_uneg.png")
-            );
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            // J.Chuluun - Uran Khas
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/urankhas.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/urankhas"),
+//                            150,
+//                            new File("/home/enkh-amar/Desktop/mood_test/urankhas.png")
+//            );
+//
+//            // Aphex Twin - Xtal
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/xtal.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/xtal"),
+//                            150,
+//                            new File("/home/enkh-amar/Desktop/mood_test/xtal.png")
+//            );
+//
+//            // Crystal Castle - Kept
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/kept.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/kept"),
+//                            150,
+//                            new File("/home/enkh-amar/Desktop/mood_test/kept.png")
+//            );
+//
+//            // Magnolian - Uvuljuu
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/magnolian.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/magnolian"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/magnolian.png")
+//            );
+//
+//            // Daft Punk - Harder, Better, Faster, Stronger
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/daftpunk.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/daftpunk"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/daftpunk.png")
+//            );
+//
+//            // Mohanik - Zuulun Misheel
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/mohanik.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/mohanik"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/mohanik.png")
+//            );
+//
+//
+//            // The Hu - Yuve Yuve
+//            MoodbarAdapter.moodToImage(
+//                    MoodbarAdapter.buildMoodbar("/home/enkh-amar/Desktop/mood_test/yuve.mp3",
+//                            "/home/enkh-amar/Desktop/mood_test/yuve"),
+//                    150,
+//                    new File("/home/enkh-amar/Desktop/mood_test/yuve.png")
+//            );
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
 }

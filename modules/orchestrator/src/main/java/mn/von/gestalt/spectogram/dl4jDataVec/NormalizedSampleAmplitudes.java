@@ -14,7 +14,7 @@
  *  *    limitations under the License.
  */
 
-package mn.von.gestalt.spectogram;
+package mn.von.gestalt.spectogram.dl4jDataVec;
 
 
 /**

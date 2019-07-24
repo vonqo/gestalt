@@ -1,4 +1,4 @@
-package mn.von.gestalt.spectogram;
+package mn.von.gestalt.spectogram.dl4jDataVec;
 
 import java.io.FileInputStream;
 import java.io.IOException;
