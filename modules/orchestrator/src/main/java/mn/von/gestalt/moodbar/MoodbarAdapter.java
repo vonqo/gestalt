@@ -86,4 +86,8 @@ public class MoodbarAdapter {
         Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.INFO, "Mood Image Ready!");
     }
 
+    public static Vector<Color> getMoodbar() {
+        return MoodbarAdapter.moodbar;
+    }
+
 }

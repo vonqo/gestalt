@@ -1,7 +1,14 @@
 package mn.von.gestalt;
 
+import mn.von.gestalt.moodbar.MoodbarAdapter;
+import mn.von.gestalt.spectogram.Spectrumizer;
 import mn.von.gestalt.spectogram.dl4jDataVec.Spectrogram;
 import mn.von.gestalt.spectogram.dl4jDataVec.Wave;
+import mn.von.gestalt.utility.grimoire.AudioUtils;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
 
 /**
  This is the place where all magic works
@@ -40,8 +47,8 @@ public class Orchestrator {
 //        String[] appletArgs = new String[] {"mn.von.gestalt.qrfractal.QRFractalP3"};
 //        QRFractalP3.main(appletArgs);
 
-        String pathMp3 = "/Users/eirenevon/Desktop/test.mp3";
-        String pathWav = "/Users/eirenevon/Desktop/test.wav";
+        String pathMp3 = "/home/enkh-amar/Desktop/mood_test/yuno/toosontsor.mp3";
+        String pathWav = "/home/enkh-amar/Desktop/mood_test/toosontsor.wav";
 //        try {
 //            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
 //        } catch (UnsupportedAudioFileException e) {
@@ -50,21 +57,17 @@ public class Orchestrator {
 //            e.printStackTrace();
 //        }
 
-        Wave wav = new Wave(pathWav);
-        Spectrogram spectrogram = new Spectrogram(wav, 2048, 0);
-        double[][] data = spectrogram.getNormalizedSpectrogramData();
-
-        System.out.println("=======================");
-        System.out.println(wav.length());
-        System.out.println(wav.size());
-        System.out.println("=======================");
-        System.out.println("data.len: "+data.length);
-        System.out.println(data[0].length);
-        System.out.println(data[1].length);
-        System.out.println(data[2].length);
-        System.out.println(data[3].length); //772 813
 
 
+        try {
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.asImageRange(0,spectrumizer.getSize(),new File("/home/enkh-amar/Desktop/mood_test/spectogram.png"));
+            spectrumizer.ApplyMoodbar(MoodbarAdapter.buildMoodbar(pathMp3,"/home/enkh-amar/Desktop/mood_test/bar"));
+            spectrumizer.asImageRange(0,spectrumizer.getSize(),new File("/home/enkh-amar/Desktop/mood_test/spectogram_color.png"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        try {
 //            // J.Chuluun - Uran Khas
 //            MoodbarAdapter.moodToImage(
