@@ -30,7 +30,7 @@ public class ImageTransformer {
         int width = (int) (source.getWidth() * scaleFactor);
         int height = (int) (source.getHeight() * scaleFactor);
         BufferedImage scaled = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        final AffineTransform affineTransform = AffineTransform.getScaleInstance(2.0, 2.0);
+        final AffineTransform affineTransform = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
         final AffineTransformOp ato = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BICUBIC);
         scaled = ato.filter(source, scaled);
         return scaled;
