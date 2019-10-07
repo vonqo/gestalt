@@ -21,8 +21,9 @@ public class Spectrumizer {
 
     private Wave waveFile;
     private double[][] DATA;
-    private BufferedImage SPECTOGRAM;
-    private int HEIGHT = 700;
+    private BufferedImage SPECTOGRAM = null;
+    private BufferedImage SPECTOGRAM_WITH_MOODBAR = null;
+    private int HEIGHT = 500;
     private Vector<Color> MOODBAR;
     private boolean isMoodbarApplied = false;
 
@@ -32,33 +33,52 @@ public class Spectrumizer {
         DATA = spectrogram.getNormalizedSpectrogramData();
     }
 
-    public void ApplyMoodbar(Vector<Color> moodbar) {
+    public void applyMoodbar(Vector<Color> moodbar) {
         this.MOODBAR = moodbar;
         this.isMoodbarApplied = true;
     }
 
-    public BufferedImage asBufferedImageRange(Integer left, Integer right) {
-        Integer width = right - left;
-        SPECTOGRAM = new BufferedImage(width, HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        Graphics ctx = SPECTOGRAM.getGraphics();
+    public BufferedImage asBufferedImage() {
+        this.buildImage();
+        return SPECTOGRAM;
+    }
 
-        /**
-         *
-         * moodbar: X
-         * size: Y
-         * Y - 100
-         * X - 100
-         * */
+    public void build() {
+        this.buildImage();
+    }
 
-        if (this.isMoodbarApplied) {
-            float spectogramSize = right - left;
+    public BufferedImage asBufferedMoodbar() {
+        if(!this.isMoodbarApplied) return null;
+        this.buildImage();
+        return SPECTOGRAM_WITH_MOODBAR;
+    }
+
+    private void buildImage() {
+        if(SPECTOGRAM == null) {
+            SPECTOGRAM = new BufferedImage(DATA.length, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            Graphics ctx = SPECTOGRAM.getGraphics();
+            for(int i = 0; i < DATA.length; i++) {
+                for(int e = 0; e < HEIGHT; e++) {
+                    int colorValue = 0;
+                    colorValue = 255-((Double)(shitter(DATA[i][e])*255)).intValue();
+                    // colorValue = ((Double)(colorValue * 2.55)).intValue();
+                    ctx.drawRect(i,e,1,1);
+                    ctx.setColor(new Color(colorValue,colorValue,colorValue));
+                }
+            }
+            ctx.dispose();
+        }
+        if(SPECTOGRAM_WITH_MOODBAR == null) {
+            SPECTOGRAM_WITH_MOODBAR = new BufferedImage(DATA.length, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            Graphics ctx = SPECTOGRAM_WITH_MOODBAR.getGraphics();
+            float spectogramSize = DATA.length;
             float moodbarSize = this.MOODBAR.size();
             float percent = moodbarSize / spectogramSize;
 
 //            Double min = 255.0;
 //            Double max = 0.0;
 
-            for(int i = left; i < right; i++) {
+            for(int i = 0; i < DATA.length; i++) {
                 for(int e = 0; e < HEIGHT; e++) {
                     ctx.drawRect(i,e,1,1);
                     int idx = Math.round(percent*i);
@@ -80,25 +100,8 @@ public class Spectrumizer {
 //                    ));
                 }
             }
-//            System.out.println("min: "+min);
-//            System.out.println("max: "+max);
-        } else {
-            for(int i = left; i < right; i++) {
-                for(int e = 0; e < HEIGHT; e++) {
-                    int colorValue = 0;
-                    colorValue = 255-((Double)(shitter(DATA[i][e])*255)).intValue();
-                    // colorValue = ((Double)(colorValue * 2.55)).intValue();
-                    ctx.drawRect(i-left,e,1,1);
-                    ctx.setColor(new Color(colorValue,colorValue,colorValue));
-                }
-            }
+            ctx.dispose();
         }
-        ctx.dispose();
-        return SPECTOGRAM;
-    }
-
-    public void asImageRange(Integer left, Integer right, File OUTPUT) throws IOException {
-        ImageIO.write(this.asBufferedImageRange(left, right), "png", OUTPUT);
     }
 
     private Double shitter(Double sda) {

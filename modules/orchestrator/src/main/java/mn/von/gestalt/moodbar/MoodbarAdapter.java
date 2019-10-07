@@ -78,8 +78,8 @@ public class MoodbarAdapter {
 
         Iterator<Color> itr = MOOD.iterator();
         for(int i = 0; itr.hasNext(); i++){
-            ctx.drawRect(i, 0, 1, HEIGHT);
             ctx.setColor(itr.next());
+            ctx.drawRect(i, 0, 1, HEIGHT);
         }
         ctx.dispose();
         ImageIO.write(bar, "png", OUTPUT);

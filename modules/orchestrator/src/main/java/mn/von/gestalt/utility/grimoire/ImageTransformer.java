@@ -36,8 +36,18 @@ public class ImageTransformer {
         return scaled;
     }
 
-    public static void circularTransform(BufferedImage source, int OUTER_SIZE, int INNER_SIZE, File output) throws IOException {
-        BufferedImage destination = new BufferedImage(OUTER_SIZE+5, OUTER_SIZE+5, BufferedImage.TYPE_INT_ARGB);
+    public static BufferedImage scaleImage(BufferedImage source, int width, int height) {
+        double scaleFactorX = (double) width / source.getWidth();
+        double scaleFactorY = (double) height / source.getHeight();
+        BufferedImage scaled = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        final AffineTransform affineTransform = AffineTransform.getScaleInstance(scaleFactorX, scaleFactorY);
+        final AffineTransformOp ato = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BICUBIC);
+        scaled = ato.filter(source, scaled);
+        return scaled;
+    }
+
+    public static BufferedImage circularTransform(BufferedImage source, int OUTER_SIZE, int INNER_SIZE) {
+        BufferedImage destination = new BufferedImage(OUTER_SIZE+3, OUTER_SIZE+3, BufferedImage.TYPE_INT_ARGB);
         double scaleFactor = 2.0;
         BufferedImage scaled = scaleImage(source, scaleFactor);
         Graphics ctxDestination = destination.getGraphics();
@@ -60,9 +70,7 @@ public class ImageTransformer {
             ctxDestination.setColor(getColorFromInt(scaled.getRGB(i,0)));
         }
         ctxDestination.dispose();
-
-        ImageIO.write(destination, "png", output);
-        Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.INFO, "Circular ray ready!");
+        return destination;
     }
 
 
@@ -91,9 +99,9 @@ public class ImageTransformer {
     }
 
     public static Color getColorFromInt(int COLOR) {
-        int red   = (COLOR & 0x00ff0000) >> 16;
+        int red = (COLOR & 0x00ff0000) >> 16;
         int green = (COLOR & 0x0000ff00) >> 8;
-        int blue  =  COLOR & 0x000000ff;
+        int blue = COLOR & 0x000000ff;
         return new Color(red, green, blue);
     }
 
