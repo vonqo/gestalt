@@ -59,17 +59,22 @@ public class Orchestrator {
             spectrumizer.build();
 
             // save with rotation
-            BufferedImage circle1 = ImageTransformer.circularTransform(
-                    ImageIO.read(new File(testPath+"/moodbar.png")),
-                    1000,300
+            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
+                    spectrumizer.asBufferedImage(),
+                    1000,100
+            );
+
+            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
+                    spectrumizer.asBufferedMoodbar(),
+                    1000,100
             );
 
             BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
                     spectrumizer.asBufferedImage(),
                     spectrumizer.asBufferedMoodbar(),
                     MoodbarAdapter.convertToBufferedImage(),
-                    circle1, circle1,
-                    "muzic"
+                    circle, circleMood,
+                    "Test Music - Test Title"
             );
             ImageIO.write(lunarTear, "png", new File(testPath+"/collection.png"));
 

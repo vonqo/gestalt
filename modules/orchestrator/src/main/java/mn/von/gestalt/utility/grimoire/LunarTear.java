@@ -12,9 +12,9 @@ public class LunarTear {
         ctx2D.setPaint (new Color(255, 255, 255));
         ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
-        ctx2D.setFont(new Font("SansSerif", Font.PLAIN, 22));
+        ctx2D.setFont(new Font("SansSerif", Font.PLAIN, 32));
         ctx2D.setColor(Color.BLACK);
-        ctx2D.drawString(title, 75, 30);
+        ctx2D.drawString(title, 25, 40);
 
         moodbar = ImageTransformer.scaleImage(moodbar, 1000, 75);
         ctx2D.drawImage(moodbar, 0, 50, null);

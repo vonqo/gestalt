@@ -53,6 +53,15 @@ public class Spectrumizer {
         return SPECTOGRAM_WITH_MOODBAR;
     }
 
+    private void clear() {
+        this.SPECTOGRAM = null;
+        this.SPECTOGRAM_WITH_MOODBAR = null;
+        this.MOODBAR = null;
+        this.isMoodbarApplied = false;
+        this.DATA = null;
+        this.waveFile = null;
+    }
+
     private void buildImage() {
         if(SPECTOGRAM == null) {
             SPECTOGRAM = new BufferedImage(DATA.length, HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -60,7 +69,7 @@ public class Spectrumizer {
             for(int i = 0; i < DATA.length; i++) {
                 for(int e = 0; e < HEIGHT; e++) {
                     int colorValue = 0;
-                    colorValue = 255-((Double)(shitter(DATA[i][e])*255)).intValue();
+                    colorValue = 255-((Double)(noiseFilter(DATA[i][e])*255)).intValue();
                     // colorValue = ((Double)(colorValue * 2.55)).intValue();
                     ctx.drawRect(i,e,1,1);
                     ctx.setColor(new Color(colorValue,colorValue,colorValue));
@@ -86,7 +95,7 @@ public class Spectrumizer {
                     Color temp = MOODBAR.get(idx);
 //                    if(min > DATA[i][e]) min = DATA[i][e];
 //                    if(max < DATA[i][e]) max = DATA[i][e];
-                    DATA[i][e] = shitter(DATA[i][e]);
+                    DATA[i][e] = noiseFilter(DATA[i][e]);
                     ctx.setColor(new Color(
                             ((Double)Math.floor(temp.getRed()*DATA[i][e])).intValue(),
                             ((Double)Math.floor(temp.getGreen()*DATA[i][e])).intValue(),
@@ -104,12 +113,12 @@ public class Spectrumizer {
         }
     }
 
-    private Double shitter(Double sda) {
-        sda -= 0.85;
-        if(sda < 0) sda = 0.0;
-        sda *= 8;
-        if(sda > 1) sda = 1.0;
-        return sda;
+    private Double noiseFilter(Double threshold) {
+        threshold -= 0.85;
+        if(threshold < 0) threshold = 0.0;
+        threshold *= 8;
+        if(threshold > 1) threshold = 1.0;
+        return threshold;
     }
 
     public Integer getSize() {

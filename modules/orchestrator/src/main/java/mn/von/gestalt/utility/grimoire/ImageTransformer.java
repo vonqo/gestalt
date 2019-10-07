@@ -46,30 +46,27 @@ public class ImageTransformer {
         return scaled;
     }
 
-    public static BufferedImage circularTransform(BufferedImage source, int OUTER_SIZE, int INNER_SIZE) {
-        BufferedImage destination = new BufferedImage(OUTER_SIZE+3, OUTER_SIZE+3, BufferedImage.TYPE_INT_ARGB);
-        double scaleFactor = 2.0;
-        BufferedImage scaled = scaleImage(source, scaleFactor);
-        Graphics ctxDestination = destination.getGraphics();
-
+    public static BufferedImage rectangularToPolarCoordinate(BufferedImage source, int OUTER_SIZE, int INNER_SIZE) {
         int r = OUTER_SIZE / 2;
         int rr = INNER_SIZE / 2;
-        int cicularLineLength = r - rr;
-        double x1, y1 ,x2, y2;
-        double unitSpace = Math.PI / (scaled.getWidth() / 2.0);
-        // double unitSpace = 0.001;
-        double unitIndicator = Math.PI;
+        int cicularRadius = r - rr;
+        double x, y;
+        double unitSpace = 0.0005;
+        double fullCircle = Math.PI * 4;
+        int xScalar = (int)Math.ceil((Math.PI * 3) / unitSpace);
 
-        for(int i = 0; i < scaled.getWidth(); i++, unitIndicator += unitSpace) {
-            x1 = Math.cos(unitIndicator) * r;
-            y1 = Math.sin(unitIndicator) * r;
-            x2 = Math.cos(unitIndicator) * rr;
-            y2 = Math.sin(unitIndicator) * rr;
+        BufferedImage destination = new BufferedImage(OUTER_SIZE, OUTER_SIZE, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage scaled = ImageTransformer.scaleImage(source, xScalar, cicularRadius);
 
-            ctxDestination.drawLine((int)x1+r, (int)y1+r, (int)x2+r, (int)y2+r);
-            ctxDestination.setColor(getColorFromInt(scaled.getRGB(i,0)));
+        int scaledX = 0;
+        for(double theta = Math.PI; theta < fullCircle; theta+= unitSpace, scaledX++) {
+            for(int e = 0; e < cicularRadius; e++) {
+                x = Math.cos(theta) * (r-e) + r;
+                y = Math.sin(theta) * (r-e) + r;
+                destination.setRGB((int)x, (int)y, scaled.getRGB(scaledX, e));
+            }
         }
-        ctxDestination.dispose();
+
         return destination;
     }
 
@@ -79,13 +76,13 @@ public class ImageTransformer {
         for(int x = 0; x < loadImg.getWidth(); x++)
             // for (int y = 0; y < loadImg.getHeight(); y++) {
             for (int y = 0; y < 150; y++) {
-                Color pixel = getColorFromInt(loadImg.getRGB(x, y));
+                Color pixel = ImageTransformer.getColorFromInt(loadImg.getRGB(x, y));
 
                 int r = Math.abs(pixel.getRed() - COLOR.getRed());
                 int g = Math.abs(pixel.getGreen() - COLOR.getGreen());
                 int b = Math.abs(pixel.getBlue() - COLOR.getBlue());
 
-                loadImg.setRGB(x, y + h1, getIntFromColor(new Color(r, g, b)));
+                loadImg.setRGB(x, y + h1, ImageTransformer.getIntFromColor(new Color(r, g, b)));
             }
 
         return loadImg;
