@@ -35,4 +35,16 @@ public class LunarTear {
         return canvas;
     }
 
+    public static BufferedImage addTitle (BufferedImage image, String title) {
+        BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight() + 50, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setPaint (new Color(255, 255, 255));
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        ctx2D.setFont(new Font("SansSerif", Font.PLAIN, 32));
+        ctx2D.setColor(Color.BLACK);
+        ctx2D.drawString(title, 25, 40);
+        ctx2D.drawImage(image, 0 , 40, null);
+        return canvas;
+    }
+
 }

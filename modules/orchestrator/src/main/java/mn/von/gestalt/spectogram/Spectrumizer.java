@@ -114,9 +114,9 @@ public class Spectrumizer {
     }
 
     private Double noiseFilter(Double threshold) {
-        threshold -= 0.85;
+        threshold -= 0.80;
         if(threshold < 0) threshold = 0.0;
-        threshold *= 8;
+        threshold *= 5;
         if(threshold > 1) threshold = 1.0;
         return threshold;
     }
@@ -125,4 +125,11 @@ public class Spectrumizer {
         return DATA.length;
     }
 
+    public double[][] getDATA() {
+        return DATA;
+    }
+
+    public void setDATA(double[][] DATA) {
+        this.DATA = DATA;
+    }
 }

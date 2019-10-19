@@ -32,11 +32,10 @@ public class Orchestrator {
 
     public static void main(String args[]) {
 
-
-
-        String testPath = "/home/enkh-amar/Desktop/mood_test/awlnpl/";
-        String pathMp3 = testPath+"falling.mp3";
-        String pathWav = testPath+"alling.wav";
+        String sogname = "sadangel";
+        String testPath = "/home/anomaly/Desktop/mood_test/";
+        String pathMp3 = testPath+sogname+".mp3";
+        String pathWav = testPath+sogname+".wav";
         try {
             AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
         } catch (UnsupportedAudioFileException e) {
@@ -45,11 +44,8 @@ public class Orchestrator {
             e.printStackTrace();
         }
 
-
-
         try {
-
-            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(pathMp3,"/home/enkh-amar/Desktop/mood_test/bar");
+            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(pathMp3,testPath+"/bar");
             MoodbarAdapter.moodToImage(moodbar,150,
                     new File(testPath+"/moodbar.png"));
 
@@ -59,25 +55,32 @@ public class Orchestrator {
             spectrumizer.build();
 
             // save with rotation
-            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
-                    spectrumizer.asBufferedImage(),
-                    1000,100
-            );
+//            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
+//                    spectrumizer.asBufferedImage(),
+//                    1000,100
+//            );
+//
+//            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
+//                    spectrumizer.asBufferedMoodbar(),
+//                    1000,100
+//            );
+//
+//            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
+//                    spectrumizer.asBufferedImage(),
+//                    spectrumizer.asBufferedMoodbar(),
+//                    MoodbarAdapter.convertToBufferedImage(),
+//                    circle, circleMood,
+//                    "Igor Krutoy - Sad Angel"
+//            );
+//            ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
 
-            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
-                    spectrumizer.asBufferedMoodbar(),
-                    1000,100
-            );
+            BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 100);
 
-            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
-                    spectrumizer.asBufferedImage(),
-                    spectrumizer.asBufferedMoodbar(),
-                    MoodbarAdapter.convertToBufferedImage(),
-                    circle, circleMood,
-                    "Test Music - Test Title"
+            ImageIO.write(
+                    LunarTear.addTitle(bubble, "SDA"), "png",
+                    new File(testPath+"/"+sogname+"_bubble.png")
             );
-            ImageIO.write(lunarTear, "png", new File(testPath+"/collection.png"));
-
+            // ImageIO.write(bubble, "png", new File(testPath+"/"+sogname+"_bubble.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
