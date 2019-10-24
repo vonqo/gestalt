@@ -32,7 +32,8 @@ public class Orchestrator {
 
     public static void main(String args[]) {
 
-        String sogname = "sadangel";
+        String sogname = "psalm";
+        String displayText = "Silent Hill 2 OST - Love Psalm";
         String testPath = "/home/anomaly/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -55,29 +56,28 @@ public class Orchestrator {
             spectrumizer.build();
 
             // save with rotation
-//            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
-//                    spectrumizer.asBufferedImage(),
-//                    1000,100
-//            );
-//
-//            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
-//                    spectrumizer.asBufferedMoodbar(),
-//                    1000,100
-//            );
-//
-//            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
-//                    spectrumizer.asBufferedImage(),
-//                    spectrumizer.asBufferedMoodbar(),
-//                    MoodbarAdapter.convertToBufferedImage(),
-//                    circle, circleMood,
-//                    "Igor Krutoy - Sad Angel"
-//            );
-//            ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
+            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
+                    spectrumizer.asBufferedImage(),
+                    1000,100
+            );
 
-            BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 100);
+            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
+                    spectrumizer.asBufferedMoodbar(),
+                    1000,100
+            );
 
+            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
+                    spectrumizer.asBufferedImage(),
+                    spectrumizer.asBufferedMoodbar(),
+                    MoodbarAdapter.convertToBufferedImage(),
+                    circle, circleMood,
+                    displayText
+            );
+            ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
+
+            BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
             ImageIO.write(
-                    LunarTear.addTitle(bubble, "SDA"), "png",
+                    LunarTear.addTitle(bubble, displayText), "png",
                     new File(testPath+"/"+sogname+"_bubble.png")
             );
             // ImageIO.write(bubble, "png", new File(testPath+"/"+sogname+"_bubble.png"));

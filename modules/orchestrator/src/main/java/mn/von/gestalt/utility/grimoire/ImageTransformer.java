@@ -1,5 +1,6 @@
 package mn.von.gestalt.utility.grimoire;
 
+import com.google.zxing.common.BitMatrix;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
 
 import javax.imageio.ImageIO;
@@ -10,6 +11,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,9 +84,10 @@ public class ImageTransformer {
                     size += spectogramData[g+e][k];
                 }
             }
+            // System.out.println(size);
             g += e;
             if(max < size) max = size;
-            if(min > size && size != 0.0) min = size;
+            if(i > 10 && min > size && size != 0.0) min = size;
             bubbleSizeList.add(size);
         }
         double wtf = max - min;
@@ -92,13 +95,14 @@ public class ImageTransformer {
             double percent = 0;
             if((bubbleSizeList.get(i) - min) > 0) {
                 percent = (bubbleSizeList.get(i) - min) / wtf;
+                // System.out.println(percent);
             }
             bubbleSizeList.set(i, percent);
         }
 
         BufferedImage destination = new BufferedImage((bubbleSize * 40 / 2) + bubbleSize, bubbleSize * 25, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx = (Graphics2D) destination.getGraphics();
-        ctx.setColor(Color.WHITE);
+        ctx.setColor(Color.BLACK);
         ctx.fillRect(0, 0, destination.getWidth(), destination.getHeight());
         ctx.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -115,6 +119,11 @@ public class ImageTransformer {
         }
 
         ctx.dispose();
+        return destination;
+    }
+
+    public static BufferedImage qrStringWithMoodbar(Vector<Color> moodbar, BitMatrix qrMatrix) {
+        BufferedImage destination = new BufferedImage(100,100, BufferedImage.TYPE_INT_ARGB);
         return destination;
     }
 
