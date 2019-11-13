@@ -26,16 +26,19 @@ public class MoodbarAdapter {
     private static ProcessBuilder processBuilder;
     private static Process process;
 
-    private static Vector<Color> moodbar;
+    // private static Vector<Color> moodbar;
 
     public static Vector<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT) throws IOException {
-        moodbar = new Vector<Color>(1000);
+        Vector<Color> moodbar = new Vector<Color>(1000);
+
         processBuilder = new ProcessBuilder("moodbar", "-o" ,OUTPUT, AUDIO_PATH);
         process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
         String line = null;
+        System.out.println("process");
         while ((line = reader.readLine()) != null) {
+            System.out.println(line);
             if(!"".equals(line)) moodbar.add(colorize(line));
         }
 
@@ -60,34 +63,26 @@ public class MoodbarAdapter {
         );
     }
 
-    public static BufferedImage convertToBufferedImage() {
-        BufferedImage bar = new BufferedImage(moodbar.size(), 150, BufferedImage.TYPE_INT_RGB);
+    public static BufferedImage toBufferedImage(Vector<Color> MOOD, int HEIGHT) {
+        BufferedImage bar = new BufferedImage(MOOD.size(), 150, BufferedImage.TYPE_INT_RGB);
         Graphics ctx = bar.getGraphics();
-        Iterator<Color> itr = moodbar.iterator();
+        Iterator<Color> itr = MOOD.iterator();
         for (int i = 0; itr.hasNext(); i++) {
-            ctx.drawRect(i, 0, 1, 150);
+            ctx.drawRect(i, 0, 1, HEIGHT);
             ctx.setColor(itr.next());
         }
         ctx.dispose();
         return bar;
     }
 
-    public static void moodToImage(Vector<Color> MOOD, int HEIGHT, File OUTPUT) throws IOException {
-        BufferedImage bar = new BufferedImage(MOOD.size(),HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics ctx = bar.getGraphics();
-
-        Iterator<Color> itr = MOOD.iterator();
-        for(int i = 0; itr.hasNext(); i++){
-            ctx.setColor(itr.next());
-            ctx.drawRect(i, 0, 1, HEIGHT);
-        }
-        ctx.dispose();
+    public static void moodToFile(Vector<Color> MOOD, int HEIGHT, File OUTPUT) throws IOException {
+        BufferedImage bar = toBufferedImage(MOOD, HEIGHT);
         ImageIO.write(bar, "png", OUTPUT);
         Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.INFO, "Mood Image Ready!");
     }
 
-    public static Vector<Color> getMoodbar() {
-        return MoodbarAdapter.moodbar;
-    }
+//    public static Vector<Color> getMoodbar() {
+//        return MoodbarAdapter.moodbar;
+//    }
 
 }
