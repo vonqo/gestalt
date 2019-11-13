@@ -19,7 +19,7 @@ import java.util.Vector;
 /**
  This is the place where all magic works
 
- @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
+ @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amagit r.G]</A>
  @version $Revision: 1.0
  @see [https://github.com/lupino22/gestalt]
  **/

@@ -2,6 +2,9 @@ package mn.von.gestalt.utility.grimoire;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
+import java.util.Vector;
+import java.util.ArrayList;
 
 public class LunarTear {
 
@@ -50,6 +53,22 @@ public class LunarTear {
         ctx2D.setColor(LunarTear.fontColor);
         ctx2D.drawString(title, 25, 40);
         ctx2D.drawImage(image, 0 , 50, null);
+        return canvas;
+    }
+
+    public static BufferedImage legacy4Bar(ArrayList<BufferedImage> moodbarList, ArrayList<String> moodbarTitle) {
+        if(moodbarList.size() != moodbarTitle.size()) {
+            throw new RuntimeException("parameter error");
+        }
+        BufferedImage canvas = new BufferedImage(1000, moodbarList.size() * 220, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ctx2D.setPaint(LunarTear.backgroundColor);
+        for(int i = 0; i < moodbarList.size(); i++) {
+            ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
+            ctx2D.drawString(moodbarTitle.get(i), 0, i * 220+10);
+            ctx2D.drawImage(moodbarList.get(i),0, i * 220, null);
+        }
         return canvas;
     }
 
