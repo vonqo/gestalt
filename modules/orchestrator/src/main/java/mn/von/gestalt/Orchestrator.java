@@ -19,7 +19,7 @@ import java.util.Vector;
 /**
  This is the place where all magic works
 
- @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
+ @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amagit r.G]</A>
  @version $Revision: 1.0
  @see [https://github.com/lupino22/gestalt]
  **/
@@ -34,7 +34,7 @@ public class Orchestrator {
 
         String sogname = "psalm";
         String displayText = "Silent Hill 2 OST - Love Psalm";
-        String testPath = "/home/anomaly/Desktop/mood_test/";
+        String testPath = "/Users/von/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
         try {
