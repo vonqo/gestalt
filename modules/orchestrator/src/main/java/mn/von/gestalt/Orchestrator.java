@@ -32,8 +32,8 @@ public class Orchestrator {
 
     public static void main(String args[]) {
 
-        String sogname = "psalm";
-        String displayText = "Silent Hill 2 OST - Love Psalm";
+        String sogname = "ghost";
+        String displayText = "Nightwish - Ghost Love Score";
         String testPath = "/home/anomaly/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -66,6 +66,8 @@ public class Orchestrator {
                     1000,100
             );
 
+            LunarTear.setFontColor(new Color(0,0,0));
+            LunarTear.setBackgroundColor(new Color(255,255,255));
             BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
                     spectrumizer.asBufferedImage(),
                     spectrumizer.asBufferedMoodbar(),
@@ -75,6 +77,8 @@ public class Orchestrator {
             );
             ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
 
+            LunarTear.setFontColor(new Color(255,255,255));
+            LunarTear.setBackgroundColor(new Color(0,0,0));
             BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
             ImageIO.write(
                     LunarTear.addTitle(bubble, displayText), "png",

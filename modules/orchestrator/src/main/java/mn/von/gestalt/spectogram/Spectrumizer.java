@@ -119,6 +119,12 @@ public class Spectrumizer {
         threshold *= 5;
         if(threshold > 1) threshold = 1.0;
         return threshold;
+
+//        threshold -= 0.85;
+//        if(threshold < 0) threshold = 0.0;
+//        threshold *= 7;
+//        if(threshold > 1) threshold = 1.0;
+//        return threshold;
     }
 
     public Integer getSize() {
