@@ -18,7 +18,7 @@ public class LunarTear {
         BufferedImage canvas = new BufferedImage(1000, 1300, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx2D = canvas.createGraphics();
         // ctx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5));
-        ctx2D.setPaint (new Color(255, 255, 255));
+        ctx2D.setPaint (backgroundColor);
         ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
         ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));

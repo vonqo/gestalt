@@ -102,8 +102,6 @@ public class Orchestrator {
 //                    LunarTear.addTitle(bubble, displayText), "png",
 //                    new File(testPath+"/"+sogname+"_bubble.png")
 //            );
-            // ImageIO.write(bubble, "png", new File(testPath+"/"+sogname+"_bubble.png"));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
