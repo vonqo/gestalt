@@ -5,15 +5,21 @@ This is open source repository of creative coding playground, including interact
 
 ## Modules
 List of modules that written in different programming languages
-* **Orchestrator** (Java) - Core image, audio processor
-	* [Processing](https://github.com/processing) bindings for more productive codebase
-	* Some utility classes implemented on [deeplearning4j](https://github.com/deeplearning4j)/[DataVec](https://github.com/deeplearning4j/DataVec)
+* **Orchestrator** (Java) - Synthesize variety of images, audio and videos.
+	* [Processing](https://github.com/processing) bindings
+	* Some utility classes taken from [deeplearning4j](https://github.com/deeplearning4j)/[DataVec](https://github.com/deeplearning4j/DataVec)
 * **Moodbar** (C++) - Forked from [exaile](https://github.com/exaile)/[moodbar](https://github.com/exaile/moodbar) 
+* **HQZ** (C++) - Forked from [scanlime](https://github.com/scanlime)/[zenphoton](https://github.com/scanlime/zenphoton) 
 * **a1_restorer** (Python) - Image defect fixing, enhance greyscale
+
+## Sketches
+Processing sketches
+
+## Study Materials
+Explanation materials of **Modules** and the other related audio, image computing methods.
 
 ## Associate
 <a  href="https://www.instagram.com/wiserstudio/"  target="_blank"><img  src="https://github.com/lupino22/gestalt/blob/master/waiza.jpg"></a>
-
 
 ## Copyright & License
 Copyright (c) 2019 Enkh-Amar.G - Released under the <a  href="https://github.com/lupino22/gestalt/blob/master/LICENSE">Mozilla Public License Version 2.0</a>
