@@ -114,9 +114,9 @@ public class Spectrumizer {
     }
 
     private Double noiseFilter(Double threshold) {
-        threshold -= 0.80;
+        threshold -= 0.85;
         if(threshold < 0) threshold = 0.0;
-        threshold *= 5;
+        threshold *= 6.6;
         if(threshold > 1) threshold = 1.0;
         return threshold;
 

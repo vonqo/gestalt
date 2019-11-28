@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class LunarTear {
 
     public static int fontSize = 26;
-    public static String fontName = "SansSerif";
+    public static String fontName = "Roboto Mono";
     public static Color fontColor = new Color(255,255,255);
     public static Color backgroundColor = new Color(0,0,0);
 
@@ -23,7 +23,7 @@ public class LunarTear {
 
         ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
         ctx2D.setColor(LunarTear.fontColor);
-        ctx2D.drawString(title, 25, 40);
+        ctx2D.drawString(title, 25  , 40);
 
         moodbar = ImageTransformer.scaleImage(moodbar, 1000, 75);
         ctx2D.drawImage(moodbar, 0, 50, null);
@@ -63,11 +63,13 @@ public class LunarTear {
         BufferedImage canvas = new BufferedImage(1000, moodbarList.size() * 220, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx2D = canvas.createGraphics();
         ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        ctx2D.setPaint(LunarTear.backgroundColor);
+        ctx2D.setPaint (backgroundColor);
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         for(int i = 0; i < moodbarList.size(); i++) {
-            ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
-            ctx2D.drawString(moodbarTitle.get(i), 0, i * 220+10);
-            ctx2D.drawImage(moodbarList.get(i),0, i * 220+30, null);
+            ctx2D.setColor(LunarTear.fontColor);
+            ctx2D.setFont(new Font(fontName, Font.BOLD, fontSize));
+            ctx2D.drawString(moodbarTitle.get(i), 10, (i * 220)+55);
+            ctx2D.drawImage(moodbarList.get(i),0, (i * 220)+68, null);
         }
         return canvas;
     }

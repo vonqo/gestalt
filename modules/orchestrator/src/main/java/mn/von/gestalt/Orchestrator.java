@@ -33,9 +33,9 @@ public class Orchestrator {
 
     public static void main(String args[]) {
 
-        String sogname = "divine";
-//        String displayText = "Silent Hill 2 OST - Love Psalm";
-        String testPath = "/Users/von/Desktop/mood_test/";
+        String sogname = "games";
+        String displayText = "Tessa Violet - Games";
+        String testPath = "/home/enkh-amar/Desktop/MUZ/moodbar/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
         try {
@@ -47,24 +47,26 @@ public class Orchestrator {
         }
 
         try {
-            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"divine.mp3",testPath+"/bar1");
-            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"shootingstar.mp3",testPath+"/bar2");
-            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"sharav.mp3",testPath+"/bar3");
-            Vector<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"mixpate17.mp3",testPath+"/bar4");
+            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+//            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"divine.mp3",testPath+"/bar1");
+//            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"shootingstar.mp3",testPath+"/bar2");
+//            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"manaach.mp3",testPath+"/bar3");
+//            Vector<Color> moodbar0 = MoodbarAdapter.buildMoodbar(testPath+"agaar.mp3",testPath+"/bar4");
 //            ArrayList<BufferedImage> moodbarList = new ArrayList<BufferedImage>();
+//            moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar0, 150));
 //            moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar1, 150));
 //            moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar2, 150));
 //            moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar3, 150));
-//            moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar4, 150));
 //            ArrayList<String> names = new ArrayList<String>();
-//            names.add("Wondha Mountain ft Yung Lean - Divine Madness");
+//            names.add("Бадар-Ууган, Дуламсүрэн - Улаанбаатрын агаар");
+//            names.add("Wondha Mountain, Yung Lean - Divine Madness");
 //            names.add("ANDROMEDA - Сүүлт од");
-//            names.add("Б.Шарав - Гэгээн алсад одох юмсан");
-//            names.add("Ka - Mixtape 17");
+//            names.add("Моханик - Манангийн манаач");
 //
 //            LunarTear.setBackgroundColor(Color.WHITE);
 //            LunarTear.setFontColor(Color.BLACK);
 //            LunarTear.setFontSize(28);
+//            LunarTear.setFontName("Roboto Mono");
 //            ImageIO.write(
 //                    LunarTear.legacy4Bar(moodbarList, names), "png",
 //                    new File(testPath+"/"+sogname+"_bars.png")
@@ -73,35 +75,40 @@ public class Orchestrator {
 
 
             // initialize spectogram
-//            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
-//            spectrumizer.applyMoodbar(moodbar);
-//            spectrumizer.build();
-//
-//            // save with rotation
-//            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
-//                    spectrumizer.asBufferedImage(),
-//                    1000,100
-//            );
-//
-//            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
-//                    spectrumizer.asBufferedMoodbar(),
-//                    1000,100
-//            );
-//
-//            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
-//                    spectrumizer.asBufferedImage(),
-//                    spectrumizer.asBufferedMoodbar(),
-//                    MoodbarAdapter.convertToBufferedImage(),
-//                    circle, circleMood,
-//                    displayText
-//            );
-//            ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
-//
-//            BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
-//            ImageIO.write(
-//                    LunarTear.addTitle(bubble, displayText), "png",
-//                    new File(testPath+"/"+sogname+"_bubble.png")
-//            );
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+            // save with rotation
+            BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
+                    spectrumizer.asBufferedImage(),
+                    1000,100
+            );
+
+            BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
+                    spectrumizer.asBufferedMoodbar(),
+                    1000,100
+            );
+
+            LunarTear.setBackgroundColor(Color.WHITE);
+            LunarTear.setFontColor(Color.BLACK);
+            LunarTear.setFontSize(38);
+            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
+                    spectrumizer.asBufferedImage(),
+                    spectrumizer.asBufferedMoodbar(),
+                    MoodbarAdapter.toBufferedImage(moodbar, 150),
+                    circle, circleMood,
+                    displayText
+            );
+            ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
+
+            LunarTear.setBackgroundColor(Color.BLACK);
+            LunarTear.setFontColor(Color.WHITE);
+            BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
+            ImageIO.write(
+                    LunarTear.addTitle(bubble, displayText), "png",
+                    new File(testPath+"/"+sogname+"_bubble.png")
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }

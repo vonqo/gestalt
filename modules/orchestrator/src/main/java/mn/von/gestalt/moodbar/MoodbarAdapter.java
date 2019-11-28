@@ -23,12 +23,16 @@ import java.util.logging.Logger;
  **/
 public class MoodbarAdapter {
 
-    private static ProcessBuilder processBuilder;
-    private static Process process;
+//    private static ProcessBuilder processBuilder;
+//    private static Process process;
 
     // private static Vector<Color> moodbar;
 
     public static Vector<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT) throws IOException {
+
+        ProcessBuilder processBuilder;
+        Process process;
+
         Vector<Color> moodbar = new Vector<Color>(1000);
 
         processBuilder = new ProcessBuilder("moodbar", "-o" ,OUTPUT, AUDIO_PATH);
@@ -36,9 +40,8 @@ public class MoodbarAdapter {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
         String line = null;
-        System.out.println("process");
+
         while ((line = reader.readLine()) != null) {
-            System.out.println(line);
             if(!"".equals(line)) moodbar.add(colorize(line));
         }
 
@@ -50,7 +53,7 @@ public class MoodbarAdapter {
         } catch (InterruptedException ex) {
             Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        System.out.println(moodbar.size());
         return moodbar;
     }
 
