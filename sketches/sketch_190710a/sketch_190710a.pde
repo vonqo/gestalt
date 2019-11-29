@@ -72,11 +72,6 @@ void drawStats(int leftPadding, int topPadding) {
 }
 
 void drawTestScene(int width, int height, int leftPadding, int topPadding) {
-  // for(int x = 0; x < width; x++) {
-  //  for(int y = 0; y < height; y++) {
-  //    set(x + leftPadding,y + topPadding,color(0,0,0)); 
-  //  }
-  //}
   fill(255);
   rect(leftPadding, topPadding, width, height);
   float scale = 0;
