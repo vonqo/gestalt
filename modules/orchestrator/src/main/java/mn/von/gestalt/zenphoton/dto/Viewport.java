@@ -1,13 +1,14 @@
 package mn.von.gestalt.zenphoton.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Viewport implements Serializable {
+public class Viewport extends ArrayList implements Serializable {
 
-    private int left;
-    private int top;
-    private int width;
-    private int height;
+    private transient int left;
+    private transient int top;
+    private transient int width;
+    private transient int height;
 
     public Viewport() {
         super();
@@ -43,5 +44,11 @@ public class Viewport implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void toList() {
+        this.clear();
+        this.add(this.left); this.add(this.top);
+        this.add(this.width); this.add(this.height);
     }
 }

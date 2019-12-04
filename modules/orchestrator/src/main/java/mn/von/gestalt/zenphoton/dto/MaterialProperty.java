@@ -1,27 +1,39 @@
 package mn.von.gestalt.zenphoton.dto;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class MaterialProperty implements Serializable {
+public class MaterialProperty extends ArrayList implements Serializable {
 
-    private char type;
-    private float weigth;
+    public enum MaterialPropertyType {
+        Diffuse,
+        Reflective,
+        Transmissive
+    }
+    private transient char type;
+    private transient float weigth;
 
     public MaterialProperty() {
         super();
     }
 
-    public Material.MaterialPropertyType getType() {
-        if(type == 'd') return Material.MaterialPropertyType.Diffuse;
-        if(type == 't') return Material.MaterialPropertyType.Transmissive;
-        if(type == 'r') return Material.MaterialPropertyType.Reflective;
+    public MaterialPropertyType getType() {
+        if(type == 'd') return MaterialPropertyType.Diffuse;
+        if(type == 't') return MaterialPropertyType.Transmissive;
+        if(type == 'r') return MaterialPropertyType.Reflective;
         return null;
     }
 
-    public void setType(Material.MaterialPropertyType type) {
-        if(type == Material.MaterialPropertyType.Diffuse) this.type = 'd';
-        else if(type == Material.MaterialPropertyType.Transmissive) this.type = 't';
-        else if(type == Material.MaterialPropertyType.Reflective) this.type = 'r';
+    public void setType(MaterialPropertyType type) {
+        if(type == MaterialPropertyType.Diffuse) this.type = 'd';
+        else if(type == MaterialPropertyType.Transmissive) this.type = 't';
+        else if(type == MaterialPropertyType.Reflective) this.type = 'r';
+
     }
 
     public float getWeigth() {
@@ -30,5 +42,11 @@ public class MaterialProperty implements Serializable {
 
     public void setWeigth(float weigth) {
         this.weigth = weigth;
+    }
+
+    public void wrapToList() {
+        this.clear();
+        this.add(this.type);
+        this.add(this.weigth);
     }
 }

@@ -1,11 +1,12 @@
 package mn.von.gestalt.zenphoton.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Resolution implements Serializable {
+public class Resolution extends ArrayList implements Serializable {
 
-    private int width;
-    private int height;
+    private transient int width;
+    private transient int height;
 
     public Resolution() {
         super();
@@ -25,5 +26,11 @@ public class Resolution implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void toList() {
+        this.clear();
+        this.add(width);
+        this.add(height);
     }
 }

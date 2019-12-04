@@ -1,8 +1,9 @@
 package mn.von.gestalt.zenphoton.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class ZObject implements Serializable {
+public class ZObject extends ArrayList implements Serializable {
 
     private int materialIndex;
     private int x0;
@@ -70,5 +71,10 @@ public class ZObject implements Serializable {
 
     public void setDa(int da) {
         this.da = da;
+    }
+
+    public void toList() {
+        this.clear();
+        //TODO implement
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 public class Scene implements Serializable {
 
     private float exposure;
+    private float gamma;
     private long rays;
     private Resolution resolution;
     private Viewport viewport;
@@ -15,6 +16,14 @@ public class Scene implements Serializable {
 
     public Scene() {
         super();
+    }
+
+    public float getGamma() {
+        return gamma;
+    }
+
+    public void setGamma(float gamma) {
+        this.gamma = gamma;
     }
 
     public float getExposure() {
