@@ -76,7 +76,15 @@ public class Light extends ArrayList implements Serializable {
 
     public void toList() {
         this.clear();
-        this.add(lightPower);
-        //TODO implement
+        this.add(this.lightPower);
+        this.add(this.cartesianX);
+        this.add(this.cartesianY);
+        if (this.polarAngle.size() == 1) this.add(this.polarAngle.get(0));
+        else this.add(this.polarAngle);
+        if (this.polarDistance.size() == 1) this.add(this.polarDistance.get(0));
+        else this.add(this.polarDistance);
+        if (this.rayAngle.size() == 1) this.add(this.rayAngle.get(0));
+        else this.add(this.rayAngle);
+        this.add(this.waveLength);
     }
 }

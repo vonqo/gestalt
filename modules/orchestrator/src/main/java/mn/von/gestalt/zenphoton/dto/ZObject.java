@@ -73,8 +73,23 @@ public class ZObject extends ArrayList implements Serializable {
         this.da = da;
     }
 
+    public void toListExtended() {
+        this.clear();
+        this.add(this.materialIndex);
+        this.add(this.x0);
+        this.add(this.y0);
+        this.add(this.a0);
+        this.add(this.dx);
+        this.add(this.dy);
+        this.add(this.da);
+    }
+
     public void toList() {
         this.clear();
-        //TODO implement
+        this.add(this.materialIndex);
+        this.add(this.x0);
+        this.add(this.y0);
+        this.add(this.dx);
+        this.add(this.dy);
     }
 }

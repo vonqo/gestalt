@@ -46,7 +46,7 @@ public class MaterialProperty extends ArrayList implements Serializable {
 
     public void wrapToList() {
         this.clear();
-        this.add(this.type);
         this.add(this.weigth);
+        this.add(this.type);
     }
 }
