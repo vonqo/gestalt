@@ -13,6 +13,11 @@ public class LunarTear {
     public static Color fontColor = new Color(255,255,255);
     public static Color backgroundColor = new Color(0,0,0);
 
+    public static BufferedImage MakeFun(int width, int height, String title ) {
+        BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+        return null;
+    }
 
     public static BufferedImage MoodbarAndSpectogramCollection(BufferedImage spectogram, BufferedImage spectogramColorful, BufferedImage moodbar, BufferedImage circle, BufferedImage circleColorful, String title) {
         BufferedImage canvas = new BufferedImage(1000, 1300, BufferedImage.TYPE_INT_ARGB);
