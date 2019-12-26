@@ -3,6 +3,7 @@ package mn.von.gestalt.utility.grimoire;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
+import java.util.Arrays;
 import java.util.Vector;
 import java.util.ArrayList;
 
@@ -12,6 +13,26 @@ public class LunarTear {
     public static String fontName = "Roboto Mono";
     public static Color fontColor = new Color(255,255,255);
     public static Color backgroundColor = new Color(0,0,0);
+
+    public static void RGB2WV_Generate_LossyExhaustingTable() {
+        float[][][] colorTable = new float[255][255][255];
+        boolean[][][] fillTable = new boolean[255][255][255];
+        int rate = 0;
+        // Generate discrete wvs
+        for(short i = 360; i <= 780; i++) {
+            float gamma = 0.05f;
+            for(short e = 0; e < 20; e++, gamma += 0.05f) {
+                Color clr = Wavelength.wvColor(i, gamma);
+                short r = (short)clr.getRed();
+                short g = (short)clr.getGreen();
+                short b = (short)clr.getBlue();
+                colorTable[r][g][b] = (float)i;
+                fillTable[r][g][b] = true;
+                rate++;
+            }
+        }
+        System.out.println(rate);
+    }
 
     public static BufferedImage MakeFun(int width, int height, String title ) {
         BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
