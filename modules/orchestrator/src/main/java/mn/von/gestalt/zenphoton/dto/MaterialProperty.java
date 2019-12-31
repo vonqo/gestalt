@@ -1,7 +1,5 @@
 package mn.von.gestalt.zenphoton.dto;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;

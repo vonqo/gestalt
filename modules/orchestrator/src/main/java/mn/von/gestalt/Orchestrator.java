@@ -50,9 +50,9 @@ public class Orchestrator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//
+
         try {
-//             Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+//            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
 //            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"divine.mp3",testPath+"/bar1");
 //            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"shootingstar.mp3",testPath+"/bar2");
 //            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"manaach.mp3",testPath+"/bar3");
@@ -116,6 +116,9 @@ public class Orchestrator {
 //            );
 
 //
+
+            // ==============================================================
+            // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
             Scene scene = new Scene();
             Resolution reso = new Resolution();
             reso.setHeight(1000);
@@ -201,7 +204,7 @@ public class Orchestrator {
             light1.toList(); lights.add(light1);
             scene.setLights(lights);
 
-            hqzAdapter.buildHQZ(scene);
+            // hqzAdapter.buildHQZ(scene);
 
         } catch (Exception e) {
             e.printStackTrace();
