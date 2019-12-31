@@ -50,9 +50,9 @@ public class Orchestrator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//
+
         try {
-//             Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+//            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
 //            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"divine.mp3",testPath+"/bar1");
 //            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"shootingstar.mp3",testPath+"/bar2");
 //            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"manaach.mp3",testPath+"/bar3");
@@ -118,93 +118,93 @@ public class Orchestrator {
 //
 
             // ==============================================================
-            LunarTear.RGB2WV_Generate_LossyExhaustingTable();
-//            Scene scene = new Scene();
-//            Resolution reso = new Resolution();
-//            reso.setHeight(1000);
-//            reso.setWidth(1000);
-//            reso.toList();
-//            scene.setResolution(reso);
-//            Viewport viewport = new Viewport();
-//            viewport.setHeight(1000);
-//            viewport.setWidth(1000);
-//            viewport.setLeft(0); viewport.setTop(0);
-//            viewport.toList();
-//            scene.setViewport(viewport);
-//            scene.setRays(1000000);
-//            scene.setExposure(0.2f);
-//            scene.setGamma(2.2f);
-//
-//            // ================ MATERIAL =============== //
-//            List<Material> materials = new ArrayList<Material>();
-//            Material material1 = new Material();
-//
-//            MaterialProperty property11 = new MaterialProperty();
-//            property11.setType(MaterialProperty.MaterialPropertyType.Diffuse);
-//            property11.setWeigth(0.5f);
-//            property11.wrapToList();
-//
-//            MaterialProperty property12 = new MaterialProperty();
-//            property12.setType(MaterialProperty.MaterialPropertyType.Reflective);
-//            property12.setWeigth(0.5f);
-//            property12.wrapToList();
-//
-//            material1.addMaterialProperty(property11);
-//            material1.addMaterialProperty(property12);
-//            materials.add(material1);
-//            scene.setMaterials(materials);
-//
-//            // ================ OBJECTS =============== //
-//            List<ZObject> objects = new ArrayList<ZObject>();
-//            ZObject obj1 = new ZObject();
-//            obj1.setMaterialIndex(0);
-//            obj1.setX0(0); obj1.setY0(0);
-//            obj1.setDx(1000); obj1.setDy(0);
-//            obj1.toList(); objects.add(obj1);
-//
-//            ZObject obj2 = new ZObject();
-//            obj2.setMaterialIndex(0);
-//            obj2.setX0(1000); obj1.setY0(0);
-//            obj2.setDx(1000); obj1.setDy(0);
-//            obj2.toList(); objects.add(obj2);
-//
-//            ZObject obj3 = new ZObject();
-//            obj3.setMaterialIndex(0);
-//            obj3.setX0(0); obj1.setY0(0);
-//            obj3.setDx(0); obj1.setDy(1000);
-//            obj3.toList(); objects.add(obj3);
-//
-//            ZObject obj4 = new ZObject();
-//            obj4.setMaterialIndex(0);
-//            obj4.setX0(1000); obj4.setY0(0);
-//            obj4.setDx(0); obj4.setDy(1000);
-//            obj4.toList(); objects.add(obj4);
-//
-//            scene.setObjects(objects);
-//
-//            // ================ LIGHTS =============== //
-//            List<Light> lights = new ArrayList<Light>();
-//            Light light1 = new Light();
-//            light1.setLightPower(1);
-//            light1.setCartesianX(2); light1.setCartesianY(2);
-//
-//            ArrayList<Integer> polarAngle = new ArrayList<Integer>();
-//            polarAngle.add(0); polarAngle.add(90);
-//            light1.setPolarAngle(polarAngle);
-//
-//            ArrayList<Integer> polarDist = new ArrayList<Integer>();
-//            polarDist.add(0); polarDist.add(750);
-//            light1.setPolarDistance(polarDist);
-//
-//            ArrayList<Integer> rayAngle = new ArrayList<Integer>();
-//            rayAngle.add(0); rayAngle.add(360);
-//            light1.setRayAngle(rayAngle);
-//
-//            light1.setWaveLength(580);
-//            light1.toList(); lights.add(light1);
-//            scene.setLights(lights);
-//
-//            hqzAdapter.buildHQZ(scene);
+            // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
+            Scene scene = new Scene();
+            Resolution reso = new Resolution();
+            reso.setHeight(1000);
+            reso.setWidth(1000);
+            reso.toList();
+            scene.setResolution(reso);
+            Viewport viewport = new Viewport();
+            viewport.setHeight(1000);
+            viewport.setWidth(1000);
+            viewport.setLeft(0); viewport.setTop(0);
+            viewport.toList();
+            scene.setViewport(viewport);
+            scene.setRays(1000000);
+            scene.setExposure(0.2f);
+            scene.setGamma(2.2f);
+
+            // ================ MATERIAL =============== //
+            List<Material> materials = new ArrayList<Material>();
+            Material material1 = new Material();
+
+            MaterialProperty property11 = new MaterialProperty();
+            property11.setType(MaterialProperty.MaterialPropertyType.Diffuse);
+            property11.setWeigth(0.5f);
+            property11.wrapToList();
+
+            MaterialProperty property12 = new MaterialProperty();
+            property12.setType(MaterialProperty.MaterialPropertyType.Reflective);
+            property12.setWeigth(0.5f);
+            property12.wrapToList();
+
+            material1.addMaterialProperty(property11);
+            material1.addMaterialProperty(property12);
+            materials.add(material1);
+            scene.setMaterials(materials);
+
+            // ================ OBJECTS =============== //
+            List<ZObject> objects = new ArrayList<ZObject>();
+            ZObject obj1 = new ZObject();
+            obj1.setMaterialIndex(0);
+            obj1.setX0(0); obj1.setY0(0);
+            obj1.setDx(1000); obj1.setDy(0);
+            obj1.toList(); objects.add(obj1);
+
+            ZObject obj2 = new ZObject();
+            obj2.setMaterialIndex(0);
+            obj2.setX0(1000); obj1.setY0(0);
+            obj2.setDx(1000); obj1.setDy(0);
+            obj2.toList(); objects.add(obj2);
+
+            ZObject obj3 = new ZObject();
+            obj3.setMaterialIndex(0);
+            obj3.setX0(0); obj1.setY0(0);
+            obj3.setDx(0); obj1.setDy(1000);
+            obj3.toList(); objects.add(obj3);
+
+            ZObject obj4 = new ZObject();
+            obj4.setMaterialIndex(0);
+            obj4.setX0(1000); obj4.setY0(0);
+            obj4.setDx(0); obj4.setDy(1000);
+            obj4.toList(); objects.add(obj4);
+
+            scene.setObjects(objects);
+
+            // ================ LIGHTS =============== //
+            List<Light> lights = new ArrayList<Light>();
+            Light light1 = new Light();
+            light1.setLightPower(1);
+            light1.setCartesianX(2); light1.setCartesianY(2);
+
+            ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+            polarAngle.add(0); polarAngle.add(90);
+            light1.setPolarAngle(polarAngle);
+
+            ArrayList<Integer> polarDist = new ArrayList<Integer>();
+            polarDist.add(0); polarDist.add(750);
+            light1.setPolarDistance(polarDist);
+
+            ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+            rayAngle.add(0); rayAngle.add(360);
+            light1.setRayAngle(rayAngle);
+
+            light1.setWaveLength(580);
+            light1.toList(); lights.add(light1);
+            scene.setLights(lights);
+
+            // hqzAdapter.buildHQZ(scene);
 
         } catch (Exception e) {
             e.printStackTrace();

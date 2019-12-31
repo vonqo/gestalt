@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Light extends ArrayList implements Serializable {
 
-    private transient int lightPower;
+    private transient float lightPower;
     private transient int cartesianX;
     private transient int cartesianY;
     private transient List<Integer> polarAngle;
@@ -18,11 +18,11 @@ public class Light extends ArrayList implements Serializable {
         super();
     }
 
-    public int getLightPower() {
+    public float getLightPower() {
         return lightPower;
     }
 
-    public void setLightPower(int lightPower) {
+    public void setLightPower(float lightPower) {
         this.lightPower = lightPower;
     }
 
