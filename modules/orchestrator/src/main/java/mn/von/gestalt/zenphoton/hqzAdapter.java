@@ -2,6 +2,7 @@ package mn.von.gestalt.zenphoton;
 
 import com.google.gson.Gson;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
+import mn.von.gestalt.utility.Settings;
 import mn.von.gestalt.zenphoton.dto.Scene;
 
 import java.io.BufferedReader;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
 
 public class hqzAdapter {
 
-    public static String hqzExecutablePath = "/home/anomaly/Desktop/gestalt/modules/zenphoton/hqz/";
+    public static String hqzExecutablePath = Settings.GESTALT_PATH+"/modules/zenphoton/hqz/";
 
     public static void buildHQZ(Scene scene) throws IOException {
 
@@ -24,7 +25,7 @@ public class hqzAdapter {
 
         ProcessBuilder processBuilder;
         Process process;
-        String jsonInputName = "/home/anomaly/Desktop/gestalt/modules/zenphoton/hqz/examples/moodphoton.json";
+        String jsonInputName = Settings.GESTALT_PATH+"/modules/zenphoton/hqz/examples/moodphoton.json";
         String outputName = "test_output.png";
         Files.write(Paths.get(jsonInputName), jsonInString.getBytes());
 
