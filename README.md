@@ -1,4 +1,4 @@
-# [![Gestalt logo][][lupino22.github.io/gestalt]]
+# [![Gestalt logo[]][lupino22.github.io/gestalt]]
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5085d2cd13a245a0af21f85f48ae23a9)](https://www.codacy.com/app/lupino22/gestalt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lupino22/gestalt&amp;utm_campaign=Badge_Grade)
 
@@ -24,11 +24,10 @@ Facebook page: [Color Note and Code](www.facebook.com/colornotecode/)
 Execute ```install.sh```
 
 ## Associate
-<a  href="https://www.instagram.com/wiserstudio/"  target="_blank"><img  src=""></a>
-[![Wiser logo][][https://www.instagram.com/wiserstudio/]]
+[![Wiser logo[]][https://www.instagram.com/wiserstudio/]]
 
 ## Copyright & License
 Copyright (c) 2019 Enkh-Amar.G - Released under the [Mozilla Public License Version 2.0](LICENSE)
 
-[Gestalt logo]: https://github.com/lupino22/gestalt/blob/master/public/logo.png
+[Gestalt logo]: https://github.com/lupino22/gestalt/blob/master/public/logo.png | width=500
 [Wiser logo]: https://github.com/lupino22/gestalt/blob/master/public/waiza.jpg
