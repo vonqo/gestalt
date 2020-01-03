@@ -11,8 +11,8 @@ Facebook page: [Color Note and Code](www.facebook.com/colornotecode/)
 ## Directories
 * **modules** - List of modules that written in different programming languages
     * **orchestrator** - Synthesize variety of images, audio and videos.
-	* [Processing](https://github.com/processing) bindings
-	* Some utility classes taken from              [deeplearning4j](https://github.com/deeplearning4j)/[DataVec](https://github.com/deeplearning4j/DataVec)
+		* [Processing](https://github.com/processing) bindings
+		* Some utility classes taken from              [deeplearning4j](https://github.com/deeplearning4j)/[DataVec](https://github.com/deeplearning4j/DataVec)
     * **moodbar** - Used in orchestrator. Forked from [exaile](https://github.com/exaile)/[moodbar](https://github.com/exaile/moodbar) 
     * **hqz** - Used in orchestrator. Forked from [scanlime](https://github.com/scanlime)/[zenphoton](https://github.com/scanlime/zenphoton) 
     * **a1_restorer** - Image defect fixing, enhance greyscale
