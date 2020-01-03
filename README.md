@@ -29,5 +29,5 @@ Execute ```install.sh```
 ## Copyright & License
 Copyright (c) 2019 Enkh-Amar.G - Released under the [Mozilla Public License Version 2.0](LICENSE)
 
-[Gestalt logo]: https://github.com/lupino22/gestalt/blob/master/public/logo.png | width=500
+[Gestalt logo]: https://github.com/lupino22/gestalt/blob/master/public/logo.png
 [Wiser logo]: https://github.com/lupino22/gestalt/blob/master/public/waiza.jpg
