@@ -1,4 +1,4 @@
-# [![Gestalt logo][]](lupino22.github.io/gestalt)
+# [![Gestalt logo][]](https://lupino22.github.io/gestalt/)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5085d2cd13a245a0af21f85f48ae23a9)](https://www.codacy.com/app/lupino22/gestalt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lupino22/gestalt&amp;utm_campaign=Badge_Grade)
 
@@ -6,7 +6,7 @@ Definition of **gestalt**: "*something that is made of many parts and yet is som
 
 This is open source repository of creative coding playground, including interactive design and generative art experiments. Some visual ouputs are posted on facebook page.
 
-Facebook page: [Color Note and Code](www.facebook.com/colornotecode/)
+Facebook page: [Color Note and Code](https://www.facebook.com/colornotecode/)
 
 ## Directories
 * **modules** - List of modules that written in different programming languages
