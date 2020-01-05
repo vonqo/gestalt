@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E0E1EDB223C2482200E5B454 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0E1EDB123C2482200E5B454 /* main.cpp */; };
+		E0E1EDD123C24C4A00E5B454 /* moodbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0E1EDCF23C24C4A00E5B454 /* moodbar.cpp */; };
+		E0E1EDDA23C24C5100E5B454 /* gstfastspectrum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0E1EDD223C24C5100E5B454 /* gstfastspectrum.cpp */; };
+		E0E1EDDB23C24C5100E5B454 /* moodbarpipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0E1EDD323C24C5100E5B454 /* moodbarpipeline.cpp */; };
+		E0E1EDDC23C24C5100E5B454 /* plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0E1EDD723C24C5100E5B454 /* plugin.cpp */; };
+		E0E1EDDD23C24C5100E5B454 /* moodbarbuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0E1EDD823C24C5100E5B454 /* moodbarbuilder.cpp */; };
+		E0E1EDDE23C2510600E5B454 /* GStreamer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0E1EDB923C248B300E5B454 /* GStreamer.framework */; };
+		E0E1EDE223C254D700E5B454 /* libfftw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0E1EDE123C254D700E5B454 /* libfftw3.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E0E1EDAC23C2482200E5B454 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		E0E1EDAE23C2482200E5B454 /* moodbar-xcode */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "moodbar-xcode"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0E1EDB123C2482200E5B454 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E0E1EDB923C248B300E5B454 /* GStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GStreamer.framework; path = ../../../../../../Library/Frameworks/GStreamer.framework; sourceTree = "<group>"; };
+		E0E1EDCE23C24C4A00E5B454 /* moodbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moodbar.h; sourceTree = "<group>"; };
+		E0E1EDCF23C24C4A00E5B454 /* moodbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moodbar.cpp; sourceTree = "<group>"; };
+		E0E1EDD223C24C5100E5B454 /* gstfastspectrum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gstfastspectrum.cpp; sourceTree = "<group>"; };
+		E0E1EDD323C24C5100E5B454 /* moodbarpipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moodbarpipeline.cpp; sourceTree = "<group>"; };
+		E0E1EDD423C24C5100E5B454 /* moodbarpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moodbarpipeline.h; sourceTree = "<group>"; };
+		E0E1EDD523C24C5100E5B454 /* moodbarbuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moodbarbuilder.h; sourceTree = "<group>"; };
+		E0E1EDD623C24C5100E5B454 /* gstfastspectrum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gstfastspectrum.h; sourceTree = "<group>"; };
+		E0E1EDD723C24C5100E5B454 /* plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plugin.cpp; sourceTree = "<group>"; };
+		E0E1EDD823C24C5100E5B454 /* moodbarbuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moodbarbuilder.cpp; sourceTree = "<group>"; };
+		E0E1EDD923C24C5100E5B454 /* plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin.h; sourceTree = "<group>"; };
+		E0E1EDDF23C254A100E5B454 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../../../../opt/local/lib/fftw/3.3.8_1/lib; sourceTree = "<group>"; };
+		E0E1EDE123C254D700E5B454 /* libfftw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3.a; path = ../../../../../../opt/local/lib/fftw/3.3.8_1/lib/libfftw3.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E0E1EDAB23C2482200E5B454 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0E1EDE223C254D700E5B454 /* libfftw3.a in Frameworks */,
+				E0E1EDDE23C2510600E5B454 /* GStreamer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E0E1EDA523C2482100E5B454 = {
+			isa = PBXGroup;
+			children = (
+				E0E1EDB023C2482200E5B454 /* moodbar-xcode */,
+				E0E1EDAF23C2482200E5B454 /* Products */,
+				E0E1EDB823C248B300E5B454 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E0E1EDAF23C2482200E5B454 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E0E1EDAE23C2482200E5B454 /* moodbar-xcode */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E0E1EDB023C2482200E5B454 /* moodbar-xcode */ = {
+			isa = PBXGroup;
+			children = (
+				E0E1EDBD23C24ADC00E5B454 /* moodbar */,
+				E0E1EDB123C2482200E5B454 /* main.cpp */,
+				E0E1EDCF23C24C4A00E5B454 /* moodbar.cpp */,
+				E0E1EDCE23C24C4A00E5B454 /* moodbar.h */,
+			);
+			path = "moodbar-xcode";
+			sourceTree = "<group>";
+		};
+		E0E1EDB823C248B300E5B454 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E0E1EDE123C254D700E5B454 /* libfftw3.a */,
+				E0E1EDDF23C254A100E5B454 /* lib */,
+				E0E1EDB923C248B300E5B454 /* GStreamer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E0E1EDBD23C24ADC00E5B454 /* moodbar */ = {
+			isa = PBXGroup;
+			children = (
+				E0E1EDD223C24C5100E5B454 /* gstfastspectrum.cpp */,
+				E0E1EDD623C24C5100E5B454 /* gstfastspectrum.h */,
+				E0E1EDD823C24C5100E5B454 /* moodbarbuilder.cpp */,
+				E0E1EDD523C24C5100E5B454 /* moodbarbuilder.h */,
+				E0E1EDD323C24C5100E5B454 /* moodbarpipeline.cpp */,
+				E0E1EDD423C24C5100E5B454 /* moodbarpipeline.h */,
+				E0E1EDD723C24C5100E5B454 /* plugin.cpp */,
+				E0E1EDD923C24C5100E5B454 /* plugin.h */,
+			);
+			path = moodbar;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E0E1EDAD23C2482200E5B454 /* moodbar-xcode */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0E1EDB523C2482200E5B454 /* Build configuration list for PBXNativeTarget "moodbar-xcode" */;
+			buildPhases = (
+				E0E1EDAA23C2482200E5B454 /* Sources */,
+				E0E1EDAB23C2482200E5B454 /* Frameworks */,
+				E0E1EDAC23C2482200E5B454 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "moodbar-xcode";
+			productName = "moodbar-xcode";
+			productReference = E0E1EDAE23C2482200E5B454 /* moodbar-xcode */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E0E1EDA623C2482100E5B454 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Von Eirene";
+				TargetAttributes = {
+					E0E1EDAD23C2482200E5B454 = {
+						CreatedOnToolsVersion = 11.3;
+					};
+				};
+			};
+			buildConfigurationList = E0E1EDA923C2482100E5B454 /* Build configuration list for PBXProject "moodbar-xcode" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E0E1EDA523C2482100E5B454;
+			productRefGroup = E0E1EDAF23C2482200E5B454 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E0E1EDAD23C2482200E5B454 /* moodbar-xcode */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E0E1EDAA23C2482200E5B454 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0E1EDDC23C24C5100E5B454 /* plugin.cpp in Sources */,
+				E0E1EDDD23C24C5100E5B454 /* moodbarbuilder.cpp in Sources */,
+				E0E1EDB223C2482200E5B454 /* main.cpp in Sources */,
+				E0E1EDD123C24C4A00E5B454 /* moodbar.cpp in Sources */,
+				E0E1EDDA23C24C5100E5B454 /* gstfastspectrum.cpp in Sources */,
+				E0E1EDDB23C24C5100E5B454 /* moodbarpipeline.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E0E1EDB323C2482200E5B454 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E0E1EDB423C2482200E5B454 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E0E1EDB623C2482200E5B454 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/GStreamer.framework/Headers,
+					/usr/local/Cellar/fftw/3.3.8_1/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib/fftw/3.3.8_1/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E0E1EDB723C2482200E5B454 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/GStreamer.framework/Headers,
+					/usr/local/Cellar/fftw/3.3.8_1/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib/fftw/3.3.8_1/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E0E1EDA923C2482100E5B454 /* Build configuration list for PBXProject "moodbar-xcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0E1EDB323C2482200E5B454 /* Debug */,
+				E0E1EDB423C2482200E5B454 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0E1EDB523C2482200E5B454 /* Build configuration list for PBXNativeTarget "moodbar-xcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0E1EDB623C2482200E5B454 /* Debug */,
+				E0E1EDB723C2482200E5B454 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E0E1EDA623C2482100E5B454 /* Project object */;
+}
