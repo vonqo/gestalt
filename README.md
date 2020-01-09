@@ -4,7 +4,7 @@
 
 Definition of **gestalt**: "*something that is made of many parts and yet is somehow more than or different from the combination of its parts*"
 
-This is open source repository of creative coding playground, including interactive design and generative art experiments. Some visual ouputs are posted on facebook page.
+This is an open source repository of creative coding playground, including interactive design and generative art experiments. Some visual ouputs are posted on facebook page.
 
 Facebook page: [Color Note and Code](https://www.facebook.com/colornotecode/)
 
@@ -17,8 +17,8 @@ Facebook page: [Color Note and Code](https://www.facebook.com/colornotecode/)
     * **hqz** - Used in orchestrator. Forked from [scanlime](https://github.com/scanlime)/[zenphoton](https://github.com/scanlime/zenphoton) 
     * **a1_restorer** - Image defect fixing, enhance greyscale
 
-* Sketches: Processing sketches
-* ***study_materials*** Project related study materials.
+* **sketches** - Processing sketches
+* **study_materials** - Project related study materials.
 
 ## Install and use
 Execute ```install.sh```
