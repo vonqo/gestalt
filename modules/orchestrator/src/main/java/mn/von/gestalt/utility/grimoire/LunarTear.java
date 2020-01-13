@@ -83,7 +83,7 @@ public class LunarTear {
         return canvas;
     }
 
-    public static BufferedImage legacy4Bar(ArrayList<BufferedImage> moodbarList, ArrayList<String> moodbarTitle) {
+    public static BufferedImage vanilla4Bar(ArrayList<BufferedImage> moodbarList, ArrayList<String> moodbarTitle) {
         if(moodbarList.size() != moodbarTitle.size()) {
             throw new RuntimeException("parameter error");
         }

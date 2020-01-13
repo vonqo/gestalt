@@ -21,7 +21,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class hqzAdapter {
+public class HQZAdapter {
 
     public static String hqzExecutablePath = Settings.GESTALT_PATH+"/modules/zenphoton/hqz/";
     private static int absoluteRed = 635;
@@ -29,8 +29,14 @@ public class hqzAdapter {
     private static int absoluteBlue = 465;
     private static float colorPercent = 0.00039f;
 
+    public enum Types {
+        TEST1,
+        TEST2,
+        TEST3
+    }
 
-    public static void buildHQZ(Vector<Color> moodbar, double[][] spectrumData, String title, String filename) throws IOException {
+
+    public static void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, File output) throws IOException {
 
         // ================ Scene building - phase ============= //
         Scene scene = new Scene();
@@ -52,19 +58,19 @@ public class hqzAdapter {
         List<Light> lightList = new ArrayList<Light>();
 
         ArrayList<Integer> polarAngle = new ArrayList<Integer>();
-        polarAngle.add(0); polarAngle.add(2);
+        polarAngle.add(-3); polarAngle.add(3);
 
         ArrayList<Integer> polarAngle2 = new ArrayList<Integer>();
-        polarAngle2.add(90); polarAngle2.add(92);
+        polarAngle2.add(87); polarAngle2.add(93);
 
         ArrayList<Integer> polarDist = new ArrayList<Integer>();
         polarDist.add(0); polarDist.add(1500);
 
         ArrayList<Integer> rayAngle = new ArrayList<Integer>();
-        rayAngle.add(0); rayAngle.add(1);
+        rayAngle.add(-3); rayAngle.add(3);
 
         ArrayList<Integer> rayAngle2 = new ArrayList<Integer>();
-        rayAngle2.add(90); rayAngle2.add(91);
+        rayAngle2.add(87); rayAngle2.add(93);
 
         // ================ LIGHTS =============== //
         for(int i = 0; i < moodbar.size(); i++) {
@@ -257,11 +263,9 @@ public class hqzAdapter {
         ProcessBuilder processBuilder;
         Process process;
         String jsonInputName = Settings.GESTALT_PATH+"/modules/zenphoton/hqz/examples/moodphoton.json";
-        String outputName = filename;
         Files.write(Paths.get(jsonInputName), jsonInString.getBytes());
 
-        processBuilder = new ProcessBuilder(hqzExecutablePath+"hqz",jsonInputName,outputName).redirectErrorStream(true);
-
+        processBuilder = new ProcessBuilder(hqzExecutablePath+"hqz",jsonInputName,output.getName()).redirectErrorStream(true);
         process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -275,20 +279,31 @@ public class hqzAdapter {
             int wait = process.waitFor();
             System.out.println(wait);
             if (wait == 0) {
-                Logger.getLogger(hqzAdapter.class.getName()).log(Level.INFO, "Zenphoton build finished");
-                BufferedImage img = ImageIO.read(new File(outputName));
-                LunarTear.setBackgroundColor(Color.BLACK);
-                LunarTear.setFontColor(Color.WHITE);
-                LunarTear.setFontSize(28);
-                LunarTear.setFontName("Roboto Mono");
-                ImageIO.write(
-                        LunarTear.addTitle(img, title), "png",
-                    new File(outputName)
-                );
+                Logger.getLogger(HQZAdapter.class.getName()).log(Level.INFO, "Zenphoton build finished");
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(hqzAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HQZAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private List<Material> buildMaterials() {
+        //TODO: materials
+        return null;
+    }
+
+    private List<ZObject> buildObjects() {
+        //TODO: objects
+        return  null;
+    }
+
+    private List<Light> buildLights() {
+        //TODO: lights
+        return null;
+    }
+
+    private Scene initializeScene() {
+        //TODO: scene
+        return null;
     }
 
 }
