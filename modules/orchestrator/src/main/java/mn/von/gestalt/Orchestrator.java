@@ -63,7 +63,8 @@ public class Orchestrator {
             // ==============================================================
             // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
             File outputFile = new File("emil.png");
-            HQZAdapter.buildHQZ(HQZAdapter.Types.TEST1, moodbar, spectrumizer.getDATA(), outputFile);
+            HQZAdapter hqz = new HQZAdapter();
+            hqz.buildHQZ(HQZAdapter.Types.TEST1, moodbar, spectrumizer.getDATA(), outputFile);
             BufferedImage img = ImageIO.read(outputFile);
             LunarTear.setBackgroundColor(Color.BLACK);
             LunarTear.setFontColor(Color.WHITE);
@@ -165,10 +166,6 @@ public class Orchestrator {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private static void renderVanillaCombo() {
-
     }
 
 

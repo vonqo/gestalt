@@ -36,227 +36,22 @@ public class HQZAdapter {
     }
 
 
-    public static void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, File output) throws IOException {
-
+    public void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, File output) throws IOException {
         // ================ Scene building - phase ============= //
-        Scene scene = new Scene();
-        Resolution reso = new Resolution();
-        reso.setHeight(2000);
-        reso.setWidth(2000);
-        reso.toList();
-        scene.setResolution(reso);
-        Viewport viewport = new Viewport();
-        viewport.setHeight(2000);
-        viewport.setWidth(2000);
-        viewport.setLeft(0); viewport.setTop(0);
-        viewport.toList();
-        scene.setViewport(viewport);
-        scene.setRays(5000000);
-        scene.setExposure(0.2f);
-        scene.setGamma(2.2f);
-
-        List<Light> lightList = new ArrayList<Light>();
-
-        ArrayList<Integer> polarAngle = new ArrayList<Integer>();
-        polarAngle.add(-3); polarAngle.add(3);
-
-        ArrayList<Integer> polarAngle2 = new ArrayList<Integer>();
-        polarAngle2.add(87); polarAngle2.add(93);
-
-        ArrayList<Integer> polarDist = new ArrayList<Integer>();
-        polarDist.add(0); polarDist.add(1500);
-
-        ArrayList<Integer> rayAngle = new ArrayList<Integer>();
-        rayAngle.add(-3); rayAngle.add(3);
-
-        ArrayList<Integer> rayAngle2 = new ArrayList<Integer>();
-        rayAngle2.add(87); rayAngle2.add(93);
+        Scene scene = initializeScene(50000);
 
         // ================ LIGHTS =============== //
-        for(int i = 0; i < moodbar.size(); i++) {
-            Color clr = moodbar.get(i);
-            int x = i*2; int y = i*2;
-
-            Light lightRed = new Light();
-            lightRed.setPolarDistance(polarDist);
-            lightRed.setCartesianX(x); lightRed.setCartesianY(y);
-            lightRed.setLightPower(clr.getRed() * colorPercent);
-            lightRed.setWaveLength(absoluteRed);
-
-            Light lightGreen = new Light();
-            lightGreen.setPolarDistance(polarDist);
-            lightGreen.setCartesianX(x); lightGreen.setCartesianY(y);
-            lightGreen.setLightPower(clr.getGreen() * colorPercent);
-            lightGreen.setWaveLength(absoluteGreen);
-
-            Light lightBlue = new Light();
-            lightBlue.setPolarDistance(polarDist);
-            lightBlue.setCartesianX(x); lightBlue.setCartesianY(y);
-            lightBlue.setLightPower(clr.getBlue() * colorPercent);
-            lightBlue.setWaveLength(absoluteBlue);
-
-            if(i % 2 == 0) {
-                lightGreen.setPolarAngle(polarAngle);
-                lightRed.setPolarAngle(polarAngle);
-                lightBlue.setPolarAngle(polarAngle);
-                lightRed.setRayAngle(rayAngle);
-                lightBlue.setRayAngle(rayAngle);
-                lightGreen.setRayAngle(rayAngle);
-            } else {
-                lightGreen.setPolarAngle(polarAngle2);
-                lightRed.setPolarAngle(polarAngle2);
-                lightBlue.setPolarAngle(polarAngle2);
-                lightRed.setRayAngle(rayAngle2);
-                lightBlue.setRayAngle(rayAngle2);
-                lightGreen.setRayAngle(rayAngle2);
-            }
-
-
-            lightRed.toList(); lightBlue.toList(); lightGreen.toList();
-            lightList.add(lightRed);
-            lightList.add(lightGreen);
-            lightList.add(lightBlue);
-        }
+        List<Light> lightList = buildLights(moodbar);
         scene.setLights(lightList);
 
         // ================ MATERIALS =============== //
-        List<Material> materials = new ArrayList<Material>();
-        Material material1 = new Material();
-
-        MaterialProperty property11 = new MaterialProperty();
-        property11.setType(MaterialProperty.MaterialPropertyType.Diffuse);
-        property11.setWeigth(1.0f);
-        property11.wrapToList();
-
-        MaterialProperty property12 = new MaterialProperty();
-        property12.setType(MaterialProperty.MaterialPropertyType.Reflective);
-        property12.setWeigth(0f);
-        property12.wrapToList();
-
-        material1.addMaterialProperty(property11);
-        material1.addMaterialProperty(property12);
-        materials.add(material1);
-
-
-        Material material2 = new Material();
-
-        MaterialProperty property21 = new MaterialProperty();
-        property21.setType(MaterialProperty.MaterialPropertyType.Diffuse);
-        property21.setWeigth(0.9f);
-        property21.wrapToList();
-
-        MaterialProperty property22 = new MaterialProperty();
-        property22.setType(MaterialProperty.MaterialPropertyType.Transmissive);
-        property22.setWeigth(0.1f);
-        property22.wrapToList();
-
-        material2.addMaterialProperty(property21);
-        material2.addMaterialProperty(property22);
-        materials.add(material2);
-
-        Material material3 = new Material();
-
-        MaterialProperty property31 = new MaterialProperty();
-        property31.setType(MaterialProperty.MaterialPropertyType.Transmissive);
-        property31.setWeigth(0.05f);
-        property31.wrapToList();
-
-        MaterialProperty property32 = new MaterialProperty();
-        property32.setType(MaterialProperty.MaterialPropertyType.Reflective);
-        property32.setWeigth(0.8f);
-        property32.wrapToList();
-
-        MaterialProperty property33 = new MaterialProperty();
-        property33.setType(MaterialProperty.MaterialPropertyType.Diffuse);
-        property33.setWeigth(0.15f);
-        property33.wrapToList();
-
-        material3.addMaterialProperty(property31);
-        material3.addMaterialProperty(property32);
-        material3.addMaterialProperty(property33);
-        materials.add(material3);
-
-        Material material4 = new Material();
-
-        MaterialProperty property41 = new MaterialProperty();
-        property41.setType(MaterialProperty.MaterialPropertyType.Transmissive);
-        property41.setWeigth(0.7f);
-        property41.wrapToList();
-
-        MaterialProperty property42 = new MaterialProperty();
-        property42.setType(MaterialProperty.MaterialPropertyType.Reflective);
-        property42.setWeigth(0);
-        property42.wrapToList();
-
-        MaterialProperty property43 = new MaterialProperty();
-        property43.setType(MaterialProperty.MaterialPropertyType.Diffuse);
-        property43.setWeigth(0.3f);
-        property43.wrapToList();
-
-        material4.addMaterialProperty(property41);
-        material4.addMaterialProperty(property42);
-        material4.addMaterialProperty(property43);
-        materials.add(material4);
-
+        List<Material> materials = buildMaterials();
         scene.setMaterials(materials);
 
         // ================ OBJECTS =============== //
-        List<ZObject> objects = new ArrayList<ZObject>();
-        ZObject obj1 = new ZObject();
-        obj1.setMaterialIndex(0);
-        obj1.setX0(0); obj1.setY0(0);
-        obj1.setDx(2000); obj1.setDy(0);
-        obj1.toList(); objects.add(obj1);
-
-        ZObject obj2 = new ZObject();
-        obj2.setMaterialIndex(0);
-        obj2.setX0(2000); obj1.setY0(0);
-        obj2.setDx(2000); obj1.setDy(0);
-        obj2.toList(); objects.add(obj2);
-
-        ZObject obj3 = new ZObject();
-        obj3.setMaterialIndex(0);
-        obj3.setX0(0); obj1.setY0(0);
-        obj3.setDx(0); obj1.setDy(2000);
-        obj3.toList(); objects.add(obj3);
-
-        ZObject obj4 = new ZObject();
-        obj4.setMaterialIndex(0);
-        obj4.setX0(2000); obj4.setY0(0);
-        obj4.setDx(0); obj4.setDy(2000);
-        obj4.toList(); objects.add(obj4);
-
-        ZObject object1 = new ZObject();
-        object1.setMaterialIndex(1);
-        object1.setX0(1600); object1.setY0(0);
-        object1.setDx(150); object1.setDy(730);
-        object1.toList(); objects.add(object1);
-
-        ZObject object2 = new ZObject();
-        object2.setMaterialIndex(2);
-        object2.setX0(1750); object2.setY0(730);
-        object2.setDx(-70); object2.setDy(200);
-        object2.toList(); objects.add(object2);
-
-        ZObject object3 = new ZObject();
-        object3.setMaterialIndex(1);
-        object3.setX0(1900); object3.setY0(1000);
-        object3.setDx(-250); object3.setDy(180);
-        object3.toList(); objects.add(object3);
-
-        ZObject object4 = new ZObject();
-        object4.setMaterialIndex(1);
-        object4.setX0(100); object4.setY0(1560);
-        object4.setDx(630); object4.setDy(-440);
-        object4.toList(); objects.add(object4);
-
-        ZObject object5 = new ZObject();
-        object5.setMaterialIndex(2);
-        object5.setX0(690); object5.setY0(1430);
-        object5.setDx(510); object5.setDy(220);
-        object5.toList(); objects.add(object5);
-
+        List<ZObject> objects = buildObjects();
         scene.setObjects(objects);
+
         // ================ Post processing - phase ================ //
         Gson gson = new Gson();
         String jsonInString = gson.toJson(scene);
@@ -286,24 +81,190 @@ public class HQZAdapter {
         }
     }
 
+    // ============================================================= //
+    // ========================= SCENE ============================= //
+    // ============================================================= //
+    private Scene initializeScene(long rays) {
+        Scene scene = new Scene();
+        Resolution reso = new Resolution();
+        reso.setHeight(2000);
+        reso.setWidth(2000);
+        reso.toList();
+        scene.setResolution(reso);
+        Viewport viewport = new Viewport();
+        viewport.setHeight(2000);
+        viewport.setWidth(2000);
+        viewport.setLeft(0); viewport.setTop(0);
+        viewport.toList();
+        scene.setViewport(viewport);
+        scene.setRays(rays);
+        scene.setExposure(0.2f);
+        scene.setGamma(2.2f);
+        return scene;
+    }
+
+    // ============================================================= //
+    // ========================= MATERIALS ========================= //
+    // ============================================================= //
     private List<Material> buildMaterials() {
-        //TODO: materials
-        return null;
+        List<Material> materials = new ArrayList<Material>();
+        Material material1 = buildMaterial(0.0f,0.0f,1.0f);
+        materials.add(material1);
+
+        Material material2 = buildMaterial(0.1f,0.0f,0.9f);
+        materials.add(material2);
+
+        Material material3 = buildMaterial(0.05f,0.8f,0.15f);
+        materials.add(material3);
+
+        Material material4 = buildMaterial(0.7f,0,0.3f);
+        materials.add(material4);
+
+        return materials;
     }
 
+    private Material buildMaterial(float transmissive, float reflective, float diffuse) {
+        Material mater = new Material();
+
+        MaterialProperty transmissiveProperty = new MaterialProperty();
+        transmissiveProperty.setType(MaterialProperty.MaterialPropertyType.Transmissive);
+        transmissiveProperty.setWeigth(transmissive);
+        transmissiveProperty.wrapToList();
+        mater.addMaterialProperty(transmissiveProperty);
+
+        MaterialProperty reflectiveProperty = new MaterialProperty();
+        reflectiveProperty.setType(MaterialProperty.MaterialPropertyType.Reflective);
+        reflectiveProperty.setWeigth(reflective);
+        reflectiveProperty.wrapToList();
+        mater.addMaterialProperty(reflectiveProperty);
+
+        MaterialProperty diffuseProperty = new MaterialProperty();
+        diffuseProperty.setType(MaterialProperty.MaterialPropertyType.Diffuse);
+        diffuseProperty.setWeigth(diffuse);
+        diffuseProperty.wrapToList();
+        mater.addMaterialProperty(diffuseProperty);
+
+        return mater;
+    }
+
+    // ============================================================= //
+    // ========================= OBJECTS =========================== //
+    // ============================================================= //
     private List<ZObject> buildObjects() {
-        //TODO: objects
-        return  null;
+        List<ZObject> objects = new ArrayList<ZObject>();
+        ZObject wall1 = buildObject(0,0,0,2000,0);
+        objects.add(wall1);
+
+        ZObject wall2 = buildObject(0,2000,0,2000,0);
+        objects.add(wall2);
+
+        ZObject wall3 = buildObject(0,0,0,0,2000);
+        objects.add(wall3);
+
+        ZObject wall4 = buildObject(0,2000,0,0,2000);
+        objects.add(wall4);
+
+        ZObject object1 = buildObject(1,1600,0,150,730);
+        objects.add(object1);
+
+        ZObject object2 = buildObject(2,1750,730,-70,200);
+        objects.add(object2);
+
+        ZObject object3 = buildObject(1,1900,1000,-250,180);
+        objects.add(object3);
+
+        ZObject object4 = buildObject(1,100,1560,630,-440);
+        objects.add(object4);
+
+        ZObject object5 = buildObject(2,690,1430,510,220);
+        objects.add(object5);
+        return objects;
     }
 
-    private List<Light> buildLights() {
-        //TODO: lights
-        return null;
+    private ZObject buildObject(int materialIndex, int x0, int y0, int dx, int dy) {
+        ZObject obj = new ZObject();
+        obj.setMaterialIndex(materialIndex);
+        obj.setX0(x0); obj.setY0(y0);
+        obj.setDx(dx); obj.setDy(dy);
+        obj.toList();
+        return obj;
     }
 
-    private Scene initializeScene() {
-        //TODO: scene
-        return null;
+    // ============================================================= //
+    // ========================= LIGHTS ============================ //
+    // ============================================================= //
+    private List<Light> buildLights(Vector<Color> moodbar) {
+        List<Light> lightList = new ArrayList<Light>();
+
+        ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+        polarAngle.add(-3); polarAngle.add(3);
+
+        ArrayList<Integer> polarAngle2 = new ArrayList<Integer>();
+        polarAngle2.add(87); polarAngle2.add(93);
+
+        ArrayList<Integer> polarDist = new ArrayList<Integer>();
+        polarDist.add(0); polarDist.add(1500);
+
+        ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+        rayAngle.add(-3); rayAngle.add(3);
+
+        ArrayList<Integer> rayAngle2 = new ArrayList<Integer>();
+        rayAngle2.add(87); rayAngle2.add(93);
+
+
+        for(int i = 0; i < moodbar.size(); i++) {
+            Color clr = moodbar.get(i);
+            int x = i*2; int y = i*2;
+
+            Light lightRed = new Light();
+            Light lightGreen = new Light();
+            Light lightBlue = new Light();
+            MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+            buildRGBLight(mixedLight, clr, polarDist, x, y);
+
+            if(i % 2 == 0) {
+                lightGreen.setPolarAngle(polarAngle);
+                lightRed.setPolarAngle(polarAngle);
+                lightBlue.setPolarAngle(polarAngle);
+                lightRed.setRayAngle(rayAngle);
+                lightBlue.setRayAngle(rayAngle);
+                lightGreen.setRayAngle(rayAngle);
+            } else {
+                lightGreen.setPolarAngle(polarAngle2);
+                lightRed.setPolarAngle(polarAngle2);
+                lightBlue.setPolarAngle(polarAngle2);
+                lightRed.setRayAngle(rayAngle2);
+                lightBlue.setRayAngle(rayAngle2);
+                lightGreen.setRayAngle(rayAngle2);
+            }
+
+            lightRed.toList(); lightBlue.toList(); lightGreen.toList();
+            lightList.add(lightRed);
+            lightList.add(lightGreen);
+            lightList.add(lightBlue);
+        }
+        return lightList;
+    }
+
+    private void buildRGBLight(MixedLight mixedLight, Color color, List<Integer> polarDist, int x, int y) {
+        Light red = mixedLight.getRed();
+        red.setPolarDistance(polarDist);
+        red.setCartesianX(x); red.setCartesianY(y);
+        red.setLightPower(color.getRed() * colorPercent);
+        red.setWaveLength(absoluteRed);
+
+        Light green = mixedLight.getGreen();
+        green.setPolarDistance(polarDist);
+        green.setCartesianX(x); green.setCartesianY(y);
+        green.setLightPower(color.getGreen() * colorPercent);
+        green.setWaveLength(absoluteGreen);
+
+        Light blue = mixedLight.getBlue();
+        blue.setPolarDistance(polarDist);
+        blue.setCartesianX(x); blue.setCartesianY(y);
+        blue.setLightPower(color.getBlue() * colorPercent);
+        blue.setWaveLength(absoluteBlue);
     }
 
 }
