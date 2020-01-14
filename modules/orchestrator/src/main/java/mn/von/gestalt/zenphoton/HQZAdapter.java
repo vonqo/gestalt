@@ -5,6 +5,7 @@ import mn.von.gestalt.moodbar.MoodbarAdapter;
 import mn.von.gestalt.utility.Settings;
 import mn.von.gestalt.utility.grimoire.LunarTear;
 import mn.von.gestalt.zenphoton.dto.*;
+import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,29 +28,31 @@ public class HQZAdapter {
     private static int absoluteRed = 635;
     private static int absoluteGreen = 520;
     private static int absoluteBlue = 465;
-    private static float colorPercent = 0.00039f;
+    private static float colorPercent = 0.0004f;
 
     public enum Types {
         TEST1,
-        TEST2,
-        TEST3
+        TORNADO,
+        MATRIX,
+        PYRAMID,
+        TESSERACT,
+        GRAPHTREE
     }
 
-
-    public void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, File output) throws IOException {
+    public void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
         // ================ Scene building - phase ============= //
-        Scene scene = initializeScene(50000);
+        Scene scene = initializeScene(rays);
 
         // ================ LIGHTS =============== //
-        List<Light> lightList = buildLights(moodbar);
+        List<Light> lightList = buildLights(moodbar, type);
         scene.setLights(lightList);
 
         // ================ MATERIALS =============== //
-        List<Material> materials = buildMaterials();
+        List<Material> materials = buildMaterials(type);
         scene.setMaterials(materials);
 
         // ================ OBJECTS =============== //
-        List<ZObject> objects = buildObjects();
+        List<ZObject> objects = buildObjects(type);
         scene.setObjects(objects);
 
         // ================ Post processing - phase ================ //
@@ -106,19 +109,21 @@ public class HQZAdapter {
     // ============================================================= //
     // ========================= MATERIALS ========================= //
     // ============================================================= //
-    private List<Material> buildMaterials() {
+    private List<Material> buildMaterials(Types types) {
         List<Material> materials = new ArrayList<Material>();
-        Material material1 = buildMaterial(0.0f,0.0f,1.0f);
-        materials.add(material1);
+        materials.add(buildMaterial(0.0f,0.0f,1.0f));
 
-        Material material2 = buildMaterial(0.1f,0.0f,0.9f);
-        materials.add(material2);
+        if(types == Types.TEST1 || types == Types.TORNADO) {
+            Material material2 = buildMaterial(0.1f,0.0f,0.9f);
+            materials.add(material2);
 
-        Material material3 = buildMaterial(0.05f,0.8f,0.15f);
-        materials.add(material3);
+            Material material3 = buildMaterial(0.05f,0.8f,0.15f);
+            materials.add(material3);
 
-        Material material4 = buildMaterial(0.7f,0,0.3f);
-        materials.add(material4);
+            Material material4 = buildMaterial(0.7f,0,0.3f);
+            materials.add(material4);
+
+        }
 
         return materials;
     }
@@ -150,34 +155,49 @@ public class HQZAdapter {
     // ============================================================= //
     // ========================= OBJECTS =========================== //
     // ============================================================= //
-    private List<ZObject> buildObjects() {
+    private List<ZObject> buildObjects(Types types) {
         List<ZObject> objects = new ArrayList<ZObject>();
-        ZObject wall1 = buildObject(0,0,0,2000,0);
-        objects.add(wall1);
+        objects.add(buildObject(0,0,0,2000,0));
+        objects.add(buildObject(0,2000,0,2000,0));
+        objects.add(buildObject(0,0,0,0,2000));
+        objects.add(buildObject(0,2000,0,0,2000));
 
-        ZObject wall2 = buildObject(0,2000,0,2000,0);
-        objects.add(wall2);
+        // ============================================================= //
+        if(types == Types.TEST1) {
+            ZObject object1 = buildObject(1,1600,0,150,730);
+            objects.add(object1);
 
-        ZObject wall3 = buildObject(0,0,0,0,2000);
-        objects.add(wall3);
+            ZObject object2 = buildObject(1,1750,730,-60,450);
+            objects.add(object2);
 
-        ZObject wall4 = buildObject(0,2000,0,0,2000);
-        objects.add(wall4);
+            ZObject object3 = buildObject(1,100,100,100,100);
+            objects.add(object3);
 
-        ZObject object1 = buildObject(1,1600,0,150,730);
-        objects.add(object1);
+            ZObject object4 = buildObject(1,100,1560,830,-380);
+            objects.add(object4);
 
-        ZObject object2 = buildObject(2,1750,730,-70,200);
-        objects.add(object2);
+            ZObject object5 = buildObject(2,690,1430,510,220);
+            objects.add(object5);
 
-        ZObject object3 = buildObject(1,1900,1000,-250,180);
-        objects.add(object3);
+            ZObject object6 = buildObject(2,25,650,510,220);
+            objects.add(object6);
 
-        ZObject object4 = buildObject(1,100,1560,630,-440);
-        objects.add(object4);
+            ZObject object7 = buildObject(1,1500,1750,510,100);
+            objects.add(object7);
 
-        ZObject object5 = buildObject(2,690,1430,510,220);
-        objects.add(object5);
+        } else if(types == Types.TORNADO) {
+            ZObject object1 = buildObject(1,1400,0,350,600);
+            objects.add(object1);
+
+            ZObject object2 = buildObject(2,1750,730,-60,450);
+            objects.add(object2);
+
+            ZObject object5 = buildObject(1,690,1430,510,220);
+            objects.add(object5);
+
+            ZObject object7 = buildObject(1,1500,1750,510,100);
+            objects.add(object7);
+        }
         return objects;
     }
 
@@ -193,57 +213,100 @@ public class HQZAdapter {
     // ============================================================= //
     // ========================= LIGHTS ============================ //
     // ============================================================= //
-    private List<Light> buildLights(Vector<Color> moodbar) {
+    private List<Light> buildLights(Vector<Color> moodbar, Types types) {
         List<Light> lightList = new ArrayList<Light>();
 
-        ArrayList<Integer> polarAngle = new ArrayList<Integer>();
-        polarAngle.add(-3); polarAngle.add(3);
+        if(types == Types.TEST1) {
+            ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+            polarAngle.add(-3); polarAngle.add(3);
 
-        ArrayList<Integer> polarAngle2 = new ArrayList<Integer>();
-        polarAngle2.add(87); polarAngle2.add(93);
+            ArrayList<Integer> polarAngle2 = new ArrayList<Integer>();
+            polarAngle2.add(87); polarAngle2.add(93);
 
-        ArrayList<Integer> polarDist = new ArrayList<Integer>();
-        polarDist.add(0); polarDist.add(1500);
+            ArrayList<Integer> polarDist = new ArrayList<Integer>();
+            polarDist.add(0); polarDist.add(1500);
 
-        ArrayList<Integer> rayAngle = new ArrayList<Integer>();
-        rayAngle.add(-3); rayAngle.add(3);
+            ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+            rayAngle.add(-3); rayAngle.add(3);
 
-        ArrayList<Integer> rayAngle2 = new ArrayList<Integer>();
-        rayAngle2.add(87); rayAngle2.add(93);
+            ArrayList<Integer> rayAngle2 = new ArrayList<Integer>();
+            rayAngle2.add(87); rayAngle2.add(93);
 
+            for(int i = 0; i < moodbar.size(); i++) {
+                Color clr = moodbar.get(i);
+                int x = i*2; int y = i*2;
 
-        for(int i = 0; i < moodbar.size(); i++) {
-            Color clr = moodbar.get(i);
-            int x = i*2; int y = i*2;
+                Light lightRed = new Light();
+                Light lightGreen = new Light();
+                Light lightBlue = new Light();
+                MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
 
-            Light lightRed = new Light();
-            Light lightGreen = new Light();
-            Light lightBlue = new Light();
-            MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+                buildRGBLight(mixedLight, clr, polarDist, x, y);
 
-            buildRGBLight(mixedLight, clr, polarDist, x, y);
+                if(i % 2 == 0) {
+                    lightGreen.setPolarAngle(polarAngle);
+                    lightRed.setPolarAngle(polarAngle);
+                    lightBlue.setPolarAngle(polarAngle);
+                    lightRed.setRayAngle(rayAngle);
+                    lightBlue.setRayAngle(rayAngle);
+                    lightGreen.setRayAngle(rayAngle);
+                } else {
+                    lightGreen.setPolarAngle(polarAngle2);
+                    lightRed.setPolarAngle(polarAngle2);
+                    lightBlue.setPolarAngle(polarAngle2);
+                    lightRed.setRayAngle(rayAngle2);
+                    lightBlue.setRayAngle(rayAngle2);
+                    lightGreen.setRayAngle(rayAngle2);
+                }
 
-            if(i % 2 == 0) {
+                lightRed.toList(); lightBlue.toList(); lightGreen.toList();
+                lightList.add(lightRed);
+                lightList.add(lightGreen);
+                lightList.add(lightBlue);
+            }
+        } else if(types == Types.TORNADO) {
+
+            ArrayList<Integer> polarDist = new ArrayList<Integer>();
+            polarDist.add(0); polarDist.add(1500);
+
+            int radius = 50; int padding = 1000-radius;
+            double unitSpace = Math.PI * 2 / moodbar.size();
+            double theta = Math.PI;
+
+            for(int i = 0; i < moodbar.size(); i++, theta += unitSpace) {
+                Color clr = moodbar.get(i);
+
+                Light lightRed = new Light();
+                Light lightGreen = new Light();
+                Light lightBlue = new Light();
+                MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+                int x = (int)(Math.cos(theta) * radius) + radius + padding;
+                int y = (int)(Math.sin(theta) * radius) + radius + padding;
+                buildRGBLight(mixedLight, clr, polarDist, x, y);
+
+                int degree = (int)Math.toDegrees(theta);
+                degree += 50;
+                ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+                polarAngle.add(degree-2); polarAngle.add(degree+2);
+
+                ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+                rayAngle.add(degree-2); rayAngle.add(degree+2);
+
                 lightGreen.setPolarAngle(polarAngle);
                 lightRed.setPolarAngle(polarAngle);
                 lightBlue.setPolarAngle(polarAngle);
                 lightRed.setRayAngle(rayAngle);
                 lightBlue.setRayAngle(rayAngle);
                 lightGreen.setRayAngle(rayAngle);
-            } else {
-                lightGreen.setPolarAngle(polarAngle2);
-                lightRed.setPolarAngle(polarAngle2);
-                lightBlue.setPolarAngle(polarAngle2);
-                lightRed.setRayAngle(rayAngle2);
-                lightBlue.setRayAngle(rayAngle2);
-                lightGreen.setRayAngle(rayAngle2);
-            }
 
-            lightRed.toList(); lightBlue.toList(); lightGreen.toList();
-            lightList.add(lightRed);
-            lightList.add(lightGreen);
-            lightList.add(lightBlue);
+                lightRed.toList(); lightBlue.toList(); lightGreen.toList();
+                lightList.add(lightRed);
+                lightList.add(lightGreen);
+                lightList.add(lightBlue);
+            }
         }
+
         return lightList;
     }
 

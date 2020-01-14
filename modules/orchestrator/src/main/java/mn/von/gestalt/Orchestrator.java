@@ -38,21 +38,22 @@ public class Orchestrator {
 
     public static void main(String args[]) {
         renderPhotonbar();
+//        renderCollection();
     }
 
     private static void renderPhotonbar() {
-        String sogname = "emil";
-        String displayText = "emil";
+        String sogname = "rose";
+        String displayText = "ZenPhoton Render - type:TORNADO";
         String testPath = "/Users/von/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
-        try {
-            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+//        } catch (UnsupportedAudioFileException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         try {
             Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
@@ -62,13 +63,13 @@ public class Orchestrator {
 
             // ==============================================================
             // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
-            File outputFile = new File("emil.png");
+            File outputFile = new File("tornado3_1500000.png");
             HQZAdapter hqz = new HQZAdapter();
-            hqz.buildHQZ(HQZAdapter.Types.TEST1, moodbar, spectrumizer.getDATA(), outputFile);
+            hqz.buildHQZ(HQZAdapter.Types.TORNADO, moodbar, spectrumizer.getDATA(), 1500000, outputFile);
             BufferedImage img = ImageIO.read(outputFile);
             LunarTear.setBackgroundColor(Color.BLACK);
             LunarTear.setFontColor(Color.WHITE);
-            LunarTear.setFontSize(28);
+            LunarTear.setFontSize(42);
             LunarTear.setFontName("Roboto Mono");
             ImageIO.write(
                     LunarTear.addTitle(img, displayText), "png", outputFile
@@ -115,8 +116,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "emil";
-        String displayText = "emil";
+        String sogname = "rose";
+        String displayText = "RoseScythe - Silence Must Endure";
         String testPath = "/Users/von/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
