@@ -1,7 +1,10 @@
 package mn.von.gestalt.utility.grimoire;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.Vector;
@@ -45,6 +48,7 @@ public class LunarTear {
         Graphics2D ctx2D = canvas.createGraphics();
         // ctx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5));
         ctx2D.setPaint (backgroundColor);
+        ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
         ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
@@ -80,6 +84,22 @@ public class LunarTear {
         ctx2D.setColor(LunarTear.fontColor);
         ctx2D.drawString(title, fontSize+5, fontSize+10);
         ctx2D.drawImage(image, 0 , fontSize+20, null);
+        return canvas;
+    }
+
+    public static BufferedImage addMark(BufferedImage image, String text, int topPadding) throws IOException {
+        BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight()+50+topPadding, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage logo = ImageIO.read(new File("logo_smoll.png"));
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ctx2D.setPaint (Color.WHITE);
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        ctx2D.drawImage(image, 0 , 0, null);
+        ctx2D.drawImage(logo, 0 , image.getHeight()+topPadding, null);
+
+        ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
+        ctx2D.setColor(LunarTear.fontColor);
+        ctx2D.drawString(text, 410, image.getHeight()+35+topPadding);
         return canvas;
     }
 

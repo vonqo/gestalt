@@ -37,23 +37,24 @@ public class Orchestrator {
 //    }
 
     public static void main(String args[]) {
-        renderPhotonbar();
+//        renderPhotonbar();
 //        renderCollection();
+        renderVanillaMoodbars();
     }
 
     private static void renderPhotonbar() {
-        String sogname = "rose";
-        String displayText = "ZenPhoton Render - type:TORNADO";
+        String sogname = "last";
+        String displayText = "Kinoko Teikoku (きのこ帝国) - Last Day (ラストデイ)";
         String testPath = "/Users/von/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
-//        try {
-//            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-//        } catch (UnsupportedAudioFileException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
@@ -63,13 +64,14 @@ public class Orchestrator {
 
             // ==============================================================
             // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
-            File outputFile = new File("tornado3_1500000.png");
+            int ray = 10000000;
+            File outputFile = new File(sogname+"_"+ray+".png");
             HQZAdapter hqz = new HQZAdapter();
-            hqz.buildHQZ(HQZAdapter.Types.TORNADO, moodbar, spectrumizer.getDATA(), 1500000, outputFile);
+            hqz.buildHQZ(HQZAdapter.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile);
             BufferedImage img = ImageIO.read(outputFile);
             LunarTear.setBackgroundColor(Color.BLACK);
             LunarTear.setFontColor(Color.WHITE);
-            LunarTear.setFontSize(42);
+            LunarTear.setFontSize(55);
             LunarTear.setFontName("Roboto Mono");
             ImageIO.write(
                     LunarTear.addTitle(img, displayText), "png", outputFile
@@ -81,34 +83,38 @@ public class Orchestrator {
 
     private static void renderVanillaMoodbars() {
         String sogname = "emil";
-        String displayText = "emil";
-        String testPath = "/Users/von/Desktop/mood_test/";
-        String pathMp3 = testPath+sogname+".mp3";
-        String pathWav = testPath+sogname+".wav";
+        String testPath = "/Users/von/Desktop/mood_test/tsatsral/";
         try{
-            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"e_jadenfallen.mp3",testPath+"/bar1");
-            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"e_mac.mp3",testPath+"/bar2");
-            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"manaach.mp3",testPath+"/bar3");
-            Vector<Color> moodbar0 = MoodbarAdapter.buildMoodbar(testPath+"agaar.mp3",testPath+"/bar4");
+            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"az_jargaltai_tugsdug.mp3",testPath+"/bar1");
+            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"minii_nirvana.mp3",testPath+"/bar2");
+            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"setgel_hudulnu.mp3",testPath+"/bar3");
             ArrayList<BufferedImage> moodbarList = new ArrayList<BufferedImage>();
-            moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar0, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar1, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar2, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar3, 150));
             ArrayList<String> names = new ArrayList<String>();
-            names.add("Бадар-Ууган, Дуламсүрэн - Улаанбаатрын агаар");
-            names.add("Wondha Mountain, Yung Lean - Divine Madness");
-            names.add("ANDROMEDA - Сүүлт од");
-            names.add("Моханик - Манангийн манаач");
+            names.add("NISVANIS - Аз жаргалтай төгсдөг");
+            names.add("NISVANIS - Миний Нирвана");
+            names.add("NISVANIS - Сэтгэл хөдөлнө");
 
             LunarTear.setBackgroundColor(Color.WHITE);
             LunarTear.setFontColor(Color.BLACK);
             LunarTear.setFontSize(28);
             LunarTear.setFontName("Roboto Mono");
+            BufferedImage moodbars = LunarTear.vanilla4Bar(moodbarList, names);
+
+            // ==================== LOGO MARK =================== //
+            LunarTear.setFontSize(28);
+            LunarTear.setFontColor(Color.black);
+            LunarTear.setFontName("Ubuntu");
+            moodbars = LunarTear.addMark(moodbars, "# Gereltuul Art & Music Fest vol5 ", 50);
+            // ==================== LOGO MARK - END ============= //
+
             ImageIO.write(
-                    LunarTear.vanilla4Bar(moodbarList, names), "png",
+                    moodbars, "png",
                     new File(testPath+"/"+sogname+"_bars.png")
             );
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -116,9 +122,10 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "rose";
-        String displayText = "RoseScythe - Silence Must Endure";
-        String testPath = "/Users/von/Desktop/mood_test/";
+        String sogname = "setgel_hudulnu";
+        String displayText = "NISVANIS - Сэтгэл хөдөлнө";
+        String footerText = "# Gereltuul Art & Music Fest vol5 ";
+        String testPath = "/Users/von/Desktop/mood_test/tsatsral/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
         try {
@@ -146,7 +153,7 @@ public class Orchestrator {
 
             LunarTear.setBackgroundColor(Color.WHITE);
             LunarTear.setFontColor(Color.BLACK);
-            LunarTear.setFontSize(34);
+            LunarTear.setFontSize(32);
             BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
                     spectrumizer.asBufferedImage(),
                     spectrumizer.asBufferedMoodbar(),
@@ -154,13 +161,28 @@ public class Orchestrator {
                     circle, circleMood,
                     displayText
             );
+            // ==================== LOGO MARK =================== //
+            LunarTear.setFontSize(28);
+            LunarTear.setFontColor(Color.black);
+            LunarTear.setFontName("Ubuntu");
+            lunarTear = LunarTear.addMark(lunarTear, footerText, 0);
+            // ==================== LOGO MARK - END ============= //
             ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
+
 
             LunarTear.setBackgroundColor(Color.BLACK);
             LunarTear.setFontColor(Color.WHITE);
             BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
-            ImageIO.write(
-                    LunarTear.addTitle(bubble, displayText), "png",
+            bubble = LunarTear.addTitle(bubble, displayText);
+            // ==================== LOGO MARK =================== //
+            LunarTear.setFontSize(28);
+            LunarTear.setFontColor(Color.black);
+            LunarTear.setFontName("Ubuntu");
+            bubble = LunarTear.addMark(bubble, footerText, 0);
+            // ==================== LOGO MARK - END ============= //
+
+
+            ImageIO.write(bubble,"png",
                     new File(testPath+"/"+sogname+"_bubble.png")
             );
 

@@ -189,14 +189,16 @@ public class HQZAdapter {
             ZObject object1 = buildObject(1,1400,0,350,600);
             objects.add(object1);
 
-            ZObject object2 = buildObject(2,1750,730,-60,450);
+            ZObject object2 = buildObject(1,1750,730,-60,450);
             objects.add(object2);
 
-            ZObject object5 = buildObject(1,690,1430,510,220);
-            objects.add(object5);
+            ZObject object3 = buildObject(1,290,1430,510,220);
+            objects.add(object3);
 
-            ZObject object7 = buildObject(1,1500,1750,510,100);
-            objects.add(object7);
+            ZObject object4 = buildObject(1,800,1750,510,100);
+            objects.add(object4);
+        } else if(types == Types.GRAPHTREE) {
+
         }
         return objects;
     }
@@ -269,7 +271,7 @@ public class HQZAdapter {
             ArrayList<Integer> polarDist = new ArrayList<Integer>();
             polarDist.add(0); polarDist.add(1500);
 
-            int radius = 50; int padding = 1000-radius;
+            int radius = 250; int padding = 1000-radius;
             double unitSpace = Math.PI * 2 / moodbar.size();
             double theta = Math.PI;
 
@@ -286,7 +288,7 @@ public class HQZAdapter {
                 buildRGBLight(mixedLight, clr, polarDist, x, y);
 
                 int degree = (int)Math.toDegrees(theta);
-                degree += 50;
+                degree += 45;
                 ArrayList<Integer> polarAngle = new ArrayList<Integer>();
                 polarAngle.add(degree-2); polarAngle.add(degree+2);
 
