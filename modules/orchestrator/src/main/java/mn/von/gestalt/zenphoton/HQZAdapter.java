@@ -36,7 +36,8 @@ public class HQZAdapter {
         MATRIX,
         PYRAMID,
         TESSERACT,
-        GRAPHTREE
+        GRAPHTREE,
+        BUBBLE2
     }
 
     public void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {

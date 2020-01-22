@@ -84,9 +84,6 @@ public class Spectrumizer {
             float moodbarSize = this.MOODBAR.size();
             float percent = moodbarSize / spectogramSize;
 
-//            Double min = 255.0;
-//            Double max = 0.0;
-
             for(int i = 0; i < DATA.length; i++) {
                 for(int e = 0; e < HEIGHT; e++) {
                     ctx.drawRect(i,e,1,1);
@@ -101,12 +98,6 @@ public class Spectrumizer {
                             ((Double)Math.floor(temp.getGreen()*DATA[i][e])).intValue(),
                             ((Double)Math.floor(temp.getBlue()*DATA[i][e])).intValue()
                     ));
-//                    ctx.setColor(new Color(
-//                            ((float)temp.getRed()/255),
-//                            ((float)temp.getGreen()/255),
-//                            ((float)temp.getBlue()/255),
-//                            ((float)DATA[i][e])
-//                    ));
                 }
             }
             ctx.dispose();
@@ -119,12 +110,6 @@ public class Spectrumizer {
         threshold *= 6.6;
         if(threshold > 1) threshold = 1.0;
         return threshold;
-
-//        threshold -= 0.85;
-//        if(threshold < 0) threshold = 0.0;
-//        threshold *= 7;
-//        if(threshold > 1) threshold = 1.0;
-//        return threshold;
     }
 
     public Integer getSize() {

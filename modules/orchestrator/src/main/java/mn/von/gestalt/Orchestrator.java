@@ -8,6 +8,7 @@ import mn.von.gestalt.spectogram.dl4jDataVec.Wave;
 import mn.von.gestalt.utility.grimoire.AudioUtils;
 import mn.von.gestalt.utility.grimoire.ImageTransformer;
 import mn.von.gestalt.utility.grimoire.LunarTear;
+import mn.von.gestalt.utility.grimoire.PhysicsUtils;
 import mn.von.gestalt.zenphoton.HQZAdapter;
 import mn.von.gestalt.zenphoton.dto.*;
 
@@ -25,7 +26,7 @@ import java.util.Vector;
 /**
  This is the place where all magic works
 
- @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amagit r.G]</A>
+ @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
  @version $Revision: 1.0
  @see [https://github.com/lupino22/gestalt]
  **/
@@ -37,14 +38,16 @@ public class Orchestrator {
 //    }
 
     public static void main(String args[]) {
+        PhysicsUtils.simulateB2T();
+
 //        renderPhotonbar();
 //        renderCollection();
-        renderVanillaMoodbars();
+//        renderVanillaMoodbars();
     }
 
     private static void renderPhotonbar() {
-        String sogname = "last";
-        String displayText = "Kinoko Teikoku (きのこ帝国) - Last Day (ラストデイ)";
+        String sogname = "heretic";
+        String displayText = "Slipknot - The Heretic Anthem";
         String testPath = "/Users/von/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -64,7 +67,7 @@ public class Orchestrator {
 
             // ==============================================================
             // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
-            int ray = 10000000;
+            int ray = 5000000;
             File outputFile = new File(sogname+"_"+ray+".png");
             HQZAdapter hqz = new HQZAdapter();
             hqz.buildHQZ(HQZAdapter.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile);
@@ -122,10 +125,10 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "setgel_hudulnu";
-        String displayText = "NISVANIS - Сэтгэл хөдөлнө";
+        String sogname = "heretic";
+        String displayText = "Slipknot - The Heretic Anthem";
         String footerText = "# Gereltuul Art & Music Fest vol5 ";
-        String testPath = "/Users/von/Desktop/mood_test/tsatsral/";
+        String testPath = "/Users/von/Desktop/mood_test/";
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
         try {
@@ -162,10 +165,10 @@ public class Orchestrator {
                     displayText
             );
             // ==================== LOGO MARK =================== //
-            LunarTear.setFontSize(28);
-            LunarTear.setFontColor(Color.black);
-            LunarTear.setFontName("Ubuntu");
-            lunarTear = LunarTear.addMark(lunarTear, footerText, 0);
+//            LunarTear.setFontSize(28);
+//            LunarTear.setFontColor(Color.black);
+//            LunarTear.setFontName("Ubuntu");
+//            lunarTear = LunarTear.addMark(lunarTear, footerText, 0);
             // ==================== LOGO MARK - END ============= //
             ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
 
@@ -175,10 +178,10 @@ public class Orchestrator {
             BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
             bubble = LunarTear.addTitle(bubble, displayText);
             // ==================== LOGO MARK =================== //
-            LunarTear.setFontSize(28);
-            LunarTear.setFontColor(Color.black);
-            LunarTear.setFontName("Ubuntu");
-            bubble = LunarTear.addMark(bubble, footerText, 0);
+//            LunarTear.setFontSize(28);
+//            LunarTear.setFontColor(Color.black);
+//            LunarTear.setFontName("Ubuntu");
+//            bubble = LunarTear.addMark(bubble, footerText, 0);
             // ==================== LOGO MARK - END ============= //
 
 
