@@ -1,6 +1,6 @@
 # [![Gestalt logo][]](https://lupino22.github.io/gestalt/)
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5085d2cd13a245a0af21f85f48ae23a9)](https://www.codacy.com/app/lupino22/gestalt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lupino22/gestalt&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5085d2cd13a245a0af21f85f48ae23a9)](https://www.codacy.com/app/lupino22/gestalt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lupino22/gestalt&amp;utm_campaign=Badge_Grade) [![Join the chat at https://gitter.im/punkowl-gestalt/community](https://badges.gitter.im/punkowl-gestalt/community.svg)](https://gitter.im/punkowl-gestalt/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Definition of **gestalt**: "*something that is made of many parts and yet is somehow more than or different from the combination of its parts*"
 
