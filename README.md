@@ -1,10 +1,6 @@
-<img align="left" height="48px" src="https://github.com/lupino22/gestalt/blob/master/public/gestalt-logo.png" />
-<img align="left" height="48px" src="https://github.com/lupino22/gestalt/blob/master/public/ccnc-logo.png" />
-
-# 
+# <img height="34px" src="https://github.com/vonqo/gestalt/blob/master/public/gestalt-logo.png" /> & <img height="34px" src="https://github.com/vonqo/gestalt/blob/master/public/cnc-logo.png" />
 
 
-[![Build Status][travis-badge]][travis]
 [![Codacy Badge][codacy-badge]][codacy]
 [![Gitter][gitter-badge]][gitter]
 [![HitCount][hit-badge]][hit]
@@ -34,8 +30,6 @@ Execute ```install.sh```
 Copyright (c) 2019 Enkh-Amar.G - Released under the [Mozilla Public License Version 2.0](LICENSE)
 
 [gestalt-logo]: https://github.com/lupino22/gestalt/blob/master/public/logo.png
-[travis-badge]: https://travis-ci.org/vonqo/gestalt.png?branch=master
-[travis]: https://travis-ci.org/vonqo/gestalt
 [codacy-badge]: https://api.codacy.com/project/badge/Grade/5085d2cd13a245a0af21f85f48ae23a9
 [codacy]: https://www.codacy.com/app/lupino22/gestalt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lupino22/gestalt&amp;utm_campaign=Badge_Grade
 [hit-badge]: http://hits.dwyl.io/vonqo/gestalt.svg
