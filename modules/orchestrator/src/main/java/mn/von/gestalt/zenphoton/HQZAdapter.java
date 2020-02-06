@@ -3,6 +3,7 @@ package mn.von.gestalt.zenphoton;
 import com.google.gson.Gson;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
 import mn.von.gestalt.utility.Settings;
+import mn.von.gestalt.utility.grimoire.ImageTransformer;
 import mn.von.gestalt.utility.grimoire.LunarTear;
 import mn.von.gestalt.zenphoton.dto.*;
 import org.opencv.core.Mat;
@@ -24,7 +25,6 @@ import java.util.logging.Logger;
 
 public class HQZAdapter {
 
-    public static String hqzExecutablePath = Settings.GESTALT_PATH+"/modules/zenphoton/hqz/";
     private static int absoluteRed = 635;
     private static int absoluteGreen = 520;
     private static int absoluteBlue = 465;
@@ -40,7 +40,7 @@ public class HQZAdapter {
         BUBBLE2
     }
 
-    public void buildHQZ(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
+    public void buildPhoton(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
         // ================ Scene building - phase ============= //
         Scene scene = initializeScene(rays);
 
@@ -61,10 +61,10 @@ public class HQZAdapter {
         String jsonInString = gson.toJson(scene);
         ProcessBuilder processBuilder;
         Process process;
-        String jsonInputName = Settings.GESTALT_PATH+"/modules/zenphoton/hqz/examples/moodphoton.json";
+        String jsonInputName = Settings.RESOURCE_DIR+"/moodphoton.json";
         Files.write(Paths.get(jsonInputName), jsonInString.getBytes());
 
-        processBuilder = new ProcessBuilder(hqzExecutablePath+"hqz",jsonInputName,output.getName()).redirectErrorStream(true);
+        processBuilder = new ProcessBuilder(Settings.HQZ_EXEC,jsonInputName,output.getName()).redirectErrorStream(true);
         process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -83,6 +83,10 @@ public class HQZAdapter {
         } catch (InterruptedException ex) {
             Logger.getLogger(HQZAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void buildPhotonAnimationFrame(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, String frameDir) {
+        // TODO: implement with ffmpeg
     }
 
     // ============================================================= //
@@ -112,45 +116,23 @@ public class HQZAdapter {
     // ============================================================= //
     private List<Material> buildMaterials(Types types) {
         List<Material> materials = new ArrayList<Material>();
-        materials.add(buildMaterial(0.0f,0.0f,1.0f));
+        materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
 
         if(types == Types.TEST1 || types == Types.TORNADO) {
-            Material material2 = buildMaterial(0.1f,0.0f,0.9f);
+            Material material1 = HQZUtils.buildMaterial(0.1f,0.0f,0.9f);
+            materials.add(material1);
+
+            Material material2 = HQZUtils.buildMaterial(0.05f,0.8f,0.15f);
             materials.add(material2);
 
-            Material material3 = buildMaterial(0.05f,0.8f,0.15f);
+            Material material3 = HQZUtils.buildMaterial(0.7f,0,0.3f);
             materials.add(material3);
 
-            Material material4 = buildMaterial(0.7f,0,0.3f);
+            Material material4 = HQZUtils.buildMaterial(0.0f,0.5f,.05f);
             materials.add(material4);
-
         }
 
         return materials;
-    }
-
-    private Material buildMaterial(float transmissive, float reflective, float diffuse) {
-        Material mater = new Material();
-
-        MaterialProperty transmissiveProperty = new MaterialProperty();
-        transmissiveProperty.setType(MaterialProperty.MaterialPropertyType.Transmissive);
-        transmissiveProperty.setWeigth(transmissive);
-        transmissiveProperty.wrapToList();
-        mater.addMaterialProperty(transmissiveProperty);
-
-        MaterialProperty reflectiveProperty = new MaterialProperty();
-        reflectiveProperty.setType(MaterialProperty.MaterialPropertyType.Reflective);
-        reflectiveProperty.setWeigth(reflective);
-        reflectiveProperty.wrapToList();
-        mater.addMaterialProperty(reflectiveProperty);
-
-        MaterialProperty diffuseProperty = new MaterialProperty();
-        diffuseProperty.setType(MaterialProperty.MaterialPropertyType.Diffuse);
-        diffuseProperty.setWeigth(diffuse);
-        diffuseProperty.wrapToList();
-        mater.addMaterialProperty(diffuseProperty);
-
-        return mater;
     }
 
     // ============================================================= //
@@ -158,59 +140,68 @@ public class HQZAdapter {
     // ============================================================= //
     private List<ZObject> buildObjects(Types types) {
         List<ZObject> objects = new ArrayList<ZObject>();
-        objects.add(buildObject(0,0,0,2000,0));
-        objects.add(buildObject(0,2000,0,2000,0));
-        objects.add(buildObject(0,0,0,0,2000));
-        objects.add(buildObject(0,2000,0,0,2000));
+        objects.add(HQZUtils.buildObject(0,0,0,2000,0));
+        objects.add(HQZUtils.buildObject(0,2000,0,2000,0));
+        objects.add(HQZUtils.buildObject(0,0,0,0,2000));
+        objects.add(HQZUtils.buildObject(0,2000,0,0,2000));
 
         // ============================================================= //
         if(types == Types.TEST1) {
-            ZObject object1 = buildObject(1,1600,0,150,730);
+            ZObject object1 = HQZUtils.buildObject(1,1600,0,150,730);
             objects.add(object1);
 
-            ZObject object2 = buildObject(1,1750,730,-60,450);
+            ZObject object2 = HQZUtils.buildObject(1,1750,730,-60,450);
             objects.add(object2);
 
-            ZObject object3 = buildObject(1,100,100,100,100);
+            ZObject object3 = HQZUtils.buildObject(1,100,100,100,100);
             objects.add(object3);
 
-            ZObject object4 = buildObject(1,100,1560,830,-380);
+            ZObject object4 = HQZUtils.buildObject(1,100,1560,830,-380);
             objects.add(object4);
 
-            ZObject object5 = buildObject(2,690,1430,510,220);
+            ZObject object5 = HQZUtils.buildObject(2,690,1430,510,220);
             objects.add(object5);
 
-            ZObject object6 = buildObject(2,25,650,510,220);
+            ZObject object6 = HQZUtils.buildObject(2,25,650,510,220);
             objects.add(object6);
 
-            ZObject object7 = buildObject(1,1500,1750,510,100);
+            ZObject object7 = HQZUtils.buildObject(1,1500,1750,510,100);
             objects.add(object7);
 
         } else if(types == Types.TORNADO) {
-            ZObject object1 = buildObject(1,1400,0,350,600);
-            objects.add(object1);
+//            ZObject object1 = buildObject(1,1400,0,350,600);
+//            objects.add(object1);
+//
+//            ZObject object2 = buildObject(1,1750,730,-60,450);
+//            objects.add(object2);
+//
+//            ZObject object3 = buildObject(1,290,1430,510,220);
+//            objects.add(object3);
+//
+//            ZObject object4 = buildObject(1,800,1750,510,100);
+//            objects.add(object4);
 
-            ZObject object2 = buildObject(1,1750,730,-60,450);
-            objects.add(object2);
+            int offset = 300;
+            int distance = 1400;
 
-            ZObject object3 = buildObject(1,290,1430,510,220);
-            objects.add(object3);
+            // top
+            ZObject wall1 = HQZUtils.buildObject(1,offset,offset,98,distance,0,46);
+            objects.add(wall1);
 
-            ZObject object4 = buildObject(1,800,1750,510,100);
-            objects.add(object4);
+            ZObject wall2 = HQZUtils.buildObject(4,offset,offset,47,0,distance/2+50,99);
+            objects.add(wall2);
+
+            ZObject wall3 = HQZUtils.buildObject(4,2000-offset,offset,52,0,distance,12);
+            objects.add(wall3);
+
+            // bottom
+            ZObject wall4 = HQZUtils.buildObject(1,offset+1080,2000-offset,17,distance-1080,0,146);
+            objects.add(wall4);
+
         } else if(types == Types.GRAPHTREE) {
 
         }
         return objects;
-    }
-
-    private ZObject buildObject(int materialIndex, int x0, int y0, int dx, int dy) {
-        ZObject obj = new ZObject();
-        obj.setMaterialIndex(materialIndex);
-        obj.setX0(x0); obj.setY0(y0);
-        obj.setDx(dx); obj.setDy(dy);
-        obj.toList();
-        return obj;
     }
 
     // ============================================================= //
@@ -268,11 +259,10 @@ public class HQZAdapter {
                 lightList.add(lightBlue);
             }
         } else if(types == Types.TORNADO) {
-
             ArrayList<Integer> polarDist = new ArrayList<Integer>();
             polarDist.add(0); polarDist.add(1500);
 
-            int radius = 250; int padding = 1000-radius;
+            int radius = 150; int padding = 1000-radius;
             double unitSpace = Math.PI * 2 / moodbar.size();
             double theta = Math.PI;
 
@@ -289,7 +279,7 @@ public class HQZAdapter {
                 buildRGBLight(mixedLight, clr, polarDist, x, y);
 
                 int degree = (int)Math.toDegrees(theta);
-                degree += 45;
+                degree += 0;
                 ArrayList<Integer> polarAngle = new ArrayList<Integer>();
                 polarAngle.add(degree-2); polarAngle.add(degree+2);
 
@@ -320,10 +310,18 @@ public class HQZAdapter {
         red.setLightPower(color.getRed() * colorPercent);
         red.setWaveLength(absoluteRed);
 
+        // ORIGINAL
+//        Light green = mixedLight.getGreen();
+//        green.setPolarDistance(polarDist);
+//        green.setCartesianX(x); green.setCartesianY(y);
+//        green.setLightPower(color.getGreen() * colorPercent);
+//        green.setWaveLength(absoluteGreen);
+
+        // MODIFIED GREEN
         Light green = mixedLight.getGreen();
         green.setPolarDistance(polarDist);
         green.setCartesianX(x); green.setCartesianY(y);
-        green.setLightPower(color.getGreen() * colorPercent);
+        green.setLightPower(color.getGreen() * 0.0005f);
         green.setWaveLength(absoluteGreen);
 
         Light blue = mixedLight.getBlue();
