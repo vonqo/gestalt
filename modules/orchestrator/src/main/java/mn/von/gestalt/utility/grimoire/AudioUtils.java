@@ -59,4 +59,12 @@ public class AudioUtils {
         AudioSystem.write(converted, AudioFileFormat.Type.WAVE, new File(filePath));
     }
 
+    public static double getDuration(String filePath) throws IOException, UnsupportedAudioFileException {
+        File file = new File(filePath);
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+        AudioFormat format = audioInputStream.getFormat();
+        long frames = audioInputStream.getFrameLength();
+        return (frames+0.0) / format.getFrameRate();
+    }
+
 }

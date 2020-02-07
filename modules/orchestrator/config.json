@@ -1,7 +1,7 @@
 {
   "moodbarExecuteable": "moodbar",
   "hqzExecutable": "/Users/von/Desktop/gestalt/modules/zenphoton/hqz/hqz",
-  "ffmpegExecutable": "",
+  "ffmpegExecutable": "ffmpeg",
   "neuralstyleExecutable": "",
   "resourceDir": "/Users/von/Desktop/mood_test/col3/"
 }

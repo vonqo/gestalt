@@ -28,7 +28,7 @@ public class HQZAdapter {
     private static int absoluteRed = 635;
     private static int absoluteGreen = 520;
     private static int absoluteBlue = 465;
-    private static float colorPercent = 0.0004f;
+    private static float colorPower = 0.00045f;
 
     public enum Types {
         TEST1,
@@ -37,7 +37,8 @@ public class HQZAdapter {
         PYRAMID,
         TESSERACT,
         GRAPHTREE,
-        BUBBLE2
+        BUBBLE2,
+        BLANK,
     }
 
     public void buildPhoton(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
@@ -85,8 +86,87 @@ public class HQZAdapter {
         }
     }
 
-    public void buildPhotonAnimationFrame(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, String frameDir) {
-        // TODO: implement with ffmpeg
+    public void buildPhotonAnimationFrame(Types type, Vector<Color> moodbar, double[][] spectrumData, double duration, long rays, String frameDir) throws IOException {
+        Gson gson = new Gson();
+        ProcessBuilder processBuilder;
+        Process process;
+
+        int fps = 25;
+        long frames = (long)(duration * fps);
+        float framesPerColor = frames / moodbar.size();
+
+        for(int frame = 0; frame < frames; frame++) {
+            Scene scene = initializeScene(rays);
+            // ================ MATERIALS =============== //
+            List<Material> materials = buildMaterials(type);
+            scene.setMaterials(materials);
+
+            // ================ OBJECTS =============== //
+            List<ZObject> objects = buildObjects(type);
+            scene.setObjects(objects);
+
+            // ================ LIGHTS ================ //
+            List<Light> lightList = new ArrayList<Light>();
+
+            ArrayList<Integer> polarDist = new ArrayList<Integer>();
+            polarDist.add(0); polarDist.add(1500);
+            int radius = 150; int padding = 1000-radius;
+            double unitSpace = Math.PI * 2 / moodbar.size();
+            double theta = Math.PI;
+
+            double currentColor = frame / framesPerColor;
+
+            int preColor = (int)(currentColor);
+            double currentColorPower = currentColor - preColor;
+            float power = 0.0f;
+
+            for(int i = 0; i < preColor; i++, theta += unitSpace) {
+                Color clr = moodbar.get(i);
+
+                Light lightRed = new Light();
+                Light lightGreen = new Light();
+                Light lightBlue = new Light();
+                MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+                int x = (int)(Math.cos(theta) * radius) + radius + padding;
+                int y = (int)(Math.sin(theta) * radius) + radius + padding;
+                buildRGBLight(mixedLight, clr, polarDist, x, y);
+
+                int degree = (int)Math.toDegrees(theta);
+                degree += 0;
+                ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+                polarAngle.add(degree-2); polarAngle.add(degree+2);
+
+                ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+                rayAngle.add(degree-2); rayAngle.add(degree+2);
+
+                lightGreen.setPolarAngle(polarAngle);
+                lightRed.setPolarAngle(polarAngle);
+                lightBlue.setPolarAngle(polarAngle);
+                lightRed.setRayAngle(rayAngle);
+                lightBlue.setRayAngle(rayAngle);
+                lightGreen.setRayAngle(rayAngle);
+
+                lightRed.toList(); lightBlue.toList(); lightGreen.toList();
+                lightList.add(lightRed);
+                lightList.add(lightGreen);
+                lightList.add(lightBlue);
+            }
+
+
+            // ================= GG ==================== //
+
+            String jsonInString = gson.toJson(scene);
+            String jsonInputName = Settings.RESOURCE_DIR+"/photonframe.json";
+            Files.write(Paths.get(jsonInputName), jsonInString.getBytes());
+
+            // =============== FRAME ================ //
+            File output = new File(Settings.RESOURCE_DIR+"/"+frameDir+"frame_"+frame+".png");
+            processBuilder = new ProcessBuilder(Settings.HQZ_EXEC,jsonInputName,output.getName()).redirectErrorStream(true);
+            process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line = null;
+        }
     }
 
     // ============================================================= //
@@ -307,27 +387,39 @@ public class HQZAdapter {
         Light red = mixedLight.getRed();
         red.setPolarDistance(polarDist);
         red.setCartesianX(x); red.setCartesianY(y);
-        red.setLightPower(color.getRed() * colorPercent);
+        red.setLightPower(color.getRed() * colorPower);
         red.setWaveLength(absoluteRed);
 
-        // ORIGINAL
-//        Light green = mixedLight.getGreen();
-//        green.setPolarDistance(polarDist);
-//        green.setCartesianX(x); green.setCartesianY(y);
-//        green.setLightPower(color.getGreen() * colorPercent);
-//        green.setWaveLength(absoluteGreen);
-
-        // MODIFIED GREEN
         Light green = mixedLight.getGreen();
         green.setPolarDistance(polarDist);
         green.setCartesianX(x); green.setCartesianY(y);
-        green.setLightPower(color.getGreen() * 0.0005f);
+        green.setLightPower(color.getGreen() * colorPower);
         green.setWaveLength(absoluteGreen);
 
         Light blue = mixedLight.getBlue();
         blue.setPolarDistance(polarDist);
         blue.setCartesianX(x); blue.setCartesianY(y);
-        blue.setLightPower(color.getBlue() * colorPercent);
+        blue.setLightPower(color.getBlue() * colorPower);
+        blue.setWaveLength(absoluteBlue);
+    }
+
+    private void buildRGBLight(MixedLight mixedLight, Color color, List<Integer> polarDist, int x, int y, float power) {
+        Light red = mixedLight.getRed();
+        red.setPolarDistance(polarDist);
+        red.setCartesianX(x); red.setCartesianY(y);
+        red.setLightPower(color.getRed() * power);
+        red.setWaveLength(absoluteRed);
+
+        Light green = mixedLight.getGreen();
+        green.setPolarDistance(polarDist);
+        green.setCartesianX(x); green.setCartesianY(y);
+        green.setLightPower(color.getGreen() * power);
+        green.setWaveLength(absoluteGreen);
+
+        Light blue = mixedLight.getBlue();
+        blue.setPolarDistance(polarDist);
+        blue.setCartesianX(x); blue.setCartesianY(y);
+        blue.setLightPower(color.getBlue() * power);
         blue.setWaveLength(absoluteBlue);
     }
 
