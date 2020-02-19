@@ -3,17 +3,12 @@ package mn.von.gestalt;
 import com.google.gson.Gson;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
 import mn.von.gestalt.spectogram.Spectrumizer;
-import mn.von.gestalt.spectogram.dl4jDataVec.Spectrogram;
-import mn.von.gestalt.spectogram.dl4jDataVec.Wave;
 import mn.von.gestalt.utility.ConfigDto;
-import mn.von.gestalt.utility.Settings;
+import mn.von.gestalt.utility.Config;
+import mn.von.gestalt.utility.annotation.LoadOrchestrator;
 import mn.von.gestalt.utility.grimoire.AudioUtils;
+import mn.von.gestalt.utility.grimoire.ImageSupporter;
 import mn.von.gestalt.utility.grimoire.ImageTransformer;
-import mn.von.gestalt.utility.grimoire.LunarTear;
-import mn.von.gestalt.utility.grimoire.PhysicsUtils;
-import mn.von.gestalt.zenphoton.HQZAdapter;
-import mn.von.gestalt.zenphoton.dto.*;
-import org.opencv.core.Core;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -21,13 +16,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 import java.util.stream.Stream;
 
@@ -45,45 +37,29 @@ public class Orchestrator {
 //        nu.pattern.OpenCV.loadShared();
 //    }
 
+    @LoadOrchestrator
     public static void main(String args[]) {
+        Config.loadConfig();
 
-        loadConfig();
-
-//        renderPhotonbar();
-//         renderCollection();
-        renderVanillaMoodbars();
+//        renderZenphoton();
+//        renderCollection();
+//        renderVanillaMoodbars();
     }
 
-    private static void loadConfig() {
-        StringBuilder configBuilder = new StringBuilder();
-        try (Stream<String> stream = Files.lines(Paths.get("config.json"), StandardCharsets.UTF_8)) {
-            stream.forEach(s -> configBuilder.append(s).append("\n"));
+    private static void renderZenphoton() {
+        String sogname = "fall";
+        String displayText = "Even Tide - Fall";
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+sogname+".mp3";
+        String pathWav = testPath+sogname+".wav";
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String config = configBuilder.toString();
-        Gson gsonParser = new Gson();
-        ConfigDto configData = gsonParser.fromJson(config, ConfigDto.class);
-        Settings.MOODBAR_EXEC = configData.getMoodbarExecuteable();
-        Settings.HQZ_EXEC = configData.getHqzExecutable();
-        Settings.FFMEG_EXEC = configData.getFfmpegExecutable();
-        Settings.NEURALSTYLE_EXEC = configData.getNeuralstyleExecutable();
-        Settings.RESOURCE_DIR = configData.getResourceDir();
-    }
-
-    private static void renderPhotonbar() {
-        String sogname = "fall";
-        String displayText = "Even Tide - Fall";
-        String testPath = Settings.RESOURCE_DIR;
-        String pathMp3 = testPath+sogname+".mp3";
-        String pathWav = testPath+sogname+".wav";
-//        try {
-//            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-//        } catch (UnsupportedAudioFileException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         try {
             Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
@@ -91,19 +67,17 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            // ==============================================================
-            // LunarTear.RGB2WV_Generate_LossyExhaustingTable();
             int ray = 5000;
-            File outputFile = new File(sogname+"_"+ray+".png");
-            HQZAdapter hqz = new HQZAdapter();
-            hqz.buildPhoton(HQZAdapter.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile);
+            File outputFile = new File(sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+            LunarTearHqz hqz = new LunarTearHqz();
+            hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile);
             BufferedImage img = ImageIO.read(outputFile);
-            LunarTear.setBackgroundColor(Color.BLACK);
-            LunarTear.setFontColor(Color.WHITE);
-            LunarTear.setFontSize(55);
-            LunarTear.setFontName("Roboto Mono");
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontSize(55);
+            ImageSupporter.setFontName("Roboto Mono");
             ImageIO.write(
-                    LunarTear.addTitle(img, displayText), "png", outputFile
+                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,8 +85,8 @@ public class Orchestrator {
     }
 
     private static void renderVanillaMoodbars() {
-        String sogname = "col3";
-        String testPath = Settings.RESOURCE_DIR;
+        String filename = "col3";
+        String testPath = Config.RESOURCE_DIR;
         try{
             Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"lemons.mp3",testPath+"/bar1");
             Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"molboyz.mp3",testPath+"/bar2");
@@ -129,22 +103,15 @@ public class Orchestrator {
             names.add("Хараацай - Усны гуталтай залуу");
             names.add("Соёл Эрдэнэ - Хөдөөгийн сайхан талд зорино");
 
-            LunarTear.setBackgroundColor(Color.WHITE);
-            LunarTear.setFontColor(Color.BLACK);
-            LunarTear.setFontSize(28);
-            LunarTear.setFontName("Roboto Mono");
-            BufferedImage moodbars = LunarTear.vanilla4Bar(moodbarList, names);
-
-//            // ==================== LOGO MARK =================== //
-//            LunarTear.setFontSize(28);
-//            LunarTear.setFontColor(Color.black);
-//            LunarTear.setFontName("Ubuntu");
-//            moodbars = LunarTear.addMark(moodbars, "# Gereltuul Art & Music Fest vol5 ", 50);
-//            // ==================== LOGO MARK - END ============= //
+            ImageSupporter.setBackgroundColor(Color.WHITE);
+            ImageSupporter.setFontColor(Color.BLACK);
+            ImageSupporter.setFontSize(28);
+            ImageSupporter.setFontName("Roboto Mono");
+            BufferedImage moodbars = new LunarTear().vanilla4Bar(moodbarList, names);
 
             ImageIO.write(
-                    moodbars, "png",
-                    new File(testPath+"/"+sogname+"_bars.png")
+                    moodbars, Config.OUTPUT_IMAGE_FORMAT,
+                    new File(testPath+"/"+filename+"_bars."+ Config.OUTPUT_IMAGE_FORMAT)
             );
 
         } catch (Exception ex) {
@@ -156,8 +123,7 @@ public class Orchestrator {
     private static void renderCollection() {
         String sogname = "fall";
         String displayText = "Even Tide - Fall";
-        String footerText = "# Gereltuul Art & Music Fest vol5 ";
-        String testPath = Settings.RESOURCE_DIR;
+        String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
         try {
@@ -183,39 +149,28 @@ public class Orchestrator {
                     1000,100
             );
 
-            LunarTear.setBackgroundColor(Color.WHITE);
-            LunarTear.setFontColor(Color.BLACK);
-            LunarTear.setFontSize(32);
-            BufferedImage lunarTear = LunarTear.MoodbarAndSpectogramCollection(
+            ImageSupporter.setBackgroundColor(Color.WHITE);
+            ImageSupporter.setFontColor(Color.BLACK);
+            ImageSupporter.setFontSize(32);
+
+            LunarTear lunarTear = new LunarTear();
+
+            BufferedImage collectionImage = lunarTear.moodbarAndSpectogramCollection(
                     spectrumizer.asBufferedImage(),
                     spectrumizer.asBufferedMoodbar(),
                     MoodbarAdapter.toBufferedImage(moodbar, 150),
                     circle, circleMood,
                     displayText
             );
-            // ==================== LOGO MARK =================== //
-//            LunarTear.setFontSize(28);
-//            LunarTear.setFontColor(Color.black);
-//            LunarTear.setFontName("Ubuntu");
-//            lunarTear = LunarTear.addMark(lunarTear, footerText, 0);
-            // ==================== LOGO MARK - END ============= //
-            ImageIO.write(lunarTear, "png", new File(testPath+"/"+sogname+"_collection.png"));
+            ImageIO.write(collectionImage, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection."+ Config.OUTPUT_IMAGE_FORMAT));
 
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            BufferedImage bubbleBar = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
+            bubbleBar = ImageSupporter.addTitle(bubbleBar, displayText);
 
-            LunarTear.setBackgroundColor(Color.BLACK);
-            LunarTear.setFontColor(Color.WHITE);
-            BufferedImage bubble = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
-            bubble = LunarTear.addTitle(bubble, displayText);
-            // ==================== LOGO MARK =================== //
-//            LunarTear.setFontSize(28);
-//            LunarTear.setFontColor(Color.black);
-//            LunarTear.setFontName("Ubuntu");
-//            bubble = LunarTear.addMark(bubble, footerText, 0);
-            // ==================== LOGO MARK - END ============= //
-
-
-            ImageIO.write(bubble,"png",
-                    new File(testPath+"/"+sogname+"_bubble.png")
+            ImageIO.write(bubbleBar, Config.OUTPUT_IMAGE_FORMAT,
+                    new File(testPath+"/"+sogname+"_bubble."+ Config.OUTPUT_IMAGE_FORMAT)
             );
 
         } catch (Exception ex) {

@@ -2,7 +2,7 @@ package mn.von.gestalt.moodbar;
 
 // import org.apache.commons.io.IOUtils;
 
-import mn.von.gestalt.utility.Settings;
+import mn.von.gestalt.utility.Config;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -37,7 +37,7 @@ public class MoodbarAdapter {
 
         Vector<Color> moodbar = new Vector<Color>(1000);
 
-        processBuilder = new ProcessBuilder(Settings.MOODBAR_EXEC, "-o" ,OUTPUT, AUDIO_PATH);
+        processBuilder = new ProcessBuilder(Config.MOODBAR_EXEC, "-o" ,OUTPUT, AUDIO_PATH);
         process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 

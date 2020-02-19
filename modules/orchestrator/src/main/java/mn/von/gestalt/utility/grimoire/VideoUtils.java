@@ -1,6 +1,6 @@
 package mn.von.gestalt.utility.grimoire;
 
-import mn.von.gestalt.utility.Settings;
+import mn.von.gestalt.utility.Config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class VideoUtils {
         ProcessBuilder processBuilder;
         Process process;
         processBuilder = new ProcessBuilder(
-                Settings.FFMEG_EXEC,
+                Config.FFMEG_EXEC,
                 "-r",
                 "1/5",
                 "-i",
