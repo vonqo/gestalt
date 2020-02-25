@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Resolution extends ArrayList implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private transient int width;
     private transient int height;
 

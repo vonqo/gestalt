@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Scene implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private float exposure;
     private float gamma;
     private long rays;

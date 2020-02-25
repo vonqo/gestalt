@@ -8,6 +8,7 @@ import java.util.Collection;
 
 public class MaterialProperty extends ArrayList implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     public enum MaterialPropertyType {
         Diffuse,
         Reflective,

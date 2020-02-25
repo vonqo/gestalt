@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Material extends ArrayList implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     public Material() {
         super();
     }

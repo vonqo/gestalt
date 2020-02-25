@@ -1,13 +1,14 @@
-package mn.von.gestalt.utility;
+package mn.von.gestalt.utility.config;
 
 import java.io.Serializable;
 
 public class ConfigDto implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private String moodbarExecuteable;
     private String hqzExecutable;
     private String ffmpegExecutable;
-    private String neuralstyleExecutable;
+    private NeuralStyleConfigDto neuralStyle;
     private String resourceDir;
 
     public ConfigDto() {
@@ -38,14 +39,6 @@ public class ConfigDto implements Serializable {
         this.ffmpegExecutable = ffmpegExecutable;
     }
 
-    public String getNeuralstyleExecutable() {
-        return neuralstyleExecutable;
-    }
-
-    public void setNeuralstyleExecutable(String neuralstyleExecutable) {
-        this.neuralstyleExecutable = neuralstyleExecutable;
-    }
-
     public String getResourceDir() {
         return resourceDir;
     }
@@ -53,4 +46,15 @@ public class ConfigDto implements Serializable {
     public void setResourceDir(String resourceDir) {
         this.resourceDir = resourceDir;
     }
+
+    public NeuralStyleConfigDto getNeuralStyle() {
+        return neuralStyle;
+    }
+
+    public void setNeuralStyle(NeuralStyleConfigDto neuralStyle) {
+        this.neuralStyle = neuralStyle;
+    }
+
+
 }
+

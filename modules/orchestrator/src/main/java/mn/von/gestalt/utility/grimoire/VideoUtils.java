@@ -1,6 +1,6 @@
 package mn.von.gestalt.utility.grimoire;
 
-import mn.von.gestalt.utility.Config;
+import mn.von.gestalt.utility.config.Config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,21 +12,15 @@ public class VideoUtils {
 
     public static void encodeToVideo(String frameDir, String outputVideo) throws IOException {
 
-        String cmd = "ffmpeg -r 1/5 -i img%03d.png -c:v libx264 -vf fps=25 -pix_fmt yuv420p out.mp4";
         ProcessBuilder processBuilder;
         Process process;
         processBuilder = new ProcessBuilder(
                 Config.FFMEG_EXEC,
-                "-r",
-                "1/5",
-                "-i",
-                "img%03d.png",
-                "-c:v",
-                "libx264",
-                "-vf",
-                "fps=25",
-                "-pix_fmt",
-                "yuv420p",
+                "-r", "1/5",
+                "-i", "img%03d.png",
+                "-c:v", "libx264",
+                "-vf", "fps=25",
+                "-pix_fmt", "yuv420p",
                 "out.mp4"
         ).redirectErrorStream(true);
         process = processBuilder.start();

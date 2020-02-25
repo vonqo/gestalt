@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class MixedLight implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private transient Light red;
     private transient Light green;
     private transient Light blue;

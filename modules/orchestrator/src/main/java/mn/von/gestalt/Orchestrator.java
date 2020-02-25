@@ -1,10 +1,8 @@
 package mn.von.gestalt;
 
-import com.google.gson.Gson;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
 import mn.von.gestalt.spectogram.Spectrumizer;
-import mn.von.gestalt.utility.ConfigDto;
-import mn.von.gestalt.utility.Config;
+import mn.von.gestalt.utility.config.Config;
 import mn.von.gestalt.utility.annotation.LoadOrchestrator;
 import mn.von.gestalt.utility.grimoire.AudioUtils;
 import mn.von.gestalt.utility.grimoire.ImageSupporter;
@@ -16,12 +14,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.stream.Stream;
 
 /**
  This is the place where all magic works
@@ -40,7 +34,8 @@ public class Orchestrator {
     @LoadOrchestrator
     public static void main(String args[]) {
         Config.loadConfig();
-
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println(cores);
 //        renderZenphoton();
 //        renderCollection();
 //        renderVanillaMoodbars();

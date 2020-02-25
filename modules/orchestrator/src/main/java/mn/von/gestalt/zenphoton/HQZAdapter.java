@@ -1,7 +1,7 @@
 package mn.von.gestalt.zenphoton;
 
 import com.google.gson.Gson;
-import mn.von.gestalt.utility.Config;
+import mn.von.gestalt.utility.config.Config;
 import mn.von.gestalt.zenphoton.dto.*;
 
 import java.io.BufferedReader;
@@ -28,7 +28,6 @@ public class HQZAdapter {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = null;
-
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }

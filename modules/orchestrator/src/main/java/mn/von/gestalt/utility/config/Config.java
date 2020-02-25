@@ -1,4 +1,4 @@
-package mn.von.gestalt.utility;
+package mn.von.gestalt.utility.config;
 
 import com.google.gson.Gson;
 
@@ -14,6 +14,8 @@ public class Config {
     public static String HQZ_EXEC = "";
     public static String FFMEG_EXEC = "";
     public static String NEURALSTYLE_EXEC = "";
+    public static String NEURALSTYLE_STYLE_DIR = "";
+    public static String NEURALSTYLE_CONTENT_DIR = "";
 
     public static String RESOURCE_DIR = "";
     public static String OUTPUT_IMAGE_FORMAT = "png";
@@ -30,8 +32,12 @@ public class Config {
         Config.MOODBAR_EXEC = configData.getMoodbarExecuteable();
         Config.HQZ_EXEC = configData.getHqzExecutable();
         Config.FFMEG_EXEC = configData.getFfmpegExecutable();
-        Config.NEURALSTYLE_EXEC = configData.getNeuralstyleExecutable();
         Config.RESOURCE_DIR = configData.getResourceDir();
+
+        NeuralStyleConfigDto nConfig = configData.getNeuralStyle();
+        Config.NEURALSTYLE_EXEC = nConfig.getExecutable();
+        Config.NEURALSTYLE_STYLE_DIR = nConfig.getStyleDir();
+        Config.NEURALSTYLE_CONTENT_DIR = nConfig.getContentDir();
     }
 
 }

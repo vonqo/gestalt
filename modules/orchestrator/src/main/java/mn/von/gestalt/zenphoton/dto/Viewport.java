@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Viewport extends ArrayList implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private transient int left;
     private transient int top;
     private transient int width;

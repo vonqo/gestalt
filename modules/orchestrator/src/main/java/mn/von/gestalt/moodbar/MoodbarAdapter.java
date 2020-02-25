@@ -2,7 +2,7 @@ package mn.von.gestalt.moodbar;
 
 // import org.apache.commons.io.IOUtils;
 
-import mn.von.gestalt.utility.Config;
+import mn.von.gestalt.utility.config.Config;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -24,11 +24,6 @@ import java.util.logging.Logger;
  @see [https://github.com/lupino22/gestalt]
  **/
 public class MoodbarAdapter {
-
-//    private static ProcessBuilder processBuilder;
-//    private static Process process;
-
-    // private static Vector<Color> moodbar;
 
     public static Vector<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT) throws IOException {
 

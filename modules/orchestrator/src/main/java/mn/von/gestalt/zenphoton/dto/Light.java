@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Light extends ArrayList implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private transient float lightPower;
     private transient int cartesianX;
     private transient int cartesianY;
