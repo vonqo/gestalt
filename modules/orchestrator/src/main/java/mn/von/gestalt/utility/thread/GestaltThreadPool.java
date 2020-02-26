@@ -14,7 +14,7 @@ public class GestaltThreadPool {
     private final LinkedBlockingQueue<Runnable> queue;
 
     public GestaltThreadPool() {
-        this.poolSize = getCpuThreads();
+        this.poolSize = 10;
         queue = new LinkedBlockingQueue<Runnable>();
         workers = new WorkerThread[poolSize];
 
@@ -29,7 +29,7 @@ public class GestaltThreadPool {
         if(cpuThreads <= 2) {
             return 1;
         }
-        return cpuThreads - 2;
+        return cpuThreads / 2;
     }
 
     public void execute(Runnable task) {

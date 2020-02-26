@@ -108,4 +108,12 @@ public class ImageSupporter {
         ImageSupporter.setFontName("Ubuntu");
         return ImageSupporter.addMark(image, text, 0);
     }
+
+    public static BufferedImage fillBlack(int width, int height) {
+        BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setPaint(Color.BLACK);
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        return canvas;
+    }
 }

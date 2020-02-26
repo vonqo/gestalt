@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -24,7 +25,7 @@ public class Spectrumizer {
     private BufferedImage SPECTOGRAM = null;
     private BufferedImage SPECTOGRAM_WITH_MOODBAR = null;
     private int HEIGHT = 500;
-    private Vector<Color> MOODBAR;
+    private ArrayList<Color> MOODBAR;
     private boolean isMoodbarApplied = false;
 
     public Spectrumizer(String WAVE_PATH, Integer fftSampleSize) {
@@ -33,7 +34,7 @@ public class Spectrumizer {
         DATA = spectrogram.getNormalizedSpectrogramData();
     }
 
-    public void applyMoodbar(Vector<Color> moodbar) {
+    public void applyMoodbar(ArrayList<Color> moodbar) {
         this.MOODBAR = moodbar;
         this.isMoodbarApplied = true;
     }

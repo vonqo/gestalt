@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -25,12 +26,12 @@ import java.util.logging.Logger;
  **/
 public class MoodbarAdapter {
 
-    public static Vector<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT) throws IOException {
+    public static ArrayList<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT) throws IOException {
 
         ProcessBuilder processBuilder;
         Process process;
 
-        Vector<Color> moodbar = new Vector<Color>(1000);
+        ArrayList<Color> moodbar = new ArrayList<Color>(1000);
 
         processBuilder = new ProcessBuilder(Config.MOODBAR_EXEC, "-o" ,OUTPUT, AUDIO_PATH);
         process = processBuilder.start();
@@ -63,7 +64,7 @@ public class MoodbarAdapter {
         );
     }
 
-    public static BufferedImage toBufferedImage(Vector<Color> MOOD, int HEIGHT) {
+    public static BufferedImage toBufferedImage(ArrayList<Color> MOOD, int HEIGHT) {
         BufferedImage bar = new BufferedImage(MOOD.size(), 150, BufferedImage.TYPE_INT_RGB);
         Graphics ctx = bar.getGraphics();
         Iterator<Color> itr = MOOD.iterator();
@@ -75,7 +76,7 @@ public class MoodbarAdapter {
         return bar;
     }
 
-    public static void moodToFile(Vector<Color> MOOD, int HEIGHT, File OUTPUT) throws IOException {
+    public static void moodToFile(ArrayList<Color> MOOD, int HEIGHT, File OUTPUT) throws IOException {
         BufferedImage bar = toBufferedImage(MOOD, HEIGHT);
         ImageIO.write(bar, "png", OUTPUT);
         Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.INFO, "Mood Image Ready!");

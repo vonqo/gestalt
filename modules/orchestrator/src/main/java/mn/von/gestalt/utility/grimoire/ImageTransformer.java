@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,8 +75,8 @@ public class ImageTransformer {
         return destination;
     }
 
-    public static BufferedImage bubbleMoodbar(double[][] spectogramData, Vector<Color> moodbar, int bubbleSize) {
-        Vector<Double> bubbleSizeList = new Vector<Double>(moodbar.size());
+    public static BufferedImage bubbleMoodbar(double[][] spectogramData, ArrayList<Color> moodbar, int bubbleSize) {
+        ArrayList<Double> bubbleSizeList = new ArrayList<Double>(moodbar.size());
         int unitRegion = spectogramData.length / moodbar.size();
         double max = 0, min = Double.MAX_VALUE;
         for(int i = 0, g = 0, e = 0; i < moodbar.size(); i++) {

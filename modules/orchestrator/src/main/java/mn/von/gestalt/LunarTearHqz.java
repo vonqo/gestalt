@@ -1,5 +1,8 @@
 package mn.von.gestalt;
 
+import mn.von.gestalt.utility.config.Config;
+import mn.von.gestalt.utility.grimoire.DataUtils;
+import mn.von.gestalt.utility.thread.GestaltThreadPool;
 import mn.von.gestalt.zenphoton.HQZAdapter;
 import mn.von.gestalt.zenphoton.HQZUtils;
 import mn.von.gestalt.zenphoton.dto.*;
@@ -29,9 +32,9 @@ public class LunarTearHqz {
         BLANK,
     }
 
-    public void build(Types type, Vector<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
+    public void build(Types type, ArrayList<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
         // ================ Scene building - phase ============= //
-        Scene scene = initializeScene(rays);
+        Scene scene = initializeScene(rays, 1080,1080);
 
         // ================ LIGHTS =============== //
         List<Light> lightList = buildLights(moodbar, type);
@@ -49,19 +52,111 @@ public class LunarTearHqz {
         adapter.buildPhoton(scene, output);
     }
 
+    public void buildFrames(Types type, ArrayList<Color> moodbar, double[][] spectrumData, long rays,  double audioDuration, int fps) {
+        System.out.println(audioDuration+"|"+fps);
+        int totalFrame = (int)(audioDuration * fps);
+        System.out.println("totalFrame: "+totalFrame);
+        float totalColorFrame = totalFrame / (float)moodbar.size();
+        System.out.println("totalColorFrame: "+totalColorFrame);
+
+        GestaltThreadPool threadPool = new GestaltThreadPool();
+        for(int frame = 0; frame < totalFrame; frame++) {
+            int atomicFrame = frame;
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        buildFrame(atomicFrame, totalColorFrame, type, moodbar, spectrumData, rays);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+
+    private void buildFrame(int frameIndex, float totalColorFrame, Types type, ArrayList<Color> moodbar, double[][] spectrumData, long rays) throws IOException {
+        System.out.print("building frame: "+frameIndex);
+
+        float frame = frameIndex / totalColorFrame;
+        int completedColors = (int)frame;
+        float inProgressColor = frame - completedColors;
+
+        // ================ LIGHTS =============== //
+        List<Light> lightList = new ArrayList<Light>();
+        ArrayList<Integer> polarDist = new ArrayList<Integer>();
+        polarDist.add(0); polarDist.add(1000);
+        int radius = 85; int padding = 540-radius;
+        double unitSpace = Math.PI * 2 / moodbar.size();
+        double theta = Math.PI;
+
+        for(int i = 0; i <= completedColors; i++, theta += unitSpace) {
+            Light lightRed = new Light();
+            Light lightGreen = new Light();
+            Light lightBlue = new Light();
+            MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+            int x = (int)(Math.cos(theta) * radius) + radius + padding;
+            int y = (int)(Math.sin(theta) * radius) + radius + padding;
+
+            if(i == completedColors && inProgressColor != 0) {
+                float power = colorPower * inProgressColor;
+                buildRGBLight(mixedLight, moodbar.get(i), polarDist, x, y, power);
+            } else {
+                buildRGBLight(mixedLight, moodbar.get(i), polarDist, x, y);
+            }
+
+            int degree = (int)Math.toDegrees(theta);
+            degree += 0;
+            ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+            polarAngle.add(degree-2); polarAngle.add(degree+2);
+
+            ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+            rayAngle.add(degree-2); rayAngle.add(degree+2);
+
+            lightGreen.setPolarAngle(polarAngle); lightRed.setPolarAngle(polarAngle); lightBlue.setPolarAngle(polarAngle);
+            lightRed.setRayAngle(rayAngle); lightBlue.setRayAngle(rayAngle); lightGreen.setRayAngle(rayAngle);
+
+            lightRed.toList(); lightBlue.toList(); lightGreen.toList();
+            lightList.add(lightRed);
+            lightList.add(lightGreen);
+            lightList.add(lightBlue);
+        }
+
+        Scene scene = initializeScene(rays,1080,1080);
+        scene.setLights(lightList);
+
+        // ================ MATERIALS =============== //
+        List<Material> materials = buildMaterials(type);
+        scene.setMaterials(materials);
+
+        // ================ OBJECTS =============== //
+        List<ZObject> objects = buildObjects(type);
+        scene.setObjects(objects);
+
+        HQZAdapter adapter = new HQZAdapter();
+
+        StringBuilder name = new StringBuilder("test_");
+        for(int i = 0; i < (4-DataUtils.countDigit(frameIndex)); i++) name.append("0");
+
+        adapter.buildPhoton(scene, new File(Config.RESOURCE_DIR+"/"+name+frameIndex+"."+ Config.OUTPUT_IMAGE_FORMAT));
+    }
+
+
+
     // ============================================================= //
     // ========================= SCENE ============================= //
     // ============================================================= //
-    private Scene initializeScene(long rays) {
+    private Scene initializeScene(long rays, int width, int height) {
         Scene scene = new Scene();
         Resolution reso = new Resolution();
-        reso.setHeight(2000);
-        reso.setWidth(2000);
+        reso.setHeight(height);
+        reso.setWidth(width);
         reso.toList();
         scene.setResolution(reso);
         Viewport viewport = new Viewport();
-        viewport.setHeight(2000);
-        viewport.setWidth(2000);
+        viewport.setHeight(height);
+        viewport.setWidth(width);
         viewport.setLeft(0); viewport.setTop(0);
         viewport.toList();
         scene.setViewport(viewport);
@@ -88,7 +183,7 @@ public class LunarTearHqz {
             Material material3 = HQZUtils.buildMaterial(0.7f,0,0.3f);
             materials.add(material3);
 
-            Material material4 = HQZUtils.buildMaterial(0.0f,0.5f,.05f);
+            Material material4 = HQZUtils.buildMaterial(0.0f,0.3f,.07f);
             materials.add(material4);
         }
 
@@ -141,21 +236,23 @@ public class LunarTearHqz {
 //            ZObject object4 = buildObject(1,800,1750,510,100);
 //            objects.add(object4);
 
-            int offset = 300;
-            int distance = 1400;
+            int offset = 200;
+            int distance = 1080;
 
             // top
-            ZObject wall1 = HQZUtils.buildObject(1,offset,offset,98,distance,0,46);
+            ZObject wall1 = HQZUtils.buildObject(4,0,offset,720,distance,0,360);
             objects.add(wall1);
 
-            ZObject wall2 = HQZUtils.buildObject(4,offset,offset,47,0,distance/2+50,99);
+            //left
+            ZObject wall2 = HQZUtils.buildObject(4,offset,0,180,0,distance,180);
             objects.add(wall2);
 
-            ZObject wall3 = HQZUtils.buildObject(4,2000-offset,offset,52,0,distance,12);
+            //right
+            ZObject wall3 = HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270);
             objects.add(wall3);
 
             // bottom
-            ZObject wall4 = HQZUtils.buildObject(1,offset+1080,2000-offset,17,distance-1080,0,146);
+            ZObject wall4 = HQZUtils.buildObject(4,0,1080-offset,90,distance,0,160);
             objects.add(wall4);
 
         } else if(types == LunarTearHqz.Types.GRAPHTREE) {
@@ -167,7 +264,7 @@ public class LunarTearHqz {
     // ============================================================= //
     // ========================= LIGHTS ============================ //
     // ============================================================= //
-    private List<Light> buildLights(Vector<Color> moodbar, LunarTearHqz.Types types) {
+    private List<Light> buildLights(ArrayList<Color> moodbar, LunarTearHqz.Types types) {
         List<Light> lightList = new ArrayList<Light>();
 
         if(types == LunarTearHqz.Types.TEST1) {
@@ -220,9 +317,9 @@ public class LunarTearHqz {
             }
         } else if(types == LunarTearHqz.Types.TORNADO) {
             ArrayList<Integer> polarDist = new ArrayList<Integer>();
-            polarDist.add(0); polarDist.add(1500);
+            polarDist.add(0); polarDist.add(1000);
 
-            int radius = 150; int padding = 1000-radius;
+            int radius = 85; int padding = 540-radius;
             double unitSpace = Math.PI * 2 / moodbar.size();
             double theta = Math.PI;
 

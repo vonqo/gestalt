@@ -34,16 +34,16 @@ public class Orchestrator {
     @LoadOrchestrator
     public static void main(String args[]) {
         Config.loadConfig();
-        int cores = Runtime.getRuntime().availableProcessors();
-        System.out.println(cores);
+
 //        renderZenphoton();
+        renderZenphotonFrames();
 //        renderCollection();
 //        renderVanillaMoodbars();
     }
 
     private static void renderZenphoton() {
-        String sogname = "fall";
-        String displayText = "Even Tide - Fall";
+        String sogname = "ori";
+        String displayText = "ori";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -57,13 +57,13 @@ public class Orchestrator {
         }
 
         try {
-            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 5000;
-            File outputFile = new File(sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+            int ray = 5000000;
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
             hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile);
             BufferedImage img = ImageIO.read(outputFile);
@@ -79,14 +79,46 @@ public class Orchestrator {
         }
     }
 
+    private static void renderZenphotonFrames() {
+        String sogname = "ori";
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+sogname+".mp3";
+        String pathWav = testPath+sogname+".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+            int ray = 2500000;
+            LunarTearHqz hqz = new LunarTearHqz();
+
+            hqz.buildFrames(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, audioDuration, 48);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void renderVanillaMoodbars() {
         String filename = "col3";
         String testPath = Config.RESOURCE_DIR;
         try{
-            Vector<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"lemons.mp3",testPath+"/bar1");
-            Vector<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"molboyz.mp3",testPath+"/bar2");
-            Vector<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"haraatsai.mp3",testPath+"/bar3");
-            Vector<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"huduu.mp3",testPath+"/bar3");
+            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"lemons.mp3",testPath+"/bar1");
+            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"molboyz.mp3",testPath+"/bar2");
+            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"haraatsai.mp3",testPath+"/bar3");
+            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"huduu.mp3",testPath+"/bar3");
             ArrayList<BufferedImage> moodbarList = new ArrayList<BufferedImage>();
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar1, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar2, 150));
@@ -129,7 +161,7 @@ public class Orchestrator {
             ex.printStackTrace();
         }
         try {
-            Vector<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();

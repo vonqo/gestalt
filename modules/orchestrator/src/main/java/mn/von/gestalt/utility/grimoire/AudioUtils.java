@@ -41,6 +41,9 @@ public class AudioUtils {
     }
 
     public static void mp3ToWav(File mp3Data, String filePath) throws UnsupportedAudioFileException, IOException {
+        File wavFile = new File(filePath);
+        if(wavFile.exists()) return;
+
         // open stream
         AudioInputStream mp3Stream = AudioSystem.getAudioInputStream(mp3Data);
         AudioFormat sourceFormat = mp3Stream.getFormat();
@@ -56,7 +59,7 @@ public class AudioUtils {
         // create stream that delivers the desired format
         AudioInputStream converted = AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
         // write stream into a file with file format wav
-        AudioSystem.write(converted, AudioFileFormat.Type.WAVE, new File(filePath));
+        AudioSystem.write(converted, AudioFileFormat.Type.WAVE, wavFile);
     }
 
     public static double getDuration(String filePath) throws IOException, UnsupportedAudioFileException {
