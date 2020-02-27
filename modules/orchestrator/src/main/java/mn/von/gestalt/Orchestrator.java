@@ -36,8 +36,8 @@ public class Orchestrator {
         Config.loadConfig();
 
 //        renderZenphoton();
-        renderZenphotonFrames();
-//        renderCollection();
+//        renderZenphotonFrames();
+        renderCollection();
 //        renderVanillaMoodbars();
     }
 
@@ -148,8 +148,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "fall";
-        String displayText = "Even Tide - Fall";
+        String sogname = "samurai";
+        String displayText = "B.L.M.D - Самурай/Samurai";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -193,11 +193,20 @@ public class Orchestrator {
 
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
+
             BufferedImage bubbleBar = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
             bubbleBar = ImageSupporter.addTitle(bubbleBar, displayText);
 
+            ImageSupporter.setFontSize(38);
+            BufferedImage hanzBar = ImageTransformer.hanzMoodbar(spectrumizer.getDATA(), moodbar, 40, "無謀侍"); // balmad samurai
+            hanzBar = ImageSupporter.addTitle(hanzBar, displayText);
+
             ImageIO.write(bubbleBar, Config.OUTPUT_IMAGE_FORMAT,
                     new File(testPath+"/"+sogname+"_bubble."+ Config.OUTPUT_IMAGE_FORMAT)
+            );
+
+            ImageIO.write(hanzBar, Config.OUTPUT_IMAGE_FORMAT,
+                    new File(testPath+"/"+sogname+"_hanz."+ Config.OUTPUT_IMAGE_FORMAT)
             );
 
         } catch (Exception ex) {

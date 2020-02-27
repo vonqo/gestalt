@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -76,31 +77,7 @@ public class ImageTransformer {
     }
 
     public static BufferedImage bubbleMoodbar(double[][] spectogramData, ArrayList<Color> moodbar, int bubbleSize) {
-        ArrayList<Double> bubbleSizeList = new ArrayList<Double>(moodbar.size());
-        int unitRegion = spectogramData.length / moodbar.size();
-        double max = 0, min = Double.MAX_VALUE;
-        for(int i = 0, g = 0, e = 0; i < moodbar.size(); i++) {
-            double size = 0.0;
-            for(e = 0; e < unitRegion; e++) {
-                for(int k = 0; k < spectogramData[g+e].length; k++) {
-                    size += spectogramData[g+e][k];
-                }
-            }
-            // System.out.println(size);
-            g += e;
-            if(max < size) max = size;
-            if(i > 10 && min > size && size != 0.0) min = size;
-            bubbleSizeList.add(size);
-        }
-        double wtf = max - min;
-        for(int i = 0; i < bubbleSizeList.size(); i++) {
-            double percent = 0;
-            if((bubbleSizeList.get(i) - min) > 0) {
-                percent = (bubbleSizeList.get(i) - min) / wtf;
-                // System.out.println(percent);
-            }
-            bubbleSizeList.set(i, percent);
-        }
+        ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectogramData, moodbar.size());
 
         BufferedImage destination = new BufferedImage((bubbleSize * 40 / 2) + bubbleSize, bubbleSize * 25, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx = (Graphics2D) destination.getGraphics();
@@ -117,6 +94,41 @@ public class ImageTransformer {
                 Ellipse2D.Double circle = new Ellipse2D.Double(
                         (x*(bubbleSize/2)) + gap,(y*bubbleSize) + gap, pixelSize, pixelSize);
                 ctx.fill(circle);
+            }
+        }
+
+        ctx.dispose();
+        return destination;
+    }
+
+    /**
+     * Specially designed for B.L.M.D - Samurai
+     * */
+    public static BufferedImage hanzMoodbar(double[][] spectogramData, ArrayList<Color> moodbar, int squareSize, String characters) {
+        ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectogramData, moodbar.size());
+
+        BufferedImage destination = new BufferedImage(squareSize * 30, squareSize * 33, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx = (Graphics2D) destination.getGraphics();
+        ctx.setColor(Color.BLACK);
+        ctx.fillRect(0, 0, destination.getWidth(), destination.getHeight());
+        ctx.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+        ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        for(int y = 0, i = 0 ,c = 0; y < 33; y++) {
+            for(int x = 0; x < 30; x++, i++, c++) {
+                Color clr = moodbar.get(i);
+                ctx.setColor(new Color(clr.getRed(), clr.getGreen(), clr.getBlue(), (int)(150 * bubbleSizeList.get(i))));
+                int pixelSize = (int)(bubbleSizeList.get(i) * squareSize);
+                int gap = (squareSize - pixelSize) / 2;
+                Rectangle2D.Double square = new Rectangle2D.Double((x * squareSize)+gap, (y * squareSize)+gap, pixelSize, pixelSize);
+                ctx.fill(square);
+
+                int fontSize = 32;
+                ctx.setColor(new Color(clr.getRed(), clr.getGreen(), clr.getBlue(), 255));
+                // ctx.setColor(new Color(255,255,255,(int)(150 * bubbleSizeList.get(i))));
+                ctx.setFont(new Font("Roboto Mono", Font.PLAIN, fontSize));
+
+                if(c >= characters.length()) c = 0;
+                ctx.drawString(String.valueOf(characters.charAt(c)),(x * squareSize) + 4,(y * squareSize) + fontSize);
             }
         }
 
