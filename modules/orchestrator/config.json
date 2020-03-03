@@ -2,7 +2,7 @@
   "moodbarExecuteable": "moodbar",
   "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
   "ffmpegExecutable": "ffmpeg",
-  "resourceDir": "/home/vonqo/Desktop/mood_test/",
+  "resourceDir": "/home/vonqo/Desktop/mood_test/child/",
   "neuralStyle": {
     "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
     "styleDir": "/home/vonqo/Desktop/style_img/",

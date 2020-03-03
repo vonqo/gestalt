@@ -14,7 +14,7 @@ public class GestaltThreadPool {
     private final LinkedBlockingQueue<Runnable> queue;
 
     public GestaltThreadPool() {
-        this.poolSize = 10;
+        this.poolSize = getCpuCores();
         queue = new LinkedBlockingQueue<Runnable>();
         workers = new WorkerThread[poolSize];
 
@@ -24,12 +24,10 @@ public class GestaltThreadPool {
         }
     }
 
-    private int getCpuThreads() {
-        int cpuThreads = Runtime.getRuntime().availableProcessors();
-        if(cpuThreads <= 2) {
-            return 1;
-        }
-        return cpuThreads / 2;
+    private int getCpuCores() {
+        int cpuCores = Runtime.getRuntime().availableProcessors();
+        if(cpuCores < 2) return 1;
+        return cpuCores - 3;
     }
 
     public void execute(Runnable task) {
