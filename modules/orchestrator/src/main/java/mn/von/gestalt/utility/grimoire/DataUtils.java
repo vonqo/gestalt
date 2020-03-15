@@ -10,24 +10,24 @@ public class DataUtils {
         double max = 0, min = Double.MAX_VALUE;
 
         for(int i = 0, g = 0, e = 0; i < distributionSize; i++) {
-            double size = 0.0;
+            double sum = 0.0;
             for(e = 0; e < unitRegion; e++) {
                 for(int k = 0; k < spectogramData[g+e].length; k++) {
-                    size += spectogramData[g+e][k];
+                    sum += spectogramData[g+e][k];
                 }
             }
-            // System.out.println(size);
+
             g += e;
-            if(max < size) max = size;
-            if(i > 10 && min > size && size != 0.0) min = size;
-            list.add(size);
+            if(max < sum) max = sum;
+            if(i > 10 && min > sum && sum != 0.0) min = sum;
+            list.add(sum);
         }
-        double wtf = max - min;
+
+        double diff = max - min;
         for(int i = 0; i < list.size(); i++) {
             double percent = 0;
             if((list.get(i) - min) > 0) {
-                percent = (list.get(i) - min) / wtf;
-                // System.out.println(percent);
+                percent = (list.get(i) - min) / diff;
             }
             list.set(i, percent);
         }

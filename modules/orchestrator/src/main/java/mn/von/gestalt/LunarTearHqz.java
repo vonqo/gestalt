@@ -36,7 +36,7 @@ public class LunarTearHqz {
         if(type == Types.TORNADO) {
             buildTornado(totalFrame-1,totalColorFrame,moodbar, spectrumData, rays, output);
         } else if(type == Types.BUBBLE2) {
-            buildBubble2(totalFrame, totalColorFrame, moodbar, spectrumData, rays, output);
+            buildBubble2(totalFrame-1, totalColorFrame, moodbar, spectrumData, rays, output);
         }
     }
 
@@ -154,50 +154,68 @@ public class LunarTearHqz {
         int completedColors = (int)frame;
         float inProgressColor = frame - completedColors;
 
-        Scene scene = HQZUtils.initializeScene(rays,1080,1080, 0.2f, 2.2f);
+        int screenWidth = 2650;
+        int screenHeight = 2850;
+//        int screenWidth = 2250;
+//        int screenHeight = 2460;
+
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.2f, 1.0f);
+
         // ================ MATERIALS =============== //
         List<Material> materials = new ArrayList<Material>();
         materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
-        Material material1 = HQZUtils.buildMaterial(0.1f,0.0f,0.9f);
+//        Material material1 = HQZUtils.buildMaterial(0.0f,0.1f,0.9f);
+        Material material1 = HQZUtils.buildMaterial(0,0.999f,0.001f);
         materials.add(material1);
-        scene.setMaterials(materials);
 
         // ================ OBJECTS =============== // // ================ LIGHTS =============== //
         List<ZObject> objects = new ArrayList<ZObject>();
-        List<Light> lightList = new ArrayList<Light>();
-        objects.add(HQZUtils.buildObject(0,0,0,1080,0));
-        objects.add(HQZUtils.buildObject(0,1080,0,1080,0));
-        objects.add(HQZUtils.buildObject(0,0,0,0,1080));
-        objects.add(HQZUtils.buildObject(0,1080,0,0,1080));
+        objects.add(HQZUtils.buildObject(0,0,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
 
+        int padding = 3;
+        int baseRadius = 10;
+        int dynamicRadius = 30;
+        int radius = baseRadius + dynamicRadius;
+        ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectrumData, moodbar.size());
+
+        List<Light> lightList = new ArrayList<Light>();
         ArrayList<Integer> polarDist = new ArrayList<Integer>();
-        polarDist.add(0); polarDist.add(1000);
+        polarDist.add(0); polarDist.add(3);
 
         ArrayList<Integer> polarAngle = new ArrayList<Integer>();
-        polarAngle.add(0); polarAngle.add(360);
+        polarAngle.add(0); polarAngle.add(90);
 
         ArrayList<Integer> rayAngle = new ArrayList<Integer>();
-        rayAngle.add(0); rayAngle.add(360);
+        rayAngle.add(90); rayAngle.add(180);
 
-        for(int y = 0, i = 0 ,c = 0; y < 33; y++) {
-            for(int x = 0; x < 30; x++, i++, c++) {
+//        for(int i = 0; i < bubbleSizeList.size(); i++) {
+//            System.out.println(bubbleSizeList.get(i));
+//        }
 
-                objects.addAll(HQZUtils.buildCircle(1,x,y,50));
+        for(int y = 1, i = 0; y <= 33; y++) {
+            for(int x = 1; x <= 30; x++, i++) {
+                int pointY = y * ((radius+padding) * 2) - radius;
+                int pointX = x * ((radius+padding) * 2) - radius;
+
+                objects.addAll(HQZUtils.buildCircle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
 
                 Light lightRed = new Light();
                 Light lightGreen = new Light();
                 Light lightBlue = new Light();
                 MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
-                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, x, y);
+                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, pointX, pointY, 0.00005f);
 
                 lightList.add(lightRed);
                 lightList.add(lightGreen);
                 lightList.add(lightBlue);
             }
         }
-
-        scene.setObjects(objects);
         scene.setLights(lightList);
+        scene.setMaterials(materials);
+        scene.setObjects(objects);
         HQZAdapter adapter = new HQZAdapter();
         adapter.buildPhoton(scene, output);
     }

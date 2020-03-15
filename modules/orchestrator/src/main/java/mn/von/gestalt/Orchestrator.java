@@ -35,15 +35,15 @@ public class Orchestrator {
     public static void main(String args[]) {
         Config.loadConfig();
 
+//        renderCollection();
         renderZenphoton();
 //        renderZenphotonFrames();
-//        renderCollection();
 //        renderVanillaMoodbars();
     }
 
     private static void renderZenphoton() {
-        String sogname = "ori";
-        String displayText = "ori";
+        String sogname = "preshur";
+        String displayText = "B.L.M.D - Preshur";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -64,14 +64,14 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 500000;
+            int ray = 47500;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            hqz.build(LunarTearHqz.Types.BUBBLE2, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
             BufferedImage img = ImageIO.read(outputFile);
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
-            ImageSupporter.setFontSize(55);
+            ImageSupporter.setFontSize(72);
             ImageSupporter.setFontName("Roboto Mono");
             ImageIO.write(
                     ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
@@ -150,8 +150,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "samurai";
-        String displayText = "B.L.M.D - Самурай/Samurai";
+        String sogname = "preshur";
+        String displayText = "B.L.M.D - Preshur";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
