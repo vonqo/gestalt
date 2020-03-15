@@ -24,7 +24,7 @@ void drawCircleByLine(int x, int y, int radius, int lineCount) {
 int findOptimalLineCount(int radius) {
   double p = 2 * PI * radius;
   print(p);
-  int lines = (int)(p/10);
+  int lines = (int)(p/log(radius));
   print("\nlines:"+lines);
   return lines;
 }
@@ -36,7 +36,7 @@ void drawCircle(int x, int y, int radius) {
 void setup() {
   background(255);
   size(750, 500);
-  int r = 100;
+  int r = 50;
   drawCircle(r, r, r);
   drawCircleByLine(r*3, r, r, findOptimalLineCount(r));
 }
