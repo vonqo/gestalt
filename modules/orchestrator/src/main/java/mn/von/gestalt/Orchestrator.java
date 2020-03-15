@@ -35,9 +35,9 @@ public class Orchestrator {
     public static void main(String args[]) {
         Config.loadConfig();
 
-//        renderZenphoton();
+        renderZenphoton();
 //        renderZenphotonFrames();
-        renderCollection();
+//        renderCollection();
 //        renderVanillaMoodbars();
     }
 
@@ -47,9 +47,11 @@ public class Orchestrator {
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
+        double audioDuration = 0;
 
         try {
             AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -62,10 +64,10 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 5000000;
+            int ray = 500000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile);
+            hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
             BufferedImage img = ImageIO.read(outputFile);
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
@@ -104,7 +106,7 @@ public class Orchestrator {
             int ray = 2500000;
             LunarTearHqz hqz = new LunarTearHqz();
 
-            hqz.buildFrames(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, audioDuration, 48);
+            hqz.buildFrames(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, audioDuration, 48, "test");
 
         } catch (Exception e) {
             e.printStackTrace();
