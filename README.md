@@ -30,7 +30,7 @@ Execute ```install.sh```. Installation script is not maintained. If things gone 
 ### Manual installation
 **Orchestrator** integrates all modules with isolated process calls. Each modules has to be successfully builded on the system. The source code of module(s) from this repository is slightly changed to fit with **Orchestrator**. 
  
-Follow the these instruction:
+Follow these instruction:
 * [Moodbar installation](https://github.com/PunkOwl/gestalt/tree/master/modules/moodbar) or (For OSX) [Moodbar Xcode port](https://github.com/PunkOwl/gestalt/tree/master/modules/moodbar-xcode)
 * [ZenPhoton installaton](https://github.com/PunkOwl/gestalt/tree/master/modules/zenphoton/hqz)
 
