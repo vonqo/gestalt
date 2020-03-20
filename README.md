@@ -4,6 +4,7 @@
 [![Codacy Badge][codacy-badge]][codacy]
 [![Gitter][gitter-badge]][gitter]
 [![HitCount][hit-badge]][hit]
+[![Shitcoded][ulaanbaatar-badge]][ub-wiki]
 
 Definition of **gestalt**: "*something that is made of many parts and yet is somehow more than or different from the combination of its parts*"
 
@@ -68,3 +69,5 @@ Copyright (c) 2019 Enkh-Amar.G - Released under the [Mozilla Public License Vers
 [hit]: http://hits.dwyl.io/vonqo/gestalt
 [gitter-badge]: https://badges.gitter.im/punkowl-gestalt/community.svg
 [gitter]: https://gitter.im/punkowl-gestalt/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[ulaanbaatar-badge]: https://img.shields.io/badge/shitcoded%20in-%F0%9F%87%B2%F0%9F%87%B3ulaanbaatar-brightgreen.svg
+[ub-wiki]: https://en.wikipedia.org/wiki/Ulaanbaatar
