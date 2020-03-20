@@ -28,10 +28,10 @@ This is an open source repository of creative coding integrations and playground
 Execute ```install.sh```. Installation script is not maintained. If things gone wrong, screw this script and go for manual.
 
 ### Manual installation
-**Orchestrator** integrates all modules with isolated process calls. Each modules has to be successfully builded on the system. The source code from this repository is slightly changed to fit with **Orchestrator**. 
-
+**Orchestrator** integrates all modules with isolated process calls. Each modules has to be successfully builded on the system. The source code of module(s) from this repository is slightly changed to fit with **Orchestrator**. 
+ 
 Follow the these instruction:
-* [Moodbar installation](https://github.com/PunkOwl/gestalt/tree/master/modules/moodbar)
+* [Moodbar installation](https://github.com/PunkOwl/gestalt/tree/master/modules/moodbar) or (For OSX) [Moodbar Xcode port](https://github.com/PunkOwl/gestalt/tree/master/modules/moodbar-xcode)
 * [ZenPhoton installaton](https://github.com/PunkOwl/gestalt/tree/master/modules/zenphoton/hqz)
 
 And install these third party tools:
