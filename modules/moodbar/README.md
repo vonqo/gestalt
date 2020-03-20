@@ -2,7 +2,7 @@
 
 Forked from [exaile/moodbar](https://github.com/exaile/moodbar).
 
-And made little update for more readable code color (**lupino22 edit**):
+And made little update for more readable code color (**vonqo edit**):
 
 ```c
 for(unsigned int i = 0; i < data.size(); i++){
@@ -34,7 +34,7 @@ The initial commit is taken from Clementine revision 3886f3d1e4b29d028c1bacf474b
 * GStreamer 1
   * GStreamer Base Plugins
   
-  ### Requirement installation guide (**lupino22 edit**)
+  ### Requirement installation guide (**vonqo edit**)
   #### Debian linux
   ```sh
   sudo apt-get install fftw3 fftw3-dev pkg-config
