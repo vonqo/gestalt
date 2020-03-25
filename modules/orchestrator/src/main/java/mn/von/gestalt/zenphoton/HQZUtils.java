@@ -175,7 +175,7 @@ public class HQZUtils {
 
     private static int findCircleOptimalLineCount(int radius) {
         double p = 2 * Math.PI * radius;
-        return (int)(p/Math.log(radius));
+        return (int)(p/Math.log(radius) * 1.5);
     }
 
 }

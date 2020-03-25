@@ -36,53 +36,14 @@ public class Orchestrator {
         Config.loadConfig();
 
 //        renderCollection();
-        renderZenphoton();
-//        renderZenphotonFrames();
+//        renderZenphoton();
+        renderZenphotonFrames();
 //        renderVanillaMoodbars();
     }
 
     private static void renderZenphoton() {
-        String sogname = "preshur";
-        String displayText = "B.L.M.D - Preshur";
-        String testPath = Config.RESOURCE_DIR;
-        String pathMp3 = testPath+sogname+".mp3";
-        String pathWav = testPath+sogname+".wav";
-        double audioDuration = 0;
-
-        try {
-            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-            audioDuration = AudioUtils.getDuration(pathWav);
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
-            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
-            spectrumizer.applyMoodbar(moodbar);
-            spectrumizer.build();
-
-            int ray = 47500;
-            File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
-            LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.BUBBLE2, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
-            BufferedImage img = ImageIO.read(outputFile);
-            ImageSupporter.setBackgroundColor(Color.BLACK);
-            ImageSupporter.setFontColor(Color.WHITE);
-            ImageSupporter.setFontSize(72);
-            ImageSupporter.setFontName("Roboto Mono");
-            ImageIO.write(
-                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void renderZenphotonFrames() {
-        String sogname = "ori";
+        String sogname = "buram";
+        String displayText = "Even Tide - Бурам";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -104,10 +65,48 @@ public class Orchestrator {
             spectrumizer.build();
 
             int ray = 2500000;
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+            LunarTearHqz hqz = new LunarTearHqz();
+            hqz.build(LunarTearHqz.Types.BUBBLE2, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            BufferedImage img = ImageIO.read(outputFile);
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontSize(72);
+            ImageSupporter.setFontName("Roboto Mono");
+            ImageIO.write(
+                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void renderZenphotonFrames() {
+        String sogname = "buram";
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+sogname+".mp3";
+        String pathWav = testPath+sogname+".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+            int ray = 1750000;
             LunarTearHqz hqz = new LunarTearHqz();
 
-            hqz.buildFrames(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, audioDuration, 48, "test");
-
+            hqz.buildFrames(LunarTearHqz.Types.BUBBLE2, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "test");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -150,8 +149,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "preshur";
-        String displayText = "B.L.M.D - Preshur";
+        String sogname = "buram";
+        String displayText = "Even Tide - Бурам";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";

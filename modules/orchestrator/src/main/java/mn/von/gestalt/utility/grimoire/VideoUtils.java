@@ -42,7 +42,7 @@ public class VideoUtils {
                 "-r", String.valueOf(this.fps),
                 "-f", "image2",
                 "-s", imageWidth+"x"+imageHeight,
-                "-i", this.framePrefix+"%04d.png",
+                "-i", this.framePrefix+"%05d.png",
                 "-vcodec", "libx264",
                 "-crf", "18",
                 "-pix_fmt", "yuv420p",
