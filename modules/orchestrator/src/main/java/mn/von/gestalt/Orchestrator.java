@@ -36,13 +36,15 @@ public class Orchestrator {
         Config.loadConfig();
 
 //        renderCollection();
-//        renderZenphoton();
-        renderZenphotonFrames();
+        renderZenphoton();
+//        renderZenphotonFrames();
 //        renderVanillaMoodbars();
+
+
     }
 
     private static void renderZenphoton() {
-        String sogname = "buram";
+        String sogname = "kaine";
         String displayText = "Even Tide - Бурам";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
@@ -65,17 +67,18 @@ public class Orchestrator {
             spectrumizer.build();
 
             int ray = 2500000;
+            // int ray = 100000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.BUBBLE2, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
-            BufferedImage img = ImageIO.read(outputFile);
-            ImageSupporter.setBackgroundColor(Color.BLACK);
-            ImageSupporter.setFontColor(Color.WHITE);
-            ImageSupporter.setFontSize(72);
-            ImageSupporter.setFontName("Roboto Mono");
-            ImageIO.write(
-                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
-            );
+            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+//            BufferedImage img = ImageIO.read(outputFile);
+//            ImageSupporter.setBackgroundColor(Color.BLACK);
+//            ImageSupporter.setFontColor(Color.WHITE);
+//            ImageSupporter.setFontSize(72);
+//            ImageSupporter.setFontName("Roboto Mono");
+//            ImageIO.write(
+//                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
+//            );
         } catch (Exception e) {
             e.printStackTrace();
         }
