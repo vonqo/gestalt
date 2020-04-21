@@ -132,26 +132,41 @@ public class HQZUtils {
 
     public static List<ZObject> buildCircle(int materialIndex, int x, int y, int radius) {
         int lineCount = findCircleOptimalLineCount(radius);
-        return buildRegularPolygons(materialIndex, lineCount, x, y, radius);
+        return buildRegularPolygons(materialIndex, lineCount, x, y, radius,null);
     }
 
     public static List<ZObject> buildRegularTriangle(int materialIndex, int x, int y, int radius) {
-        return  buildRegularPolygons(materialIndex, 3, x, y, radius);
+        return buildRegularPolygons(materialIndex, 3, x, y, radius,null);
     }
 
     public static List<ZObject> buildRegularSquare(int materialIndex, int x, int y, int radius) {
-        return  buildRegularPolygons(materialIndex, 4, x, y, radius);
+        return buildRegularPolygons(materialIndex, 4, x, y, radius,null);
+    }
+
+    public static List<ZObject> buildRegularSquare(int materialIndex, int x, int y, int radius, List<MaterialExtension> ext) {
+        return buildRegularPolygons(materialIndex, 4, x, y, radius, ext);
     }
 
     public static List<ZObject> buildRegularPentagon(int materialIndex, int x, int y, int radius) {
-        return  buildRegularPolygons(materialIndex, 5, x, y, radius);
+        return buildRegularPolygons(materialIndex, 5, x, y, radius,null);
     }
 
     public static List<ZObject> buildRegularHexagon(int materialIndex, int x, int y, int radius) {
-        return  buildRegularPolygons(materialIndex, 6, x, y, radius);
+        return buildRegularPolygons(materialIndex, 6, x, y, radius, null);
     }
 
-    private static List<ZObject> buildRegularPolygons(int materialIndex, int lineCount, int x, int y, int radius) {
+    public static List<ZObject> buildRegularHexagon(int materialIndex, int x, int y, int radius, List<MaterialExtension> ext) {
+        return buildRegularPolygons(materialIndex, 6, x, y, radius, ext);
+    }
+
+    private static List<ZObject> buildRegularPolygons(
+            int materialIndex,
+            int lineCount,
+            int x, int y, int radius,
+            List<MaterialExtension> ext
+    ) {
+        boolean isUsingExt = (ext != null && ext.size() == lineCount+1);
+
         List<ZObject> objects = new ArrayList<ZObject>();
         double theta = Math.PI;
         double unitSpace = 2 * Math.PI / lineCount;
@@ -164,7 +179,12 @@ public class HQZUtils {
             int postY = (int)(Math.sin(theta) * radius) + y;
 
             if(preX > 0 && preY > 0) {
-                objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY));
+                if(isUsingExt) {
+                    objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY,
+                            ext.get(i).getA0(), ext.get(i).getA0()));
+                } else {
+                    objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY));
+                }
             }
 
             preX = postX;

@@ -44,8 +44,8 @@ public class Orchestrator {
     }
 
     private static void renderZenphoton() {
-        String sogname = "kaine";
-        String displayText = "Even Tide - Бурам";
+        String sogname = "folk";
+        String displayText = "Ж.Чулуун - Уран хас / Uran Khas";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -66,11 +66,11 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 2500000;
+            int ray = 500000;
             // int ray = 100000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            hqz.build(LunarTearHqz.Types.TORNADO_WIDE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 //            BufferedImage img = ImageIO.read(outputFile);
 //            ImageSupporter.setBackgroundColor(Color.BLACK);
 //            ImageSupporter.setFontColor(Color.WHITE);
@@ -85,7 +85,7 @@ public class Orchestrator {
     }
 
     private static void renderZenphotonFrames() {
-        String sogname = "buram";
+        String sogname = "uran_khas";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -152,8 +152,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "buram";
-        String displayText = "Even Tide - Бурам";
+        String sogname = "folk";
+        String displayText = "Ж.Чулуун - Ардийн 2 аялгуу / Variations on two folk songs";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";

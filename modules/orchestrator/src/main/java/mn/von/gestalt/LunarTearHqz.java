@@ -19,6 +19,7 @@ public class LunarTearHqz {
     public enum Types {
         TEST1,
         TORNADO,
+        TORNADO_WIDE,
         MATRIX,
         PYRAMID,
         TESSERACT,
@@ -35,10 +36,12 @@ public class LunarTearHqz {
         if(type == Types.TORNADO) {
             buildTornado(totalFrame-1,totalColorFrame,moodbar, spectrumData, rays, output);
         } else if(type == Types.BUBBLE2) {
-            buildBubble2Widescreen(totalFrame-1, totalColorFrame, moodbar, spectrumData, rays, output);
-            // buildBubble2(totalFrame-1, totalColorFrame, moodbar, spectrumData, rays, output);
+            // buildBubble2Widescreen(totalFrame-1, totalColorFrame, moodbar, spectrumData, rays, output);
+            buildBubble2(totalFrame-1, totalColorFrame, moodbar, spectrumData, rays, output);
         } else if(type == Types.BUBBLE2_PRINTABLE) {
             buildBubble2Printable(totalFrame-1, totalColorFrame, moodbar, spectrumData, rays, output);
+        } else if(type == Types.TORNADO_WIDE) {
+            buildTornadoWide(totalFrame-1, totalColorFrame, moodbar, rays, output);
         }
     }
 
@@ -62,16 +65,15 @@ public class LunarTearHqz {
                 @Override
                 public void run() {
                     try {
+                        StringBuilder name = new StringBuilder(output);
+                        name.append("_");
+                        for(int i = 0; i < (5-DataUtils.countDigit(atomicFrame)); i++) name.append("0");
                         if(type == Types.TORNADO) {
-                            StringBuilder name = new StringBuilder(output);
-                            name.append("_");
-                            for(int i = 0; i < (5-DataUtils.countDigit(atomicFrame)); i++) name.append("0");
                             buildTornado(atomicFrame, totalColorFrame, moodbar, spectrumData, rays, new File(Config.RESOURCE_DIR+"/"+name+atomicFrame+"."+ Config.OUTPUT_IMAGE_FORMAT));
                         } else if(type == Types.BUBBLE2) {
-                            StringBuilder name = new StringBuilder(output);
-                            name.append("_");
-                            for(int i = 0; i < (5-DataUtils.countDigit(atomicFrame)); i++) name.append("0");
                             buildBubble2Widescreen(atomicFrame, totalColorFrame, moodbar, spectrumData, rays, new File(Config.RESOURCE_DIR+"/"+name+atomicFrame+"."+ Config.OUTPUT_IMAGE_FORMAT));
+                        } else if(type == Types.TORNADO_WIDE) {
+                            buildTornadoWide(atomicFrame, totalColorFrame, moodbar, rays, new File(Config.RESOURCE_DIR+"/"+name+atomicFrame+"."+Config.OUTPUT_IMAGE_FORMAT));
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -154,6 +156,107 @@ public class LunarTearHqz {
         objects.add(HQZUtils.buildObject(4,offset,0,180,0,distance,180));
         objects.add(HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270));
         objects.add(HQZUtils.buildObject(4,0,1080-offset,90,distance,0,160));
+        scene.setObjects(objects);
+
+        HQZAdapter adapter = new HQZAdapter();
+        adapter.buildPhoton(scene, output);
+    }
+
+    private void buildTornadoWide(int frameIndex, float totalColorFrame, ArrayList<Color> moodbar, long rays, File output) throws IOException {
+        System.out.print("building frame: "+frameIndex);
+
+        float frame = frameIndex / totalColorFrame;
+        int completedColors = (int)frame;
+        float inProgressColor = frame - completedColors;
+
+        int screenWidth = 1920;
+        int screenHeight = 1080;
+
+        // ================ LIGHTS =============== //
+        List<Light> lightList = new ArrayList<Light>();
+        ArrayList<Integer> polarDist = new ArrayList<Integer>();
+        polarDist.add(0); polarDist.add(1000);
+        int radius = 25; int padding = (screenHeight/2)-radius;
+        int xPaddingAddition = 150;
+        double unitSpace = Math.PI * 2 / moodbar.size();
+        double theta = Math.PI;
+        float colorPower = 0.00045f;
+
+        for(int i = 0; i <= completedColors; i++, theta += unitSpace) {
+            Light lightRed = new Light();
+            Light lightGreen = new Light();
+            Light lightBlue = new Light();
+            MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+            int x = (int)(Math.cos(theta) * radius) + radius + padding + xPaddingAddition;
+            int y = (int)(Math.sin(theta) * radius) + radius + padding;
+
+            int degree = (int)Math.toDegrees(theta);
+            degree += 0;
+            ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+            polarAngle.add(degree-2); polarAngle.add(degree+2);
+
+            ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+            rayAngle.add(degree-2); rayAngle.add(degree+2);
+
+            if(i == completedColors && inProgressColor != 0) {
+                float power = colorPower * inProgressColor;
+                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, x, y, power);
+            } else {
+                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, x, y);
+            }
+
+            lightList.add(lightRed);
+            lightList.add(lightGreen);
+            lightList.add(lightBlue);
+        }
+
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.2f, 2.2f);
+        scene.setLights(lightList);
+
+        // ================ MATERIALS =============== //
+        List<Material> materials = new ArrayList<Material>();
+        materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
+        Material material1 = HQZUtils.buildMaterial(0.1f,0.0f,0.9f);
+        materials.add(material1);
+        Material material2 = HQZUtils.buildMaterial(0.3f,0.4f,0.2f);
+        materials.add(material2);
+        Material material3 = HQZUtils.buildMaterial(0.7f,0.0f,0.3f);
+        materials.add(material3);
+        scene.setMaterials(materials);
+
+        // ================ OBJECTS =============== //
+        List<ZObject> objects = new ArrayList<ZObject>();
+        objects.add(HQZUtils.buildObject(0,0,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
+
+        // ============ MATERIAL EXTENSION ============= //
+        List<MaterialExtension> hexExt = new ArrayList<>();
+        hexExt.add(new MaterialExtension(32,180 ));
+        hexExt.add(new MaterialExtension(0,0 ));
+        hexExt.add(new MaterialExtension(0,0 ));
+        hexExt.add(new MaterialExtension(0,0 ));
+        hexExt.add(new MaterialExtension(0,0 ));
+        hexExt.add(new MaterialExtension(0,0 ));
+        hexExt.add(new MaterialExtension(0,0 ));
+
+        List<MaterialExtension> squareExt = new ArrayList<>();
+        squareExt.add(new MaterialExtension(0,0));
+        squareExt.add(new MaterialExtension(0,0));
+        squareExt.add(new MaterialExtension(0,0));
+        squareExt.add(new MaterialExtension(0,0));
+        squareExt.add(new MaterialExtension(0,0));
+
+        List<ZObject> hexagon = HQZUtils.buildRegularHexagon(2, padding + xPaddingAddition + radius,
+                padding + radius, 270, hexExt);
+        List<ZObject> square = HQZUtils.buildRegularSquare(3, padding + xPaddingAddition + radius,
+                padding + radius, 500, squareExt);
+
+        objects.addAll(hexagon);
+        objects.addAll(square);
+
         scene.setObjects(objects);
 
         HQZAdapter adapter = new HQZAdapter();
