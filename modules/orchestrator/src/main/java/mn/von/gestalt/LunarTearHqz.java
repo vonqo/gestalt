@@ -176,11 +176,11 @@ public class LunarTearHqz {
         List<Light> lightList = new ArrayList<Light>();
         ArrayList<Integer> polarDist = new ArrayList<Integer>();
         polarDist.add(0); polarDist.add(1000);
-        int radius = 25; int padding = (screenHeight/2)-radius;
+        int radius = 40; int padding = (screenHeight/2)-radius;
         int xPaddingAddition = 150;
         double unitSpace = Math.PI * 2 / moodbar.size();
         double theta = Math.PI;
-        float colorPower = 0.00045f;
+        float colorPower = 0.00215f;
 
         for(int i = 0; i <= completedColors; i++, theta += unitSpace) {
             Light lightRed = new Light();
@@ -211,7 +211,7 @@ public class LunarTearHqz {
             lightList.add(lightBlue);
         }
 
-        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.2f, 2.2f);
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.237f, 2.5f);
         scene.setLights(lightList);
 
         // ================ MATERIALS =============== //
@@ -219,9 +219,9 @@ public class LunarTearHqz {
         materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
         Material material1 = HQZUtils.buildMaterial(0.1f,0.0f,0.9f);
         materials.add(material1);
-        Material material2 = HQZUtils.buildMaterial(0.3f,0.4f,0.2f);
+        Material material2 = HQZUtils.buildMaterial(0.75f,0.25f,0.0f);
         materials.add(material2);
-        Material material3 = HQZUtils.buildMaterial(0.7f,0.0f,0.3f);
+        Material material3 = HQZUtils.buildMaterial(0.55f,0.45f,0.0f);
         materials.add(material3);
         scene.setMaterials(materials);
 
@@ -234,13 +234,13 @@ public class LunarTearHqz {
 
         // ============ MATERIAL EXTENSION ============= //
         List<MaterialExtension> hexExt = new ArrayList<>();
-        hexExt.add(new MaterialExtension(32,180 ));
         hexExt.add(new MaterialExtension(0,0 ));
-        hexExt.add(new MaterialExtension(0,0 ));
-        hexExt.add(new MaterialExtension(0,0 ));
-        hexExt.add(new MaterialExtension(0,0 ));
-        hexExt.add(new MaterialExtension(0,0 ));
-        hexExt.add(new MaterialExtension(0,0 ));
+        hexExt.add(new MaterialExtension(-23,17 ));
+        hexExt.add(new MaterialExtension(42,61 ));
+        hexExt.add(new MaterialExtension(36,41 ));
+        hexExt.add(new MaterialExtension(41,56 ));
+        hexExt.add(new MaterialExtension(21,72 ));
+        hexExt.add(new MaterialExtension(12,67 ));
 
         List<MaterialExtension> squareExt = new ArrayList<>();
         squareExt.add(new MaterialExtension(0,0));

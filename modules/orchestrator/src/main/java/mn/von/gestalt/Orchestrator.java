@@ -44,8 +44,8 @@ public class Orchestrator {
     }
 
     private static void renderZenphoton() {
-        String sogname = "folk";
-        String displayText = "Ж.Чулуун - Уран хас / Uran Khas";
+        String sogname = "test";
+        String displayText = "Ж.Чулуун - Ардийн 2 аялгуу / Variations on two folk songs";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -66,8 +66,8 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 500000;
-            // int ray = 100000;
+            // int ray = 250000;
+            int ray = 3000000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
             hqz.build(LunarTearHqz.Types.TORNADO_WIDE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
@@ -106,10 +106,10 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 1750000;
+            int ray = 3000000;
             LunarTearHqz hqz = new LunarTearHqz();
 
-            hqz.buildFrames(LunarTearHqz.Types.BUBBLE2, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "test");
+            hqz.buildFrames(LunarTearHqz.Types.TORNADO_WIDE, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "folk");
         } catch (Exception e) {
             e.printStackTrace();
         }

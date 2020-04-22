@@ -181,7 +181,7 @@ public class HQZUtils {
             if(preX > 0 && preY > 0) {
                 if(isUsingExt) {
                     objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY,
-                            ext.get(i).getA0(), ext.get(i).getA0()));
+                            ext.get(i).getA0(), ext.get(i).getDa()));
                 } else {
                     objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY));
                 }
