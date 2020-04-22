@@ -203,7 +203,7 @@ public class LunarTearHqz {
                 float power = colorPower * inProgressColor;
                 HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, x, y, power);
             } else {
-                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, x, y);
+                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, x, y, colorPower);
             }
 
             lightList.add(lightRed);
