@@ -12,6 +12,11 @@ This is an open source repository of creative coding integrations and playground
 
 * Facebook page: [Color Note and Code](https://www.facebook.com/colornotecode/)
 * Instagram: [@colornotecode](https://www.instagram.com/colornotecode/)
+* YouTube: [vonqo](https://www.youtube.com/channel/UCGmwCteDtjSBGco4qqs1QIQ/)
+
+#### Showcase
+[<img src="https://img.youtube.com/vi/Z6x50-Gg3c0/maxresdefault.jpg" width="30%">](https://youtu.be/Z6x50-Gg3c0)
+[<img src="https://img.youtube.com/vi/pM8h-2b6zzM/maxresdefault.jpg" width="30%">](https://youtu.be/pM8h-2b6zzM)
 
 ## Directories
 * **modules** - List of modules that written in different programming languages
@@ -26,7 +31,7 @@ This is an open source repository of creative coding integrations and playground
 * **study_materials** - Project related study materials.
 
 ## Install and use
-Execute ```install.sh```. Installation script is not maintained. If things gone wrong, screw this script and go for manual.
+Execute ```install.sh```. Installation script is not maintained. If things gone wrong, screw this script and go manual.
 
 ### Manual installation
 **Orchestrator** integrates all modules with isolated process calls. Each modules has to be successfully builded on the system. The source code of module(s) from this repository is slightly changed to fit with **Orchestrator**. 
@@ -57,7 +62,6 @@ public static void main(String args[]) {
 ```
 3. Build it with [Maven](https://maven.apache.org/). 
 4. Run
-
 
 ## Copyright & License
 Copyright (c) 2019 Enkh-Amar.G - Released under the [Mozilla Public License Version 2.0](LICENSE)
