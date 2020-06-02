@@ -34,13 +34,10 @@ public class Orchestrator {
     @LoadOrchestrator
     public static void main(String args[]) {
         Config.loadConfig();
-
         renderCollection();
         renderZenphoton();
 //        renderZenphotonFrames();
 //        renderVanillaMoodbars();
-
-
     }
 
     private static void renderZenphoton() {
@@ -85,7 +82,7 @@ public class Orchestrator {
     }
 
     private static void renderZenphotonFrames() {
-        String sogname = "uran_khas";
+        String sogname = "folk";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -106,7 +103,7 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 3000000;
+            int ray = 2500000;
             LunarTearHqz hqz = new LunarTearHqz();
 
             hqz.buildFrames(LunarTearHqz.Types.TORNADO_WIDE, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "folk");

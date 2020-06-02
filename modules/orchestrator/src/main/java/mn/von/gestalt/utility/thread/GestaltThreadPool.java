@@ -27,7 +27,7 @@ public class GestaltThreadPool {
     private int getCpuCores() {
         int cpuCores = Runtime.getRuntime().availableProcessors();
         if(cpuCores < 2) return 1;
-        return cpuCores - 3;
+        return cpuCores - 2;
     }
 
     public void execute(Runnable task) {
