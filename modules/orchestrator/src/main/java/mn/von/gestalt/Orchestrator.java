@@ -7,11 +7,17 @@ import mn.von.gestalt.utility.annotation.LoadOrchestrator;
 import mn.von.gestalt.utility.grimoire.AudioUtils;
 import mn.von.gestalt.utility.grimoire.ImageSupporter;
 import mn.von.gestalt.utility.grimoire.ImageTransformer;
+import org.opencv.core.*;
+import org.opencv.core.Point;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,26 +32,32 @@ import java.util.Vector;
  **/
 public class Orchestrator {
 
-//    static {
+    static {
 //        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-//        nu.pattern.OpenCV.loadShared();
-//    }
+        nu.pattern.OpenCV.loadShared();
+    }
 
     @LoadOrchestrator
     public static void main(String args[]) {
         Config.loadConfig();
-        renderCollection();
+//        try {
+//            opencvTest();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        renderCollection();
         renderZenphoton();
 //        renderZenphotonFrames();
 //        renderVanillaMoodbars();
     }
 
     private static void renderZenphoton() {
-        String sogname = "fox";
-        String displayText = "FUTUROMA - Зүүдний үнэг\"";
+        // String songname = "fur_elise";
+        String songname = "fur";
+        String displayText = "Beethoven - Für Elise";
         String testPath = Config.RESOURCE_DIR;
-        String pathMp3 = testPath+sogname+".mp3";
-        String pathWav = testPath+sogname+".wav";
+        String pathMp3 = testPath+songname+".mp3";
+        String pathWav = testPath+songname+".wav";
         double audioDuration = 0;
 
         try {
@@ -58,24 +70,25 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+songname+".mp3",testPath+"/bar");
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            // int ray = 250000;
+            // int ray = 2500000;
             int ray = 2500000;
-            File outputFile = new File(Config.RESOURCE_DIR+"/"+sogname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
-//            BufferedImage img = ImageIO.read(outputFile);
-//            ImageSupporter.setBackgroundColor(Color.BLACK);
-//            ImageSupporter.setFontColor(Color.WHITE);
-//            ImageSupporter.setFontSize(72);
-//            ImageSupporter.setFontName("Roboto Mono");
-//            ImageIO.write(
-//                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
-//            );
+            hqz.build(LunarTearHqz.Types.PULSE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+            BufferedImage img = ImageIO.read(outputFile);
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontSize(32);
+            ImageSupporter.setFontName("Roboto Mono");
+            ImageIO.write(
+                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,20 +129,20 @@ public class Orchestrator {
         String filename = "col3";
         String testPath = Config.RESOURCE_DIR;
         try{
-            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"preshur.mp3",testPath+"/bar1");
-            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"secret.mp3",testPath+"/bar2");
-            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"ritual.mp3",testPath+"/bar3");
-            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"happiness.mp3",testPath+"/bar4");
+            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"fire_boroo.mp3",testPath+"/bar1");
+            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"tatar_boroo.mp3",testPath+"/bar2");
+            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"rokitbay_boroo.mp3",testPath+"/bar3");
+            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"guys_boroo.mp3",testPath+"/bar4");
             ArrayList<BufferedImage> moodbarList = new ArrayList<BufferedImage>();
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar1, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar2, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar3, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar4, 150));
             ArrayList<String> names = new ArrayList<String>();
-            names.add("B.L.M.D - Preshur");
-            names.add("The Tourists - Secret");
-            names.add("Sainkho Namtchylak - Ritual Virtuality");
-            names.add("Соёл Эрдэнэ - Миний аз жаргалын дуу");
+            names.add("Fire - Бороонд урсах нулимс");
+            names.add("Татар - Бороо");
+            names.add("Rokit Bay - Бороо");
+            names.add("Guys - Бороо");
 
             ImageSupporter.setBackgroundColor(Color.WHITE);
             ImageSupporter.setFontColor(Color.BLACK);
@@ -149,8 +162,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "fox";
-        String displayText = "FUTUROMA - Зүүдний үнэг";
+        String sogname = "hero";
+        String displayText = "Nobodyknows+ - Hero's Come Back";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -206,13 +219,117 @@ public class Orchestrator {
                     new File(testPath+"/"+sogname+"_bubble."+ Config.OUTPUT_IMAGE_FORMAT)
             );
 
-            ImageIO.write(hanzBar, Config.OUTPUT_IMAGE_FORMAT,
-                    new File(testPath+"/"+sogname+"_hanz."+ Config.OUTPUT_IMAGE_FORMAT)
-            );
+//            ImageIO.write(hanzBar, Config.OUTPUT_IMAGE_FORMAT,
+//                    new File(testPath+"/"+sogname+"_hanz."+ Config.OUTPUT_IMAGE_FORMAT)
+//            );
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private static void opencvTest() throws IOException {
+//        String sourceImg = "alan_turing_1.jpg";
+//        String tempImg = "edge.png";
+//
+//        Mat img = Highgui.imread(sourceImg);
+//
+//        Mat gray = new Mat();
+//
+//        Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
+//        Imgproc.GaussianBlur(img, gray, new Size(0, 0), 5);
+//        Core.addWeighted(img, 1.5, gray, -0.5, 0, gray);
+//
+//        Mat edges = new Mat();
+//        int lowThreshold = 50;
+//        int ratio = 3;
+//        Imgproc.Canny(gray, edges, lowThreshold, lowThreshold * ratio);
+//
+//        Highgui.imwrite(tempImg, edges);
+//        Mat edge = Highgui.imread(tempImg);
+//
+//        Mat lines = new Mat();
+//        Imgproc.HoughLinesP(edges, lines, 1, Math.PI / 180, 10, 10, 10);
+//
+//        int dist = 3;
+//
+//        for (int i = 0; i < lines.cols(); i++) {
+//            double[] val = lines.get(0, i);
+//            Core.line(edge, new Point(val[0], val[1]), new Point(val[2], val[3]),
+//                    new Scalar(randColor(0, 100), randColor(0, 100), randColor(0, 100)), dist * 2);
+//        }
+//
+//        for (int i = 0; i < lines.cols(); i++) {
+//            double[] val = lines.get(0, i);
+//
+//            Core.line(edge, new Point(val[0] - dist, val[1] - dist), new Point(val[2] - dist, val[3] - dist),
+//                    new Scalar(0, 0, 255), 1);
+//
+//            Core.line(edge, new Point(val[0] + dist, val[1] + dist), new Point(val[2] + dist, val[3] + dist),
+//                    new Scalar(255, 0, 0), 1);
+//
+//            Core.line(edge, new Point(val[0] - dist, val[1] + dist), new Point(val[2] - dist, val[3] + dist),
+//                    new Scalar(0, 255, 0), 1);
+//        }
+//
+//        Highgui.imwrite(tempImg, edge);
+//        edge = Highgui.imread(tempImg);
+//        Core.addWeighted(img, 0.1, edge, 1, 0, img);
+//        Highgui.imwrite(tempImg, img);
+
+        // System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+
+        Mat src = Imgcodecs.imread(Config.RESOURCE_DIR + "muuchka_lines.png");
+        //Creating an empty matrices to store edges, source, destination
+        Mat gray = new Mat(src.rows(), src.cols(), src.type());
+//        Mat edges = new Mat(src.rows(), src.cols(), src.type());
+        Mat dst = new Mat(src.rows(), src.cols(), src.type(), new Scalar(0));
+
+
+        Imgproc.cvtColor(src, gray, Imgproc.COLOR_RGB2GRAY);
+//        Imgproc.GaussianBlur(gray, edges, new Size(0, 0), 0.85);
+//        // Imgproc.blur(gray, edges, new Size(3, 3));
+//        Core.addWeighted(gray, 1.5, gray, -0.5, 0, gray);
+
+        int lowThreshold = 28;
+        int ratio = 3;
+        // Imgproc.Canny(src, src, lowThreshold, lowThreshold*ratio);
+
+
+        Mat lines = new Mat();
+        Imgproc.HoughLinesP(gray, lines, 1, Math.PI / 180, 100, 0, 0);
+
+        for (int i = 0; i < lines.cols(); i++) {
+            double[] val = lines.get(0, i);
+            Imgproc.line(dst, new Point(val[0], val[1]), new Point(val[2], val[3]), new Scalar(255, 0, 0), 3);
+        }
+
+        // Core.addWeighted(img, 0.1, edge, 1, 0, img);
+
+        MatOfByte mob = new MatOfByte();
+        Imgcodecs.imencode(".png", dst, mob);
+        byte ba[] = mob.toArray();
+
+        BufferedImage bi = ImageIO.read(new ByteArrayInputStream(ba));
+
+        ImageIO.write(bi, Config.OUTPUT_IMAGE_FORMAT,
+                new File(Config.RESOURCE_DIR + "muchka_edge2." + Config.OUTPUT_IMAGE_FORMAT)
+        );
+
+//        Image img = HighGui.toBufferedImage(dst);
+//        WritableImage writableImage= SwingFXUtils.toFXImage((BufferedImage) img, null);
+//        //Setting the image view
+//        ImageView imageView = new ImageView(writableImage);
+//        imageView.setX(10);
+//        imageView.setY(10);
+//        imageView.setFitWidth(575);
+//        imageView.setPreserveRatio(true);
+//        //Setting the Scene object
+//        Group root = new Group(imageView);
+//        Scene scene = new Scene(root, 595, 400);
+//        stage.setTitle("Gaussian Blur Example");
+//        stage.setScene(scene);
+//        stage.show();
     }
 
 

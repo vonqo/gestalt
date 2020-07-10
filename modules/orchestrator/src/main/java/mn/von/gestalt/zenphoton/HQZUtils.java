@@ -1,5 +1,6 @@
 package mn.von.gestalt.zenphoton;
 
+import mn.von.gestalt.utility.grimoire.DataUtils;
 import mn.von.gestalt.zenphoton.dto.*;
 
 import java.awt.*;
@@ -135,6 +136,11 @@ public class HQZUtils {
         return buildRegularPolygons(materialIndex, lineCount, x, y, radius,null);
     }
 
+    public static List<ZObject> buildCircle(int materialIndex, int x, int y, int radius, List<MaterialExtension> ext) {
+        int lineCount = findCircleOptimalLineCount(radius);
+        return buildRegularPolygons(materialIndex, lineCount, x, y, radius, ext);
+    }
+
     public static List<ZObject> buildRegularTriangle(int materialIndex, int x, int y, int radius) {
         return buildRegularPolygons(materialIndex, 3, x, y, radius,null);
     }
@@ -149,6 +155,10 @@ public class HQZUtils {
 
     public static List<ZObject> buildRegularPentagon(int materialIndex, int x, int y, int radius) {
         return buildRegularPolygons(materialIndex, 5, x, y, radius,null);
+    }
+
+    public static List<ZObject> buildRegularPentagon(int materialIndex, int x, int y, int radius, List<MaterialExtension> ext) {
+        return buildRegularPolygons(materialIndex, 5, x, y, radius, ext);
     }
 
     public static List<ZObject> buildRegularHexagon(int materialIndex, int x, int y, int radius) {
@@ -169,6 +179,13 @@ public class HQZUtils {
 
         List<ZObject> objects = new ArrayList<ZObject>();
         double theta = Math.PI;
+
+        // CHANGE LATER !!!
+//        int degree = DataUtils.getRandomNumberInRange(0, 180);
+//        double rotation = Math.toRadians(degree);
+//        theta += rotation;
+        // CHANGE LATER !!! - END
+
         double unitSpace = 2 * Math.PI / lineCount;
 
         int preX = -1;
@@ -197,5 +214,4 @@ public class HQZUtils {
         double p = 2 * Math.PI * radius;
         return (int)(p/Math.log(radius) * 1.5);
     }
-
 }
