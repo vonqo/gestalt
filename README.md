@@ -1,4 +1,4 @@
-# <img height="42px" src="https://github.com/vonqo/gestalt/blob/master/public/gestalt-logo.png" /> & <img height="42px" src="https://github.com/vonqo/gestalt/blob/master/public/cnc-logo.png" />
+# <img height="42px" src="https://github.com/punkowl/gestalt/blob/master/public/gestalt-logo.png" /> & <img height="42px" src="https://github.com/punkowl/gestalt/blob/master/public/cnc-logo.png" />
 
 
 [![Codacy Badge][codacy-badge]][codacy]
