@@ -7,6 +7,7 @@ import mn.von.gestalt.utility.annotation.LoadOrchestrator;
 import mn.von.gestalt.utility.grimoire.AudioUtils;
 import mn.von.gestalt.utility.grimoire.ImageSupporter;
 import mn.von.gestalt.utility.grimoire.ImageTransformer;
+import mn.von.gestalt.utility.grimoire.NoiseGenerator;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -14,14 +15,12 @@ import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  This is the place where all magic works
@@ -45,16 +44,46 @@ public class Orchestrator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+        renderNoise();
 //        renderCollection();
-        renderZenphoton();
+//        renderZenphoton();
 //        renderZenphotonFrames();
 //        renderVanillaMoodbars();
     }
 
+    private static  void renderNoise() {
+        String songname = "1982";
+        String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
+        String pathMp3 = Config.RESOURCE_DIR+songname+".mp3";
+        String pathWav = Config.RESOURCE_DIR+songname+".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(Config.RESOURCE_DIR+songname+".mp3",Config.RESOURCE_DIR+"/bar");
+            BufferedImage image = NoiseGenerator.testNoise(moodbar);
+            BufferedImage outputImage = ImageTransformer.scaleImage(image, 1500, 1500);
+            ImageIO.write(
+                outputImage, Config.OUTPUT_IMAGE_FORMAT,
+                new File(Config.RESOURCE_DIR+"/noise_test."+ Config.OUTPUT_IMAGE_FORMAT)
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private static void renderZenphoton() {
         // String songname = "fur_elise";
-        String songname = "fur";
-        String displayText = "Beethoven - Für Elise";
+        String songname = "1982";
+        String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+songname+".mp3";
         String pathWav = testPath+songname+".wav";
@@ -79,7 +108,7 @@ public class Orchestrator {
             int ray = 2500000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.PULSE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
             BufferedImage img = ImageIO.read(outputFile);
             ImageSupporter.setBackgroundColor(Color.BLACK);
@@ -162,8 +191,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "hero";
-        String displayText = "Nobodyknows+ - Hero's Come Back";
+        String sogname = "1982";
+        String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
