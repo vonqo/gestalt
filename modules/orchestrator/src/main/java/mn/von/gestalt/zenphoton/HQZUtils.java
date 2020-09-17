@@ -210,8 +210,44 @@ public class HQZUtils {
         return objects;
     }
 
-    private static int findCircleOptimalLineCount(int radius) {
+    public static int findCircleOptimalLineCount(int radius) {
         double p = 2 * Math.PI * radius;
         return (int)(p/Math.log(radius) * 1.5);
+    }
+
+    public static List<ZObject> buildCardiac(int materialIndex, int lineCount, int x, int y, int size, List<MaterialExtension> ext) {
+        boolean isUsingExt = (ext != null && ext.size() == lineCount+1);
+
+        List<ZObject> objects = new ArrayList<ZObject>();
+        double unitSpace = 2 * Math.PI / lineCount;
+
+        double theta = Math.PI;
+        int preX = -1;
+        int preY = -1;
+
+        // CHANGE LATER !!!
+//        int degree = DataUtils.getRandomNumberInRange(0, 180);
+//        double rotation = Math.toRadians(degree);
+//        theta += rotation;
+        // CHANGE LATER !!! - END
+
+        for(int i = 0; i <= lineCount; i++, theta += unitSpace) {
+
+            int postX = (int)(-16*size*Math.pow(Math.sin(theta), 3)) + x;
+            int postY = (int)(-(13*size*Math.cos(theta)-5*size*Math.cos(2*theta)-2*size*Math.cos(3*theta)-Math.cos(4*theta))) + y;
+
+            if(preX > 0 && preY > 0) {
+                if(isUsingExt) {
+                    objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY,
+                            ext.get(i).getA0(), ext.get(i).getDa()));
+                } else {
+                    objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY));
+                }
+            }
+            preX = postX;
+            preY = postY;
+        }
+
+        return objects;
     }
 }

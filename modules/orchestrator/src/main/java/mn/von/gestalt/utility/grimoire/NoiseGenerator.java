@@ -20,7 +20,7 @@ public class NoiseGenerator {
         GradientPaint background = new GradientPaint(0, 0, Color.red, width, height, Color.blue);
         // ctx.setColor(Color.BLACK);
         ctx.setPaint(background);
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillRect(0, width, width, height);
         ctx.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -40,8 +40,11 @@ public class NoiseGenerator {
         return canvas;
     }
 
-    private Color[][] distributeNoise(Color color, Polygon polygon, double density, int distributionRadius) {
-        OpenSimplexNoise noise = new OpenSimplexNoise();
+    private Color[][] distributeNoise(Color color, Polygon polygon, int density, int distributionRadius) {
+        ArrayList<OpenSimplexNoise> noiseList = new ArrayList<OpenSimplexNoise>();
+
+
+
 
 
         return null;

@@ -58,4 +58,8 @@ public class LunarTear {
         return canvas;
     }
 
+    public BufferedImage neuralStyle() {
+        return null;
+    }
+
 }

@@ -44,9 +44,9 @@ public class Orchestrator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        renderNoise();
-//        renderCollection();
-//        renderZenphoton();
+//        renderNoise();
+        renderCollection();
+        renderZenphoton();
 //        renderZenphotonFrames();
 //        renderVanillaMoodbars();
     }
@@ -82,8 +82,8 @@ public class Orchestrator {
 
     private static void renderZenphoton() {
         // String songname = "fur_elise";
-        String songname = "1982";
-        String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
+        String songname = "garbage";
+        String displayText = "Sex Bob-Omb - Garbage Truck";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+songname+".mp3";
         String pathWav = testPath+songname+".wav";
@@ -108,7 +108,7 @@ public class Orchestrator {
             int ray = 2500000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            hqz.build(LunarTearHqz.Types.CARDIAC, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
             BufferedImage img = ImageIO.read(outputFile);
             ImageSupporter.setBackgroundColor(Color.BLACK);
@@ -158,20 +158,20 @@ public class Orchestrator {
         String filename = "col3";
         String testPath = Config.RESOURCE_DIR;
         try{
-            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"fire_boroo.mp3",testPath+"/bar1");
-            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"tatar_boroo.mp3",testPath+"/bar2");
-            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"rokitbay_boroo.mp3",testPath+"/bar3");
-            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"guys_boroo.mp3",testPath+"/bar4");
+            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"hu.mp3",testPath+"/bar1");
+            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"hungun.mp3",testPath+"/bar2");
+            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"cosmic.mp3",testPath+"/bar3");
+            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"route.mp3",testPath+"/bar4");
             ArrayList<BufferedImage> moodbarList = new ArrayList<BufferedImage>();
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar1, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar2, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar3, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar4, 150));
             ArrayList<String> names = new ArrayList<String>();
-            names.add("Fire - Бороонд урсах нулимс");
-            names.add("Татар - Бороо");
-            names.add("Rokit Bay - Бороо");
-            names.add("Guys - Бороо");
+            names.add("The Hu - Sugaan Essena (Star Wars Jedi: Fallen Order)");
+            names.add("168, 290, baatarfly - HUNGUN");
+            names.add("Even Tide - Cosmic");
+            names.add("Slater ft Wondha Mountain - When En Route");
 
             ImageSupporter.setBackgroundColor(Color.WHITE);
             ImageSupporter.setFontColor(Color.BLACK);
@@ -191,8 +191,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "1982";
-        String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
+        String sogname = "garbage";
+        String displayText = "Sex Bob-Omb - Garbage Truck";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
