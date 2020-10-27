@@ -166,10 +166,11 @@ public class LunarTearHqz {
         objects.add(HQZUtils.buildObject(0,1080,0,0,1080));
         int offset = 200;
         int distance = 1080;
-        objects.add(HQZUtils.buildObject(4,0,offset,720,distance,0,360));
-        objects.add(HQZUtils.buildObject(4,offset,0,180,0,distance,180));
-        objects.add(HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270));
-        objects.add(HQZUtils.buildObject(4,0,1080-offset,90,distance,0,160));
+        objects.addAll(HQZUtils.buildRegularSquare(4,1080/2,1080/2,410));
+//        objects.add(HQZUtils.buildObject(4,0,offset,720,distance,0,360));
+//        objects.add(HQZUtils.buildObject(4,offset,0,180,0,distance,180));
+//        objects.add(HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270));
+//        objects.add(HQZUtils.buildObject(4,0,1080-offset,90,distance,0,160));
         scene.setObjects(objects);
 
         HQZAdapter adapter = new HQZAdapter();
@@ -632,8 +633,6 @@ public class LunarTearHqz {
                 lightList.add(lightRed);
                 lightList.add(lightGreen);
                 lightList.add(lightBlue);
-
-
             }
         }
         scene.setLights(lightList);

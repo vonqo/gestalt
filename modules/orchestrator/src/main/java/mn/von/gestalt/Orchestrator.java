@@ -39,16 +39,72 @@ public class Orchestrator {
     @LoadOrchestrator
     public static void main(String args[]) {
         Config.loadConfig();
+        cliSupport(args);
+
 //        try {
 //            opencvTest();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 //        renderNoise();
-        renderCollection();
-        renderZenphoton();
+//        renderCollection();
+//        renderZenphoton();
 //        renderZenphotonFrames();
 //        renderVanillaMoodbars();
+    }
+
+    private static void cliSupport(String args[]) {
+        String type = null;
+        ArrayList<String> titleList = new ArrayList();
+        ArrayList<String> inputList = new ArrayList();
+        int ray = 0;
+        boolean isPrintable = false;
+
+        for(int i = 0; i < args.length; i++) {
+            if(args[i].equals("-type")) {
+                type = args[i+1];
+            } else if(args[i].equals("-input")) {
+                if(type.equals("VANILLA")) {
+                    inputList.add(args[i+1]);
+                    inputList.add(args[i+2]);
+                    inputList.add(args[i+3]);
+                    inputList.add(args[i+4]);
+                } else {
+                    inputList.add(args[i+1]);
+                }
+            } else if(args[i].equals("-ray")) {
+                ray = Integer.parseInt(args[i+1]);
+            } else if(args[i].equals("-printable")) {
+                isPrintable = true;
+            } else if(args[i].equals("-title")) {
+                if(type.equals("VANILLA")) {
+                    titleList.add(args[i+1]);
+                    titleList.add(args[i+2]);
+                    titleList.add(args[i+3]);
+                    titleList.add(args[i+4]);
+                } else {
+                    titleList.add(args[i+1]);
+                }
+            }
+        }
+
+        switch (type) {
+            case "VANILLA":
+                break;
+            case "COLLECTION":
+                break;
+            case "BUBBLE":
+                break;
+            case "BUBBLE2":
+                break;
+            case "PULSE":
+                break;
+            case "CARDIAC":
+                break;
+            case "CIRCULAR":
+                break;
+        }
+
     }
 
     private static  void renderNoise() {
@@ -82,8 +138,8 @@ public class Orchestrator {
 
     private static void renderZenphoton() {
         // String songname = "fur_elise";
-        String songname = "garbage";
-        String displayText = "Sex Bob-Omb - Garbage Truck";
+        String songname = "kino";
+        String displayText = "Кино - Спокойная ночь";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+songname+".mp3";
         String pathWav = testPath+songname+".wav";
@@ -104,20 +160,20 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            // int ray = 2500000;
             int ray = 2500000;
+            // int ray = 5000;
             File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.CARDIAC, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
-            BufferedImage img = ImageIO.read(outputFile);
-            ImageSupporter.setBackgroundColor(Color.BLACK);
-            ImageSupporter.setFontColor(Color.WHITE);
-            ImageSupporter.setFontSize(32);
-            ImageSupporter.setFontName("Roboto Mono");
-            ImageIO.write(
-                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
-            );
+//            BufferedImage img = ImageIO.read(outputFile);
+//            ImageSupporter.setBackgroundColor(Color.BLACK);
+//            ImageSupporter.setFontColor(Color.WHITE);
+//            ImageSupporter.setFontSize(32);
+//            ImageSupporter.setFontName("Roboto Mono");
+//            ImageIO.write(
+//                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
+//            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,7 +204,7 @@ public class Orchestrator {
             int ray = 2500000;
             LunarTearHqz hqz = new LunarTearHqz();
 
-            hqz.buildFrames(LunarTearHqz.Types.TORNADO_WIDE, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "folk");
+            hqz.buildFrames(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "folk");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,8 +247,9 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "garbage";
-        String displayText = "Sex Bob-Omb - Garbage Truck";
+        String sogname = "cities";
+        String displayText = "The Everlove - Cities in Dust";
+//        String displayText = "Adele - Rolling in the Deep";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
