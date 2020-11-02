@@ -19,7 +19,7 @@ This is an open source repository of creative coding integrations and playground
 [<img src="https://img.youtube.com/vi/pM8h-2b6zzM/maxresdefault.jpg" width="30%">](https://youtu.be/pM8h-2b6zzM)
 
 #### Gallery
-[<img height="700px" src="https://github.com/punkowl/gestalt/blob/master/public/gallery.png" />](https://www.facebook.com/colornotecode/photos/)
+[<img height="400px" src="https://github.com/punkowl/gestalt/blob/master/public/gallery.png" />](https://www.facebook.com/colornotecode/photos/)
 
 ## Directories
 * **modules** - List of modules that written in different programming languages
