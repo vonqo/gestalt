@@ -25,7 +25,7 @@ def restore(file):
 	# img = applyClahe(img);
 	# cv.imwrite('clahe.jpg', (img))
 
-	kernel = np.ones((13,13),np.uint8)
+	kernel = np.ones((51,51),np.uint8)
 	top_hat = cv.morphologyEx(img, cv.MORPH_BLACKHAT, kernel)
 	img = cv.cvtColor(top_hat,cv.COLOR_GRAY2RGB)
 
@@ -62,19 +62,22 @@ def extract(file):
 
 # extract('filtered.jpg')
 # rgbSave()
-stack = [
-	'angry.jpg',
-	'cried.jpg',
-	'wise.jpg',
-	'bored.jpg',
-	'smiled.jpg',
-	'peaceful.jpg',
-	'observing.jpg',
-	'speculated.jpg',
-	'disappointed.jpg',
-	'excited.jpg'
-]
+# stack = [
+# 	'angry.jpg',
+# 	'cried.jpg',
+# 	'wise.jpg',
+# 	'bored.jpg',
+# 	'smiled.jpg',
+# 	'peaceful.jpg',
+# 	'observing.jpg',
+# 	'speculated.jpg',
+# 	'disappointed.jpg',
+# 	'excited.jpg'
+# ]
 
-for file in stack:
-	print(file)
-	restore(file)
+# for file in stack:
+# 	print(file)
+# 	restore(file)
+
+
+restore('/Users/von/Desktop/mood_test/muchka/m8.jpg')
