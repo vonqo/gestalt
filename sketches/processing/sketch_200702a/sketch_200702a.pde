@@ -4,8 +4,12 @@ float kMax;
 float step;
 int n = 1000;
 float radius = 620;
-float inter = 0.75;
-int maxNoise = 2500;
+
+float inter = 0.55;
+// float inter = 0.75;
+float strokeWeight = 6;
+// float strokeWeight = 2;
+int maxNoise = 2200;
 PImage bg;
 PShader blur;
 
@@ -15,14 +19,15 @@ int green[] = new int[1000];
 int blue[] = new int[1000];
  
 void setup() {
-  size(5906, 8350);
+  size(6000, 8000);
+  // size(3000, 4000);
   smooth(10);
   noFill();
   noLoop();
   kMax = random(1, 1.5);
   step = random(0.01, 0.03);
-  bg = loadImage("cosmos_2000000_tiled_planet.png");
-  String[] lines = loadStrings("colors.txt");
+  // bg = loadImage("cosmos_2000000_tiled_planet.png");
+  String[] lines = loadStrings("color.txt");
   for(int i = 0; i < lines.length; i++) {
     String[] col = lines[i].split(" ");
     red[i] = Integer.parseInt(col[0]);
@@ -32,32 +37,33 @@ void setup() {
 }
 
 void draw() {
-  background(bg);
+  background(10);
+  // background(bg);
   // filter(blur);
   // colorMode(HSB, 1);
   
   int e = 0;
   for(float i = 0; i < n; i++, e++) {
-    if(i > 100 && i < 400) {
-      colorMode(RGB,70,255,150,255);
-    } else {
-      colorMode(RGB,255,255,255,255);
-    }
-    
+    //if(i > 100 && i < 400) {
+    //  colorMode(RGB,70,255,150,255);
+    //} else {
+    //  colorMode(RGB,255,255,255,255);
+    //}
+    colorMode(RGB,255,255,255,255);
     // float alpha = 1 - i/n;
     float alpha = 0.75 - (0.0005 * i);
     if(red[e] < darkThreshold && green[e] < darkThreshold && blue[e] < darkThreshold) {
       
     } else {
       stroke((color(red[e],green[e],blue[e])), alpha * 255);
-      strokeWeight(8);
+      strokeWeight(strokeWeight);
       float size = radius + i*inter;
       float k = kMax * i/n;
       float noisiness = maxNoise * noiseProg(i/n);
       blob(size, width/2, height/2, k, i * step, noisiness);
     }
   }
-  saveFrame();
+  saveFrame(); 
 }
 
 float noiseProg(float x) {

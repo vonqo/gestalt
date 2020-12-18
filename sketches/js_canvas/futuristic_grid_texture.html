@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Futuristic Grid Texture</title>
+        <meta author="vonqo"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
+            html, body {
+                font-family: 'Electrolize', sans-serif;
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            function setup() {
+                createCanvas(1000, 1000);
+                background(14, 57, 76);
+                noLoop();
+                textFont('Electrolize');
+            }
+
+            function draw() {
+                for(let i = 0; i < 5; i++) {
+                    stroke(255);
+                    if(i == 4 || i == 0) {
+                        strokeWeight(1.5);
+                    } else {
+                        strokeWeight(0.2);
+                    }
+                    let k = i * 250;
+                    line(k, 0, k, 1000);
+                    line(0, k, 1000, k);
+                }
+                let num = 0;
+                for(let i = 0; i < 5; i++) {
+                    for(let e = 0; e < 5; e++) {
+                        strokeWeight(1);
+                        circle(i*250, e*250, 5.5);
+                        
+                    }
+                }
+
+                for(let i = 1; i < 5; i++) {
+                    for(let e = 0 ; e < 4; e++) {
+                        if(num == 0) {
+                            strokeWeight(0.5);
+                            textSize(64);
+                            fill(255, 255, 255, 210);
+                            text(num, e * (250) + 5, i * (250) - 195);
+                            strokeWeight(0);
+                            textSize(22);
+                            fill(255, 255, 255, 100);
+                            text('\n\n>>GESTALT\n>>ColorNoteCode', e * (250) + 5, i * (250) - 221);
+                        } else {
+                            strokeWeight(0);
+                            textSize(26);
+                            fill(255, 255, 255, 100);
+                            text(num, e * (250) + 5, i * (250) - 221);
+                        }
+                        num++;
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
