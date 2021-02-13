@@ -830,4 +830,60 @@ public class LunarTearHqz {
         long timeElapsed = endTime - startTime;
         System.out.println("frame "+frameIndex+" in milliseconds: " + timeElapsed);
     }
+
+    public void buildDrawing(List<ZObject> drawObjects, ArrayList<Color> moodbar, long rays, File output) throws IOException {
+        int screenWidth = 1080;
+        int screenHeight = 1920;
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.2f, 0.8f);
+
+        // ================ LIGHTS =============== //
+        List<Light> lightList = new ArrayList<Light>();
+
+        ArrayList<Integer> polarDist = new ArrayList<Integer>();
+        polarDist.add(2); polarDist.add(360);
+
+        ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+        polarAngle.add(0); polarAngle.add(360);
+
+        ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+        rayAngle.add(0); rayAngle.add(360);
+
+        for(int y = 1, i = 0; y <= 30; y++) {
+            for(int x = 1; x <= 33; x++, i++) {
+                int pointY = y * 50;
+                int pointX = x * 50;
+
+                Light lightRed = new Light();
+                Light lightGreen = new Light();
+                Light lightBlue = new Light();
+                MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+                HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, pointX, pointY, 0.00055f);
+
+                lightList.add(lightRed);
+                lightList.add(lightGreen);
+                lightList.add(lightBlue);
+            }
+        }
+
+        scene.setLights(lightList);
+
+        // ================ MATERIALS =============== //
+        List<Material> materials = new ArrayList<Material>();
+        materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
+        Material material1 = HQZUtils.buildMaterial(0.0f,0.0f,1.0f);
+        materials.add(material1);
+        scene.setMaterials(materials);
+
+        // ================ OBJECTS =============== //
+        List<ZObject> objects = new ArrayList<ZObject>();
+        objects.add(HQZUtils.buildObject(0,0,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
+        objects.addAll(drawObjects);
+        scene.setObjects(objects);
+
+        HQZAdapter adapter = new HQZAdapter();
+        adapter.buildPhoton(scene, output);
+    }
 }

@@ -1,5 +1,7 @@
 package mn.von.gestalt;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
 import mn.von.gestalt.spectogram.Spectrumizer;
 import mn.von.gestalt.utility.config.Config;
@@ -8,19 +10,22 @@ import mn.von.gestalt.utility.grimoire.AudioUtils;
 import mn.von.gestalt.utility.grimoire.ImageSupporter;
 import mn.von.gestalt.utility.grimoire.ImageTransformer;
 import mn.von.gestalt.utility.grimoire.NoiseGenerator;
+import mn.von.gestalt.zenphoton.HQZUtils;
+import mn.von.gestalt.zenphoton.dto.ZObject;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import processing.data.JSONArray;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  This is the place where all magic works
@@ -31,15 +36,15 @@ import java.util.ArrayList;
  **/
 public class Orchestrator {
 
-    static {
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        nu.pattern.OpenCV.loadShared();
-    }
+//    static {
+////        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        nu.pattern.OpenCV.loadShared();
+//    }
 
     @LoadOrchestrator
     public static void main(String args[]) {
         Config.loadConfig();
-        cliSupport(args);
+//        cliSupport(args);
 
 //        try {
 //            opencvTest();
@@ -51,6 +56,7 @@ public class Orchestrator {
 //        renderZenphoton();
 //        renderZenphotonFrames();
 //        renderVanillaMoodbars();
+        renderZenphotonDrawing();
     }
 
     private static void cliSupport(String args[]) {
@@ -136,9 +142,56 @@ public class Orchestrator {
         }
     }
 
+    private static void renderZenphotonDrawing() {
+        String songname = "sound1";
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+songname+".mp3";
+        String pathWav = testPath+songname+".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+songname+".mp3",testPath+"/bar");
+
+            final String objectFile = Config.RESOURCE_DIR+"data_79825"+".json";
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new FileReader(objectFile));
+            ArrayList<ArrayList<Integer>> objects = gson.fromJson(br, new TypeToken<ArrayList<ArrayList<Integer>>>(){}.getType());
+            ArrayList<ZObject> zObjects = new ArrayList<ZObject>();
+
+            for(int i = 0; i < objects.size(); i++) {
+                ZObject obj = new ZObject();
+                zObjects.add(HQZUtils.buildObject(
+                    objects.get(i).get(0),
+                    objects.get(i).get(1),
+                    objects.get(i).get(2),
+                    objects.get(i).get(3),
+                    objects.get(i).get(4)
+                ));
+            }
+
+            LunarTearHqz hqz = new LunarTearHqz();
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_drawing."+ Config.OUTPUT_IMAGE_FORMAT);
+            hqz.buildDrawing(zObjects, moodbar, 50000, outputFile);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void renderZenphoton() {
         // String songname = "fur_elise";
-        String songname = "kino";
+        String songname = "fitz";
         String displayText = "Кино - Спокойная ночь";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+songname+".mp3";
@@ -214,20 +267,20 @@ public class Orchestrator {
         String filename = "col3";
         String testPath = Config.RESOURCE_DIR;
         try{
-            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"hu.mp3",testPath+"/bar1");
-            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"hungun.mp3",testPath+"/bar2");
-            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"cosmic.mp3",testPath+"/bar3");
-            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"route.mp3",testPath+"/bar4");
+            ArrayList<Color> moodbar1 = MoodbarAdapter.buildMoodbar(testPath+"The-Smashing-Pumpkins-Today.mp3",testPath+"/bar1");
+            ArrayList<Color> moodbar2 = MoodbarAdapter.buildMoodbar(testPath+"alex-g-nintendo64.mp3",testPath+"/bar2");
+            ArrayList<Color> moodbar3 = MoodbarAdapter.buildMoodbar(testPath+"twenty_one_pilots-stressed_out.mp3",testPath+"/bar3");
+            ArrayList<Color> moodbar4 = MoodbarAdapter.buildMoodbar(testPath+"fort-minor-high-road-feat-john-legend.mp3",testPath+"/bar4");
             ArrayList<BufferedImage> moodbarList = new ArrayList<BufferedImage>();
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar1, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar2, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar3, 150));
             moodbarList.add(MoodbarAdapter.toBufferedImage(moodbar4, 150));
             ArrayList<String> names = new ArrayList<String>();
-            names.add("The Hu - Sugaan Essena (Star Wars Jedi: Fallen Order)");
-            names.add("168, 290, baatarfly - HUNGUN");
-            names.add("Even Tide - Cosmic");
-            names.add("Slater ft Wondha Mountain - When En Route");
+            names.add("The Smashing Pumpkins - Today");
+            names.add("Alex G - Nintendo 64");
+            names.add("twenty øne piløts - Stressed Out");
+            names.add("Fort Minor - High Road (ft John Legend)");
 
             ImageSupporter.setBackgroundColor(Color.WHITE);
             ImageSupporter.setFontColor(Color.BLACK);
@@ -247,8 +300,8 @@ public class Orchestrator {
     }
 
     private static void renderCollection() {
-        String sogname = "cities";
-        String displayText = "The Everlove - Cities in Dust";
+        String sogname = "secret";
+        String displayText = "The Tourist - Secret";
 //        String displayText = "Adele - Rolling in the Deep";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
@@ -417,6 +470,7 @@ public class Orchestrator {
 //        stage.setScene(scene);
 //        stage.show();
     }
+
 
 
 }
