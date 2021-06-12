@@ -1,8 +1,8 @@
 {
   "moodbarExecuteable": "moodbar",
-  "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
+  "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
   "ffmpegExecutable": "ffmpeg",
-  "resourceDir": "/home/vonqo/Desktop/mood_test/child/",
+  "resourceDir": "/Users/von/Desktop/mood_test/muchka2/",
   "neuralStyle": {
     "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
     "styleDir": "/home/vonqo/Desktop/style_img/",

@@ -251,4 +251,23 @@ public class HQZUtils {
 
         return objects;
     }
+
+    public static List<ZObject> buildWalledCube(int materialIndex, int x, int y, int size, int wallSize, List<MaterialExtension> ext) {
+        boolean isUsingExt = (ext != null);
+
+        List<ZObject> objects = new ArrayList<ZObject>();
+        int pad = size / 2;
+
+        int startX = x - pad;
+        int startY = y - pad;
+
+        int diff = (wallSize - size) / 2;
+
+        objects.add(buildObject(materialIndex, startX, startY, wallSize, startY, ext.get(0).getA0(), ext.get(0).getDa()));
+        objects.add(buildObject(materialIndex, size, startY, size, startY, ext.get(1).getA0(), ext.get(1).getDa()));
+        objects.add(buildObject(materialIndex, startX, startY, startX, wallSize, ext.get(2).getA0(), ext.get(2).getDa()));
+        objects.add(buildObject(materialIndex, size, startY, startX, size, ext.get(3).getA0(), ext.get(3).getDa()));
+
+        return  objects;
+    }
 }
