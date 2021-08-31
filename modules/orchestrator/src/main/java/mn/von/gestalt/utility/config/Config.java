@@ -1,6 +1,9 @@
 package mn.von.gestalt.utility.config;
 
 import com.google.gson.Gson;
+import mn.von.gestalt.utility.config.dto.ConfigDto;
+import mn.von.gestalt.utility.config.dto.NeuralStyleConfigDto;
+import mn.von.gestalt.utility.config.dto.ParamDto;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +23,7 @@ public class Config {
     public static String RESOURCE_DIR = "";
     public static String OUTPUT_IMAGE_FORMAT = "png";
 
-    public static void loadConfig() {
+    public static ParamDto loadConfig() {
         StringBuilder configBuilder = new StringBuilder();
         try (Stream<String> stream = Files.lines(Paths.get("config.json"), StandardCharsets.UTF_8)) {
             stream.forEach(s -> configBuilder.append(s).append("\n"));
@@ -29,15 +32,18 @@ public class Config {
         }
         Gson gsonParser = new Gson();
         ConfigDto configData = gsonParser.fromJson(configBuilder.toString(), ConfigDto.class);
-        Config.MOODBAR_EXEC = configData.getMoodbarExecuteable();
-        Config.HQZ_EXEC = configData.getHqzExecutable();
-        Config.FFMEG_EXEC = configData.getFfmpegExecutable();
-        Config.RESOURCE_DIR = configData.getResourceDir();
 
-        NeuralStyleConfigDto nConfig = configData.getNeuralStyle();
+        Config.MOODBAR_EXEC = configData.getSystemDto().getMoodbarExecuteable();
+        Config.HQZ_EXEC = configData.getSystemDto().getHqzExecutable();
+        Config.FFMEG_EXEC = configData.getSystemDto().getFfmpegExecutable();
+        Config.RESOURCE_DIR = configData.getSystemDto().getResourceDir();
+
+        NeuralStyleConfigDto nConfig = configData.getSystemDto().getNeuralStyle();
         Config.NEURALSTYLE_EXEC = nConfig.getExecutable();
         Config.NEURALSTYLE_STYLE_DIR = nConfig.getStyleDir();
         Config.NEURALSTYLE_CONTENT_DIR = nConfig.getContentDir();
+
+        return configData.getParamDto();
     }
 
 }

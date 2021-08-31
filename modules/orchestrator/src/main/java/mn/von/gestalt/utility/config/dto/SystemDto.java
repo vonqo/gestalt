@@ -1,8 +1,8 @@
-package mn.von.gestalt.utility.config;
+package mn.von.gestalt.utility.config.dto;
 
 import java.io.Serializable;
 
-public class ConfigDto implements Serializable {
+public class SystemDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String moodbarExecuteable;
@@ -11,7 +11,7 @@ public class ConfigDto implements Serializable {
     private NeuralStyleConfigDto neuralStyle;
     private String resourceDir;
 
-    public ConfigDto() {
+    public SystemDto() {
         super();
     }
 
@@ -55,6 +55,4 @@ public class ConfigDto implements Serializable {
         this.neuralStyle = neuralStyle;
     }
 
-
 }
-
