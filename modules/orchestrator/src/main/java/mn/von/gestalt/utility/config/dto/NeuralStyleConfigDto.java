@@ -1,4 +1,4 @@
-package mn.von.gestalt.utility.config;
+package mn.von.gestalt.utility.config.dto;
 
 import java.io.Serializable;
 

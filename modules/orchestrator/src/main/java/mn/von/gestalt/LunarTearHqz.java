@@ -939,9 +939,9 @@ public class LunarTearHqz {
         System.out.println("frame "+frameIndex+" in milliseconds: " + timeElapsed);
     }
 
-    public void buildDrawing(List<ZObject> drawObjects, ArrayList<Color> moodbar, long rays, File output) throws IOException {
-        int screenWidth = 1080;
-        int screenHeight = 1920;
+    public void buildDrawing(int screenWidth, int screenHeight, List<ZObject> drawObjects, ArrayList<Color> moodbar, long rays, File output) throws IOException {
+//        int screenWidth = 1080;
+//        int screenHeight = 1920;
         Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.15f, 0.8f);
 
         // ================ LIGHTS =============== //

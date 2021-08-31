@@ -1,11 +1,27 @@
 {
-  "moodbarExecuteable": "moodbar",
-  "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
-  "ffmpegExecutable": "ffmpeg",
-  "resourceDir": "/home/vonqo/Desktop/mood_test/",
-  "neuralStyle": {
-    "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
-    "styleDir": "/home/vonqo/Desktop/style_img/",
-    "contentDir": "/home/vonqo/Desktop/content_img/"
+  "system": {
+    "moodbarExecuteable": "moodbar",
+    "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
+    "ffmpegExecutable": "ffmpeg",
+    "resourceDir": "/Users/von/Desktop/mood_test/printable3/",
+    "neuralStyle": {
+      "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
+      "styleDir": "/home/vonqo/Desktop/style_img/",
+      "contentDir": "/home/vonqo/Desktop/content_img/"
+    }
+  },
+  "param": {
+    "exportType": "VANILLA",
+    "audioFile": [""],
+    "displayText": [""],
+    "hasBanner": true,
+    "ray": 250000,
+    "extraDataFile": "dafuq.json",
+    "videoExport": {
+      "isVideoExport": false,
+      "usableCore": 1,
+      "startFrame": 0,
+      "endFrame": 0
+    }
   }
 }

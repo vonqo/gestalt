@@ -17,8 +17,8 @@ class GLine {
 ArrayList<GLine> lineList = new ArrayList<GLine>();
 
 void setup() {
-  size(540, 960);
-  bgImage = loadImage("uchka.jpg");
+  size(800, 670);
+  bgImage = loadImage("turing_fixed.png");
 }
 
 void draw() {

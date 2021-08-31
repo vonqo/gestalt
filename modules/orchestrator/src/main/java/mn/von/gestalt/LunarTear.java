@@ -5,6 +5,7 @@ import mn.von.gestalt.utility.grimoire.ImageTransformer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 public class LunarTear {
@@ -40,11 +41,13 @@ public class LunarTear {
         return canvas;
     }
 
-    public BufferedImage vanilla4Bar(ArrayList<BufferedImage> moodbarList, ArrayList<String> moodbarTitle) {
+    public BufferedImage vanilla4Bar(ArrayList<BufferedImage> moodbarList, ArrayList<String> moodbarTitle, int height, int width, int fontSize) {
         if(moodbarList.size() != moodbarTitle.size()) {
-            throw new RuntimeException("parameter error");
+            throw new InvalidParameterException("parameter error");
         }
-        BufferedImage canvas = new BufferedImage(1000, moodbarList.size() * 220, BufferedImage.TYPE_INT_ARGB);
+
+        int newHeight = height + fontSize + (int)Math.round(fontSize * 1.4);
+        BufferedImage canvas = new BufferedImage(width, moodbarList.size() * newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx2D = canvas.createGraphics();
         ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         ctx2D.setPaint (ImageSupporter.backgroundColor);
@@ -52,8 +55,8 @@ public class LunarTear {
         for(int i = 0; i < moodbarList.size(); i++) {
             ctx2D.setColor(ImageSupporter.fontColor);
             ctx2D.setFont(new Font(ImageSupporter.fontName, Font.BOLD, ImageSupporter.fontSize));
-            ctx2D.drawString(moodbarTitle.get(i), 10, (i * 220)+55);
-            ctx2D.drawImage(moodbarList.get(i),0, (i * 220)+68, null);
+            ctx2D.drawString(moodbarTitle.get(i), 10, (i * newHeight) + (newHeight - height - (fontSize / 2)));
+            ctx2D.drawImage(moodbarList.get(i),0, (i * newHeight) + (newHeight - height - 2), null);
         }
         return canvas;
     }
