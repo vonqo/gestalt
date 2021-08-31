@@ -658,13 +658,13 @@ public class LunarTearHqz {
         int screenWidth = 5906;
         int screenHeight = 8350;
 
-        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.3f, 1.0f);
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.4f, 2.0f);
 
         // ================ MATERIALS =============== //
         List<Material> materials = new ArrayList<Material>();
         materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
 //        Material material1 = HQZUtils.buildMaterial(0.0f,0.1f,0.9f);
-        Material material1 = HQZUtils.buildMaterial(0.0f,0.0f,1.0f);
+        Material material1 = HQZUtils.buildMaterial(0.0f,0.8f,0.2f);
         materials.add(material1);
 
         // ================ OBJECTS =============== // // ================ LIGHTS =============== //
@@ -674,8 +674,8 @@ public class LunarTearHqz {
         objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
         objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
 
-        int paddingX = 219;
-        int paddingY = 225;
+        int paddingX = 210;
+        int paddingY = 220;
         ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectrumData, moodbar.size());
 
         List<Light> lightList = new ArrayList<Light>();
@@ -683,10 +683,10 @@ public class LunarTearHqz {
         polarDist.add(2); polarDist.add(35);
 
         ArrayList<Integer> polarAngle = new ArrayList<Integer>();
-        polarAngle.add(0); polarAngle.add(90);
+        polarAngle.add(0); polarAngle.add(360);
 
         ArrayList<Integer> rayAngle = new ArrayList<Integer>();
-        rayAngle.add(180); rayAngle.add(270);
+        rayAngle.add(0); rayAngle.add(360);
 
         int marginY = 0;
         int marginX = 0;
@@ -705,14 +705,14 @@ public class LunarTearHqz {
 
                 List<MaterialExtension> ext = new ArrayList<>();
 
-                int l = (int) (bubbleSizeList.get(i) * 360);
+                int l = (int) (bubbleSizeList.get(i) * 180);
                 int r = Math.max(l - 25, 0);
 
                 ext.add(new MaterialExtension(DataUtils.getRandomNumberInRange(r, l),DataUtils.getRandomNumberInRange(r, l)));
                 ext.add(new MaterialExtension(DataUtils.getRandomNumberInRange(r, l),DataUtils.getRandomNumberInRange(r, l)));
                 ext.add(new MaterialExtension(DataUtils.getRandomNumberInRange(r, l),DataUtils.getRandomNumberInRange(r, l)));
                 ext.add(new MaterialExtension(DataUtils.getRandomNumberInRange(r, l),DataUtils.getRandomNumberInRange(r, l)));
-                List<ZObject> objs = HQZUtils.buildWalledCube(1, pointX, pointY, 40, 50, ext);
+                List<ZObject> objs = HQZUtils.buildWalledCube(1, pointX, pointY, 100, 230, ext);
                 // List<ZObject> objs = HQZUtils.buildRegularSquare(1, pointX, pointY, 40, ext);
                 objects.addAll(objs);
 
