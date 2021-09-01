@@ -86,6 +86,19 @@ public class ImageSupporter {
         return canvas;
     }
 
+    public static BufferedImage addTitleOver(BufferedImage image, String title, int paddingTop, int paddingLeft) {
+        BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ctx2D.setPaint (ImageSupporter.backgroundColor);
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
+        ctx2D.setColor(ImageSupporter.fontColor);
+        ctx2D.drawString(title, paddingTop, paddingLeft);
+        ctx2D.drawImage(image, 0 , 0, null);
+        return canvas;
+    }
+
     public static BufferedImage addMark(BufferedImage image, String text, int topPadding) throws IOException {
         BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight()+50+topPadding, BufferedImage.TYPE_INT_ARGB);
         BufferedImage logo = ImageIO.read(new File("logo_smoll.png"));
