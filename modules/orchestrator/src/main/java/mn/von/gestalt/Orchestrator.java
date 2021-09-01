@@ -64,17 +64,19 @@ public class Orchestrator {
 
         } else if(type.equals(ExportTypes.BUBBLE_BAR_2DRT.name())) {
 
-
+            renderBubbleBarZenphoton(paramDto);
 
         } else if(type.equals(ExportTypes.WHIRLWIND_2DRT.name())) {
 
-
+            renderWhirlwindZenphoton(paramDto);
 
         } else if(type.equals(ExportTypes.DRAWING_2DRT.name())) {
 
-            renderZenphotonDrawing();
+            renderZenphotonDrawing(paramDto.getExtraDataFile(), paramDto.getRay());
 
         } else if(type.equals(ExportTypes.CARDIAC.name())) {
+
+            renderCardiacZenphoton(paramDto);
 
         }
     }
@@ -215,7 +217,7 @@ public class Orchestrator {
 
     /* ============================================================================================ */
     /* ============================================================================================ */
-    private static void renderZenphotonDrawing() {
+    private static void renderZenphotonDrawing(String extraDataFile, int ray) {
         String songname = "turing";
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+songname+".mp3";
@@ -234,7 +236,7 @@ public class Orchestrator {
         try {
             ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+songname+".mp3",testPath+"/bar");
 
-            final String objectFile = Config.RESOURCE_DIR+"data_1133295"+".json";
+            final String objectFile = Config.RESOURCE_DIR + extraDataFile;
             Gson gson = new Gson();
             BufferedReader br = new BufferedReader(new FileReader(objectFile));
             ArrayList<ArrayList<Integer>> objects = gson.fromJson(br, new TypeToken<ArrayList<ArrayList<Integer>>>(){}.getType());
@@ -253,7 +255,7 @@ public class Orchestrator {
 
             LunarTearHqz hqz = new LunarTearHqz();
             File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_drawing."+ Config.OUTPUT_IMAGE_FORMAT);
-            hqz.buildDrawing(800*2, 670*2, zObjects, moodbar, 20000, outputFile);
+            hqz.buildDrawing(800*2, 670*2, zObjects, moodbar, ray, outputFile);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -264,13 +266,12 @@ public class Orchestrator {
 
     /* ============================================================================================ */
     /* ============================================================================================ */
-    private static void renderZenphoton() {
-        // String songname = "fur_elise";
-        String songname = "laura";
-        String displayText = "renderZenphoton";
-        String testPath = Config.RESOURCE_DIR;
-        String pathMp3 = testPath+songname+".mp3";
-        String pathWav = testPath+songname+".wav";
+    private static void renderBubbleBarZenphoton(ParamDto param) {
+        String path = Config.RESOURCE_DIR;
+
+        String songname = param.getAudioFile().get(0);
+        String pathMp3 = path + songname + ".mp3";
+        String pathWav = path + songname + ".wav";
         double audioDuration = 0;
 
         try {
@@ -283,27 +284,116 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+songname+".mp3",testPath+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 2500000;
-            // int ray = 5000;
+            int ray = param.getRay();
             File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
             LunarTearHqz hqz = new LunarTearHqz();
-            // hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
-
             hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
-//            BufferedImage img = ImageIO.read(outputFile);
-//            ImageSupporter.setBackgroundColor(Color.BLACK);
-//            ImageSupporter.setFontColor(Color.WHITE);
-//            ImageSupporter.setFontSize(32);
-//            ImageSupporter.setFontName("Roboto Mono");
-//            ImageIO.write(
-//                    ImageSupporter.addTitle(img, displayText), Config.OUTPUT_IMAGE_FORMAT, outputFile
-//            );
+            BufferedImage img = ImageIO.read(outputFile);
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontSize(32);
+            ImageSupporter.setFontName("Roboto Mono");
+            ImageIO.write(
+                ImageSupporter.addTitleOver(img, param.getDisplayText().get(0), 10, 10),
+                Config.OUTPUT_IMAGE_FORMAT,
+                outputFile
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderCardiacZenphoton(ParamDto param) {
+        String path = Config.RESOURCE_DIR;
+
+        String songname = param.getAudioFile().get(0);
+        String pathMp3 = path + songname + ".mp3";
+        String pathWav = path + songname + ".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+            int ray = param.getRay();
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+            LunarTearHqz hqz = new LunarTearHqz();
+            hqz.build(LunarTearHqz.Types.CARDIAC, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+            BufferedImage img = ImageIO.read(outputFile);
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontSize(32);
+            ImageSupporter.setFontName("Roboto Mono");
+            ImageIO.write(
+                    ImageSupporter.addTitle(img, param.getDisplayText().get(0)),
+                    Config.OUTPUT_IMAGE_FORMAT,
+                    outputFile
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderWhirlwindZenphoton(ParamDto param) {
+        String path = Config.RESOURCE_DIR;
+
+        String songname = param.getAudioFile().get(0);
+        String pathMp3 = path + songname + ".mp3";
+        String pathWav = path + songname + ".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+            int ray = param.getRay();
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+            LunarTearHqz hqz = new LunarTearHqz();
+            hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+            BufferedImage img = ImageIO.read(outputFile);
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontSize(32);
+            ImageSupporter.setFontName("Roboto Mono");
+            ImageIO.write(
+                    ImageSupporter.addTitle(img, param.getDisplayText().get(0)),
+                    Config.OUTPUT_IMAGE_FORMAT,
+                    outputFile
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -12,8 +12,8 @@
   },
   "param": {
     "exportType": "VANILLA",
-    "audioFile": [""],
-    "displayText": [""],
+    "audioFile": ["etogg"],
+    "displayText": ["dsfdsa"],
     "hasBanner": true,
     "ray": 250000,
     "extraDataFile": "dafuq.json",
