@@ -3,7 +3,7 @@
     "moodbarExecuteable": "moodbar",
     "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/Users/von/Desktop/mood_test/printable3/",
+    "resourceDir": "/Users/von/Desktop/mood_test/NEW/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -11,11 +11,16 @@
     }
   },
   "param": {
-    "exportType": "VANILLA",
-    "audioFile": ["etogg"],
-    "displayText": ["dsfdsa"],
+    "exportType": "WHIRLWIND_2DRT",
+    "fontName": "Interstate",
+    "audioFile": [
+      "ugur_nogoon_gursed"
+    ],
+    "displayText": [
+      "WAP - Өгөр Ногоон Гүрсэд"
+    ],
     "hasBanner": true,
-    "ray": 250000,
+    "ray": 500000,
     "extraDataFile": "dafuq.json",
     "videoExport": {
       "isVideoExport": false,

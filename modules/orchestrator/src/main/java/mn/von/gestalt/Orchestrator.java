@@ -52,9 +52,9 @@ public class Orchestrator {
 
         if(type.equals(ExportTypes.VANILLA.name())) {
 
-            int fontSize = 28;
+            int fontSize = 21;
             int moodbarWidth = 1000;
-            int moodbarHeight = 150;
+            int moodbarHeight = 120;
 
             renderVanillaMoodbars(paramDto, fontSize, moodbarHeight, moodbarWidth);
 
@@ -94,7 +94,8 @@ public class Orchestrator {
             ArrayList<BufferedImage> moodbars = new ArrayList<>();
 
             for (String audioFile : audioFiles) {
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile, testPath + "/tmp_moodbar");
+                System.out.println(audioFile);
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile + ".mp3", testPath + "/tmp_moodbar");
                 BufferedImage scaledImage = ImageTransformer.scaleImage(MoodbarAdapter.toBufferedImage(moodbar, height), width, height);
                 moodbars.add(scaledImage);
             }
@@ -298,7 +299,6 @@ public class Orchestrator {
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(32);
-            ImageSupporter.setFontName("Roboto Mono");
             ImageIO.write(
                 ImageSupporter.addTitleOver(img, param.getDisplayText().get(0), 10, 10),
                 Config.OUTPUT_IMAGE_FORMAT,
@@ -343,7 +343,6 @@ public class Orchestrator {
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(32);
-            ImageSupporter.setFontName("Roboto Mono");
             ImageIO.write(
                     ImageSupporter.addTitle(img, param.getDisplayText().get(0)),
                     Config.OUTPUT_IMAGE_FORMAT,
@@ -379,16 +378,22 @@ public class Orchestrator {
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
+            BufferedImage moodbarImg = MoodbarAdapter.toBufferedImage(moodbar, 75);
+            BufferedImage spectrum = spectrumizer.asBufferedMoodbar();
+
+            LunarTearHqz hqz = new LunarTearHqz();
             int ray = param.getRay();
             File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
-            LunarTearHqz hqz = new LunarTearHqz();
             hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
-            BufferedImage img = ImageIO.read(outputFile);
+            BufferedImage tornadoHqz = ImageIO.read(outputFile);
+
+            LunarTear lunarTear = new LunarTear();
+            BufferedImage img = lunarTear.wirldwind(moodbarImg, spectrum, tornadoHqz);
+
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(32);
-            ImageSupporter.setFontName("Roboto Mono");
             ImageIO.write(
                     ImageSupporter.addTitle(img, param.getDisplayText().get(0)),
                     Config.OUTPUT_IMAGE_FORMAT,
