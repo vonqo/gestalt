@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import mn.von.gestalt.utility.config.dto.ConfigDto;
 import mn.von.gestalt.utility.config.dto.NeuralStyleConfigDto;
 import mn.von.gestalt.utility.config.dto.ParamDto;
+import mn.von.gestalt.utility.grimoire.ImageSupporter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +33,7 @@ public class Config {
         }
         Gson gsonParser = new Gson();
         ConfigDto configData = gsonParser.fromJson(configBuilder.toString(), ConfigDto.class);
+        ImageSupporter.setFontName(configData.getParamDto().getFontName());
 
         Config.MOODBAR_EXEC = configData.getSystemDto().getMoodbarExecuteable();
         Config.HQZ_EXEC = configData.getSystemDto().getHqzExecutable();

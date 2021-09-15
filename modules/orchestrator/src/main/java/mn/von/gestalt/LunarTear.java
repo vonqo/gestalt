@@ -41,12 +41,36 @@ public class LunarTear {
         return canvas;
     }
 
+    public BufferedImage wirldwind(BufferedImage moodbar, BufferedImage spectrum, BufferedImage tornadoHqz) {
+        int spectrumHeight = (int) Math.round(spectrum.getHeight() * 0.5);
+        BufferedImage canvas = new BufferedImage(
+                tornadoHqz.getWidth(),
+                tornadoHqz.getHeight() + moodbar.getHeight() + spectrumHeight,
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setPaint (ImageSupporter.backgroundColor);
+        ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+
+        moodbar = ImageTransformer.scaleImage(moodbar, tornadoHqz.getWidth(), moodbar.getHeight());
+        ctx2D.drawImage(moodbar,0,0,null);
+
+        spectrum = ImageTransformer.scaleImage(spectrum, tornadoHqz.getWidth(), spectrumHeight);
+        ctx2D.drawImage(spectrum,1,moodbar.getHeight(),null);
+
+        ctx2D.drawImage(tornadoHqz,0,moodbar.getHeight() + spectrumHeight, null);
+
+        return canvas;
+    }
+
     public BufferedImage vanilla4Bar(ArrayList<BufferedImage> moodbarList, ArrayList<String> moodbarTitle, int height, int width, int fontSize) {
         if(moodbarList.size() != moodbarTitle.size()) {
             throw new InvalidParameterException("parameter error");
         }
 
-        int newHeight = height + fontSize + (int)Math.round(fontSize * 1.4);
+        int additionalSpace = 0;
+        int newHeight = height + fontSize + (int)Math.round(fontSize * 1.4) + additionalSpace;
         BufferedImage canvas = new BufferedImage(width, moodbarList.size() * newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx2D = canvas.createGraphics();
         ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

@@ -158,7 +158,7 @@ public class LunarTearHqz {
         materials.add(material2);
         Material material3 = HQZUtils.buildMaterial(0.7f,0,0.3f);
         materials.add(material3);
-        Material material4 = HQZUtils.buildMaterial(0.0f,0.3f,.07f);
+        Material material4 = HQZUtils.buildMaterial(0,0.3f,.07f);
         materials.add(material4);
         scene.setMaterials(materials);
 
@@ -170,7 +170,15 @@ public class LunarTearHqz {
         objects.add(HQZUtils.buildObject(0,1080,0,0,1080));
         int offset = 200;
         int distance = 1080;
-        objects.addAll(HQZUtils.buildRegularSquare(4,1080/2,1080/2,410));
+
+//        List<MaterialExtension> ext = new ArrayList<>();
+//        ext.add(new MaterialExtension(0, 143));
+//        ext.add(new MaterialExtension(0, 164));
+//        ext.add(new MaterialExtension(0, 122));
+//        ext.add(new MaterialExtension(0, 139));
+//        ext.add(new MaterialExtension(0, 168));
+
+        objects.addAll(HQZUtils.buildRegularSquare(4, 1080 / 2, 1080 / 2, 410));
 //        objects.add(HQZUtils.buildObject(4,0,offset,720,distance,0,360));
 //        objects.add(HQZUtils.buildObject(4,offset,0,180,0,distance,180));
 //        objects.add(HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270));

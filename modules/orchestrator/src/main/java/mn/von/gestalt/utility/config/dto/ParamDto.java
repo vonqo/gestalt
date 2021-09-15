@@ -7,6 +7,7 @@ public class ParamDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String exportType;
+    private String fontName;
     private ArrayList<String> audioFile;
     private ArrayList<String> displayText;
     private boolean hasBanner;
@@ -68,5 +69,13 @@ public class ParamDto implements Serializable {
 
     public void setExtraDataFile(String extraDataFile) {
         this.extraDataFile = extraDataFile;
+    }
+
+    public String getFontName() {
+        return fontName;
+    }
+
+    public void setFontName(String fontName) {
+        this.fontName = fontName;
     }
 }

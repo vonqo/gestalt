@@ -51,7 +51,7 @@ public class MoodbarAdapter {
         } catch (InterruptedException ex) {
             Logger.getLogger(MoodbarAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(moodbar.size());
+        System.out.println("moodbar size: " + moodbar.size());
         return moodbar;
     }
 
@@ -65,11 +65,11 @@ public class MoodbarAdapter {
     }
 
     public static BufferedImage toBufferedImage(ArrayList<Color> MOOD, int HEIGHT) {
-        BufferedImage bar = new BufferedImage(MOOD.size(), 150, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bar = new BufferedImage(MOOD.size(), HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics ctx = bar.getGraphics();
         Iterator<Color> itr = MOOD.iterator();
         for (int i = 0; itr.hasNext(); i++) {
-            ctx.drawRect(i, 0, 1, HEIGHT);
+            ctx.drawRect(i, 0, 0, HEIGHT);
             ctx.setColor(itr.next());
         }
         ctx.dispose();
