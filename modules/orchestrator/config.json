@@ -3,7 +3,7 @@
     "moodbarExecuteable": "moodbar",
     "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/Users/von/Desktop/mood_test/NEW/",
+    "resourceDir": "/Users/von/Desktop/mood_test/simpozio/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -11,16 +11,18 @@
     }
   },
   "param": {
-    "exportType": "WHIRLWIND_2DRT",
+    "exportType": "BUBBLE_BAR_2DRT",
     "fontName": "Interstate",
     "audioFile": [
-      "ugur_nogoon_gursed"
+      "shoegazer2",
+      "blackest_bile2"
     ],
     "displayText": [
-      "WAP - Өгөр Ногоон Гүрсэд"
+      "Pasteboard - Shoegazer",
+      "Giles Corey - Blackest Bile"
     ],
     "hasBanner": true,
-    "ray": 500000,
+    "ray": 2500000,
     "extraDataFile": "dafuq.json",
     "videoExport": {
       "isVideoExport": false,

@@ -217,7 +217,7 @@ public class Orchestrator {
     }
 
     /* ============================================================================================ */
-    /* ============================================================================================ */
+    /* ============================================================================================ */:
     private static void renderZenphotonDrawing(String extraDataFile, int ray) {
         String songname = "turing";
         String testPath = Config.RESOURCE_DIR;
@@ -270,42 +270,50 @@ public class Orchestrator {
     private static void renderBubbleBarZenphoton(ParamDto param) {
         String path = Config.RESOURCE_DIR;
 
-        String songname = param.getAudioFile().get(0);
-        String pathMp3 = path + songname + ".mp3";
-        String pathWav = path + songname + ".wav";
-        double audioDuration = 0;
+        for(int i = 0; i < param.getAudioFile().size(); i++) {
+            String songname = param.getAudioFile().get(i);
+            String pathMp3 = path + songname + ".mp3";
+            String pathWav = path + songname + ".wav";
+            double audioDuration = 0;
 
-        try {
-            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-            audioDuration = AudioUtils.getDuration(pathWav);
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            System.out.println(pathMp3);
+            System.out.println(pathWav);
 
-        try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
-            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
-            spectrumizer.applyMoodbar(moodbar);
-            spectrumizer.build();
+            try {
+                AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+                audioDuration = AudioUtils.getDuration(pathWav);
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            int ray = param.getRay();
-            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
-            LunarTearHqz hqz = new LunarTearHqz();
-            hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+            try {
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+                spectrumizer.applyMoodbar(moodbar);
+                spectrumizer.build();
 
-            BufferedImage img = ImageIO.read(outputFile);
-            ImageSupporter.setBackgroundColor(Color.BLACK);
-            ImageSupporter.setFontColor(Color.WHITE);
-            ImageSupporter.setFontSize(32);
-            ImageIO.write(
-                ImageSupporter.addTitleOver(img, param.getDisplayText().get(0), 10, 10),
-                Config.OUTPUT_IMAGE_FORMAT,
-                outputFile
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
+                int ray = param.getRay();
+                File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+                LunarTearHqz hqz = new LunarTearHqz();
+                hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+                BufferedImage img = ImageIO.read(outputFile);
+                ImageSupporter.setBackgroundColor(Color.BLACK);
+                ImageSupporter.setFontColor(Color.WHITE);
+                ImageSupporter.setFontSize(140);
+
+                BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
+                img = ImageSupporter.addTitleOver(img, param.getDisplayText().get(i), 265, 190);
+                img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 4290);
+
+                ImageIO.write(
+                        img, Config.OUTPUT_IMAGE_FORMAT, outputFile
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -358,49 +366,51 @@ public class Orchestrator {
     private static void renderWhirlwindZenphoton(ParamDto param) {
         String path = Config.RESOURCE_DIR;
 
-        String songname = param.getAudioFile().get(0);
-        String pathMp3 = path + songname + ".mp3";
-        String pathWav = path + songname + ".wav";
-        double audioDuration = 0;
+        for(int i = 0; i < param.getAudioFile().size(); i++) {
+            String songname = param.getAudioFile().get(i);
+            String pathMp3 = path + songname + ".mp3";
+            String pathWav = path + songname + ".wav";
+            double audioDuration = 0;
 
-        try {
-            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-            audioDuration = AudioUtils.getDuration(pathWav);
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            try {
+                AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+                audioDuration = AudioUtils.getDuration(pathWav);
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
-            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
-            spectrumizer.applyMoodbar(moodbar);
-            spectrumizer.build();
+            try {
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+                spectrumizer.applyMoodbar(moodbar);
+                spectrumizer.build();
 
-            BufferedImage moodbarImg = MoodbarAdapter.toBufferedImage(moodbar, 75);
-            BufferedImage spectrum = spectrumizer.asBufferedMoodbar();
+                BufferedImage moodbarImg = MoodbarAdapter.toBufferedImage(moodbar, 75);
+                BufferedImage spectrum = spectrumizer.asBufferedMoodbar();
 
-            LunarTearHqz hqz = new LunarTearHqz();
-            int ray = param.getRay();
-            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
-            hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+                LunarTearHqz hqz = new LunarTearHqz();
+                int ray = param.getRay();
+                File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+                hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
-            BufferedImage tornadoHqz = ImageIO.read(outputFile);
+                BufferedImage tornadoHqz = ImageIO.read(outputFile);
 
-            LunarTear lunarTear = new LunarTear();
-            BufferedImage img = lunarTear.wirldwind(moodbarImg, spectrum, tornadoHqz);
+                LunarTear lunarTear = new LunarTear();
+                BufferedImage img = lunarTear.wirldwind(moodbarImg, spectrum, tornadoHqz);
 
-            ImageSupporter.setBackgroundColor(Color.BLACK);
-            ImageSupporter.setFontColor(Color.WHITE);
-            ImageSupporter.setFontSize(32);
-            ImageIO.write(
-                    ImageSupporter.addTitle(img, param.getDisplayText().get(0)),
-                    Config.OUTPUT_IMAGE_FORMAT,
-                    outputFile
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
+                ImageSupporter.setBackgroundColor(Color.BLACK);
+                ImageSupporter.setFontColor(Color.WHITE);
+                ImageSupporter.setFontSize(32);
+                ImageIO.write(
+                        ImageSupporter.addTitle(img, param.getDisplayText().get(i)),
+                        Config.OUTPUT_IMAGE_FORMAT,
+                        outputFile
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
