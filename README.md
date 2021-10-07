@@ -4,6 +4,8 @@
 [![Codacy Badge][codacy-badge]][codacy]
 [![Gitter][gitter-badge]][gitter]
 [![Shitcoded][ulaanbaatar-badge]][ub-wiki]
+[![Linux][linux-badge]][linux-badge]
+[![macOS][osx-badge]][osx-badge]
 
 Definition of **gestalt**: "*something that is made of many parts and yet is somehow more than or different from the combination of its parts*"
 
@@ -65,19 +67,24 @@ And install these third party tools:
     }
   },
   "param": {
-    "exportType": "VANILLA",
-    "audioFile": ["audio1", "audio2", "audio3"],
-    "displayText": ["title1", "title2", "title3"],
-    "hasBanner": true,
-    "ray": 250000,
-    "extraDataFile": "drawExported.json",
-    "videoExport": {
-      "isVideoExport": false,
-      "usableCore": 12,
-      "startFrame": 0,
-      "endFrame": 4000
+      "fontName": "Interstate",
+      "audio": [
+        {
+          "exportType": "BUBBLE_BAR_2DRT",
+          "audioFile": ["alive2"],
+          "displayText": ["Portal - Still Alive (Portal OST)"],
+          "hasBanner": true,
+          "ray": 200000,
+          "extraDataFile": "dafuq.json"
+        },
+      ],
+      "videoExport": {
+        "isVideoExport": false,
+        "usableCore": 1,
+        "startFrame": 0,
+        "endFrame": 0
+      }
     }
-  }
 }
 ```
 3. Build it with [Maven](https://maven.apache.org/). 
@@ -93,3 +100,5 @@ Enkh-Amar. G (vonqo). Released under the [Mozilla Public License Version 2.0](LI
 [gitter]: https://gitter.im/punkowl-gestalt/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [ulaanbaatar-badge]: https://img.shields.io/badge/shitcoded%20in-%F0%9F%87%B2%F0%9F%87%B3ulaanbaatar-brightgreen.svg
 [ub-wiki]: https://en.wikipedia.org/wiki/Ulaanbaatar
+[linux-badge]: https://svgshare.com/i/Zhy.svg
+[osx-badge]: https://svgshare.com/i/ZjP.svg

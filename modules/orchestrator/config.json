@@ -3,7 +3,7 @@
     "moodbarExecuteable": "moodbar",
     "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/Users/von/Desktop/mood_test/NEW/",
+    "resourceDir": "/Users/von/Desktop/mood_test/REQUEST/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -11,17 +11,17 @@
     }
   },
   "param": {
-    "exportType": "WHIRLWIND_2DRT",
     "fontName": "Interstate",
-    "audioFile": [
-      "ugur_nogoon_gursed"
+    "audio": [
+      {
+        "exportType": "BUBBLE_BAR_2DRT",
+        "audioFile": ["alive2"],
+        "displayText": ["Portal - Still Alive (Portal OST)"],
+        "hasBanner": true,
+        "ray": 200000,
+        "extraDataFile": "dafuq.json"
+      }
     ],
-    "displayText": [
-      "WAP - Өгөр Ногоон Гүрсэд"
-    ],
-    "hasBanner": true,
-    "ray": 500000,
-    "extraDataFile": "dafuq.json",
     "videoExport": {
       "isVideoExport": false,
       "usableCore": 1,

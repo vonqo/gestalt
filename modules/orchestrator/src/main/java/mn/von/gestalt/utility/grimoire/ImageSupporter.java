@@ -94,8 +94,20 @@ public class ImageSupporter {
         ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
         ctx2D.setColor(ImageSupporter.fontColor);
-        ctx2D.drawString(title, paddingTop, paddingLeft);
         ctx2D.drawImage(image, 0 , 0, null);
+        ctx2D.drawString(title, paddingLeft, paddingTop);
+        return canvas;
+    }
+
+    public static BufferedImage addMarkOver(BufferedImage image, BufferedImage mark, int paddingTop, int paddingLeft) throws IOException {
+        BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+        ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ctx2D.setPaint (ImageSupporter.backgroundColor);
+        ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        ctx2D.setColor(ImageSupporter.fontColor);
+        ctx2D.drawImage(image, 0 , 0, null);
+        ctx2D.drawImage(mark, paddingLeft, paddingTop, null);
         return canvas;
     }
 
