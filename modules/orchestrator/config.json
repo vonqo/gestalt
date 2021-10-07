@@ -3,7 +3,7 @@
     "moodbarExecuteable": "moodbar",
     "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/Users/von/Desktop/mood_test/simpozio/",
+    "resourceDir": "/Users/von/Desktop/mood_test/REQUEST/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -11,19 +11,17 @@
     }
   },
   "param": {
-    "exportType": "BUBBLE_BAR_2DRT",
     "fontName": "Interstate",
-    "audioFile": [
-      "shoegazer2",
-      "blackest_bile2"
+    "audio": [
+      {
+        "exportType": "BUBBLE_BAR_2DRT",
+        "audioFile": ["alive2"],
+        "displayText": ["Portal - Still Alive (Portal OST)"],
+        "hasBanner": true,
+        "ray": 200000,
+        "extraDataFile": "dafuq.json"
+      }
     ],
-    "displayText": [
-      "Pasteboard - Shoegazer",
-      "Giles Corey - Blackest Bile"
-    ],
-    "hasBanner": true,
-    "ray": 2500000,
-    "extraDataFile": "dafuq.json",
     "videoExport": {
       "isVideoExport": false,
       "usableCore": 1,
