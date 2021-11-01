@@ -1,9 +1,9 @@
 {
   "system": {
     "moodbarExecuteable": "moodbar",
-    "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
+    "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/Users/von/Desktop/mood_test/REQUEST/",
+    "resourceDir": "/home/vonqo/Desktop/ET/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -14,18 +14,19 @@
     "fontName": "Interstate",
     "audio": [
       {
-        "exportType": "BUBBLE_BAR_2DRT",
-        "audioFile": ["alive2"],
-        "displayText": ["Portal - Still Alive (Portal OST)"],
+        "exportType": "DRAWING_2DRT",
+        "audioFile": ["tsahlai"],
+        "displayText": ["Even Tide - Tsahlai"],
         "hasBanner": true,
         "ray": 200000,
-        "extraDataFile": "dafuq.json"
+        "extraDataFile": "data_1415533.json"
       }
     ],
     "videoExport": {
-      "isVideoExport": false,
+      "isVideoExport": true,
+      "fps": 24,
       "usableCore": 1,
-      "startFrame": 0,
+      "startFrame": 5975,
       "endFrame": 0
     }
   }
