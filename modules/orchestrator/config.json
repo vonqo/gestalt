@@ -3,7 +3,7 @@
     "moodbarExecuteable": "moodbar",
     "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/home/vonqo/Desktop/ET/",
+    "resourceDir": "/home/vonqo/Desktop/mood_test/ET/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -14,12 +14,12 @@
     "fontName": "Interstate",
     "audio": [
       {
-        "exportType": "DRAWING_2DRT",
+        "exportType": "MOOD_RAIN",
         "audioFile": ["tsahlai"],
-        "displayText": ["Even Tide - Tsahlai"],
-        "hasBanner": true,
-        "ray": 200000,
-        "extraDataFile": "data_1415533.json"
+        "displayText": ["tsahlai"],
+        "hasBanner": false,
+        "ray": 2500000,
+        "extraDataFile": "dafuq.json"
       }
     ],
     "videoExport": {
