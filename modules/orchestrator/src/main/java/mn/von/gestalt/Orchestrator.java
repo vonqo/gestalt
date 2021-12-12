@@ -8,6 +8,7 @@ import mn.von.gestalt.utility.config.Config;
 import mn.von.gestalt.utility.annotation.LoadOrchestrator;
 import mn.von.gestalt.utility.config.dto.AudioDto;
 import mn.von.gestalt.utility.config.dto.ParamDto;
+import mn.von.gestalt.utility.config.dto.VideoExportDto;
 import mn.von.gestalt.utility.grimoire.AudioUtils;
 import mn.von.gestalt.utility.grimoire.ImageSupporter;
 import mn.von.gestalt.utility.grimoire.ImageTransformer;
@@ -50,44 +51,53 @@ public class Orchestrator {
     public static void main(String args[]) {
 
         ParamDto paramDto = Config.loadConfig();
+        VideoExportDto videoExportDto = paramDto.getVideoExportDto();
 
-        for(AudioDto audio : paramDto.getAudioDtos()) {
-            String type = audio.getExportType();
-            if(type.equals(ExportTypes.VANILLA.name())) {
-
-                int fontSize = 21;
-                int moodbarWidth = 1000;
-                int moodbarHeight = 120;
-
-                renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
-
-            } else if(type.equals(ExportTypes.COLLECTION.name())) {
-
-                renderCollection(audio);
-
-            } else if(type.equals(ExportTypes.BUBBLE_BAR_2DRT.name())) {
-
-                renderBubbleBarZenphoton(audio);
-
-            } else if(type.equals(ExportTypes.WHIRLWIND_2DRT.name())) {
-
-                renderWhirlwindZenphoton(audio);
-
-            } else if(type.equals(ExportTypes.DRAWING_2DRT.name())) {
-
-                renderZenphotonDrawing(audio.getExtraDataFile(), audio.getRay());
-
-            } else if(type.equals(ExportTypes.CARDIAC.name())) {
-
-                renderCardiacZenphoton(audio);
-
-            } else if(type.equals(ExportTypes.MOOD_RAIN.name())) {
-
-                renderRain(audio);
-
+        if(videoExportDto.isVideoExport()) {
+            for(AudioDto audio : paramDto.getAudioDtos()) {
+                String type = audio.getExportType();
+                if(type.equals(ExportTypes.DRAWING_2DRT.name())) {
+                    renderDrawingZenphotonFrames(audio, videoExportDto);
+                }
             }
-        }
+        } else {
+            for(AudioDto audio : paramDto.getAudioDtos()) {
+                String type = audio.getExportType();
+                if(type.equals(ExportTypes.VANILLA.name())) {
+
+                    int fontSize = 21;
+                    int moodbarWidth = 1000;
+                    int moodbarHeight = 120;
+
+                    renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
+
+                } else if(type.equals(ExportTypes.COLLECTION.name())) {
+
+                    renderCollection(audio);
+
+                } else if(type.equals(ExportTypes.BUBBLE_BAR_2DRT.name())) {
+
+                    renderBubbleBarZenphoton(audio);
+
+                } else if(type.equals(ExportTypes.WHIRLWIND_2DRT.name())) {
+
+                    renderWhirlwindZenphoton(audio);
+
+                } else if(type.equals(ExportTypes.DRAWING_2DRT.name())) {
+
+                    renderZenphotonDrawing(audio.getExtraDataFile(), audio.getRay());
+
+                } else if(type.equals(ExportTypes.CARDIAC.name())) {
+
+                    renderCardiacZenphoton(audio);
+                  
+                } else if(type.equals(ExportTypes.MOOD_RAIN.name())) {
+
+                    renderRain(audio);
+                }
+          }
     }
+
 
     /* ============================================================================================ */
     /* ============================================================================================ */
@@ -458,8 +468,8 @@ public class Orchestrator {
 
     /* ============================================================================================ */
     /* ============================================================================================ */
-    private static void renderZenphotonFrames() {
-        String sogname = "folk";
+    private static void renderDrawingZenphotonFrames(AudioDto audioDto, VideoExportDto videoExportDto) {
+        String sogname = audioDto.getAudioFile().get(0);
         String testPath = Config.RESOURCE_DIR;
         String pathMp3 = testPath+sogname+".mp3";
         String pathWav = testPath+sogname+".wav";
@@ -475,15 +485,17 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+sogname+".mp3",testPath+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(pathMp3,testPath+"/bar");
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-            int ray = 2500000;
-            LunarTearHqz hqz = new LunarTearHqz();
-
-            hqz.buildFrames(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, audioDuration, 30, "folk");
+            LunarTearHqz2 hqz = new LunarTearHqz2();
+            hqz.buildFrames(
+                LunarTearHqz2.Types.DRAWING,
+                moodbar, spectrumizer.getDATA(), audioDuration,
+                audioDto, videoExportDto
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }

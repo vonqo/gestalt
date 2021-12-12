@@ -23,9 +23,10 @@
       }
     ],
     "videoExport": {
-      "isVideoExport": false,
+      "isVideoExport": true,
+      "fps": 24,
       "usableCore": 1,
-      "startFrame": 0,
+      "startFrame": 5975,
       "endFrame": 0
     }
   }
