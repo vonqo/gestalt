@@ -41,6 +41,7 @@ public class Orchestrator {
         WHIRLWIND_2DRT,
         DRAWING_2DRT,
         CARDIAC,
+        MOOD_RAIN
     }
 
     /* ============================================================================================ */
@@ -79,6 +80,10 @@ public class Orchestrator {
             } else if(type.equals(ExportTypes.CARDIAC.name())) {
 
                 renderCardiacZenphoton(audio);
+
+            } else if(type.equals(ExportTypes.MOOD_RAIN.name())) {
+
+                renderRain(audio);
 
             }
         }
@@ -190,7 +195,40 @@ public class Orchestrator {
 
     /* ============================================================================================ */
     /* ============================================================================================ */
-    private static  void renderNoise() {
+    private static void renderRain(AudioDto audio) {
+        String sogname = audio.getAudioFile().get(0);
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+sogname+".mp3";
+        String pathWav = testPath+sogname+".wav";
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+        } catch (UnsupportedAudioFileException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+//            LunarTear lunarTear = new LunarTear();
+//            BufferedImage img = lunarTear.moodbarRain(spectrumizer.asBufferedMoodbar(), MoodbarAdapter.toBufferedImage(moodbar, 100));
+
+            ImageIO.write(spectrumizer.asBufferedMoodbar(), Config.OUTPUT_IMAGE_FORMAT,
+                    new File(testPath+"/"+sogname+"_moodrain."+ Config.OUTPUT_IMAGE_FORMAT)
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderNoise() {
         String songname = "1982";
         String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
         String pathMp3 = Config.RESOURCE_DIR+songname+".mp3";
