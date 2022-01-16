@@ -95,7 +95,7 @@ public class Spectrumizer {
                     Color temp = MOODBAR.get(idx);
 //                    if(min > DATA[i][e]) min = DATA[i][e];
 //                    if(max < DATA[i][e]) max = DATA[i][e];
-                    DATA[i][e] = noiseFilter(DATA[i][e]);
+                     DATA[i][e] = noiseFilter(DATA[i][e]);
 
                     if(DATA[i][e] != 0) {
                         ctx.setColor(new Color(
@@ -114,9 +114,9 @@ public class Spectrumizer {
     }
 
     private Double noiseFilter(Double threshold) {
-        threshold -= 0.65;
+        threshold -= 0.45;
         if(threshold < 0) threshold = 0.0;
-        threshold *= 8.0;
+        threshold *= 3.5;
         if(threshold > 1) threshold = 1.0;
         return threshold;
     }

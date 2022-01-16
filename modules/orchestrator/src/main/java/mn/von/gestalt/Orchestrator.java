@@ -8,10 +8,7 @@ import mn.von.gestalt.utility.config.Config;
 import mn.von.gestalt.utility.annotation.LoadOrchestrator;
 import mn.von.gestalt.utility.config.dto.AudioDto;
 import mn.von.gestalt.utility.config.dto.ParamDto;
-import mn.von.gestalt.utility.grimoire.AudioUtils;
-import mn.von.gestalt.utility.grimoire.ImageSupporter;
-import mn.von.gestalt.utility.grimoire.ImageTransformer;
-import mn.von.gestalt.utility.grimoire.NoiseGenerator;
+import mn.von.gestalt.utility.grimoire.*;
 import mn.von.gestalt.zenphoton.HQZUtils;
 import mn.von.gestalt.zenphoton.dto.ZObject;
 
@@ -104,6 +101,7 @@ public class Orchestrator {
             for (String audioFile : audioFiles) {
                 System.out.println(audioFile);
                 ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile + ".mp3", testPath + "/tmp_moodbar");
+                FileUtils.moodbarToFile(moodbar, testPath + audioFile + ".txt");
                 BufferedImage scaledImage = ImageTransformer.scaleImage(MoodbarAdapter.toBufferedImage(moodbar, height), width, height);
                 moodbars.add(scaledImage);
             }
@@ -111,7 +109,6 @@ public class Orchestrator {
             ImageSupporter.setBackgroundColor(Color.WHITE);
             ImageSupporter.setFontColor(Color.BLACK);
             ImageSupporter.setFontSize(fontSize);
-            ImageSupporter.setFontName("Roboto Mono");
             BufferedImage image = new LunarTear().vanilla4Bar(moodbars, displayTexts, height, width, fontSize);
 
             ImageIO.write(
@@ -343,13 +340,13 @@ public class Orchestrator {
                 BufferedImage img = ImageIO.read(outputFile);
                 ImageSupporter.setBackgroundColor(Color.BLACK);
                 ImageSupporter.setFontColor(Color.WHITE);
-                ImageSupporter.setFontSize(140);
+                ImageSupporter.setFontSize(110);
 
                 img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 265, 190);
 
                 if(audio.isHasBanner()) {
                     BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
-                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 4290);
+                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
                 }
 
                 ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);

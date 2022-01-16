@@ -21,7 +21,7 @@ import mn.von.gestalt.utility.dsp.WindowFunction;
 
 public class Spectrogram {
 
-    public static final int SPECTROGRAM_DEFAULT_FFT_SAMPLE_SIZE = 1024;
+    public static final int SPECTROGRAM_DEFAULT_FFT_SAMPLE_SIZE = 512; // 1024 default
     public static final int SPECTROGRAM_DEFAULT_OVERLAP_FACTOR = 0; // 0 for no overlapping
 
     private Wave wave;
