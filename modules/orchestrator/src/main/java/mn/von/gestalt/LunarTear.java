@@ -93,7 +93,7 @@ public class LunarTear {
         ctx2D.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         for(int i = 0; i < moodbarList.size(); i++) {
             ctx2D.setColor(ImageSupporter.fontColor);
-            ctx2D.setFont(new Font(ImageSupporter.fontName, Font.BOLD, ImageSupporter.fontSize));
+            ctx2D.setFont(new Font(ImageSupporter.fontName, Font.PLAIN, ImageSupporter.fontSize));
             ctx2D.drawString(moodbarTitle.get(i), 10, (i * newHeight) + (newHeight - height - (fontSize / 2)));
             ctx2D.drawImage(moodbarList.get(i),0, (i * newHeight) + (newHeight - height - 2), null);
         }

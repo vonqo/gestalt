@@ -112,11 +112,10 @@ public class Spectrumizer {
             ctx.dispose();
         }
     }
-
     private Double noiseFilter(Double threshold) {
-        threshold -= 0.45;
+        threshold -= 0.65;
         if(threshold < 0) threshold = 0.0;
-        threshold *= 3.5;
+        threshold *= 6.0;
         if(threshold > 1) threshold = 1.0;
         return threshold;
     }

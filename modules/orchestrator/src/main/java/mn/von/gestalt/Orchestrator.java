@@ -38,7 +38,8 @@ public class Orchestrator {
         WHIRLWIND_2DRT,
         DRAWING_2DRT,
         CARDIAC,
-        MOOD_RAIN
+        MOOD_RAIN,
+        MEDIA_ART_2022,
     }
 
     /* ============================================================================================ */
@@ -52,9 +53,9 @@ public class Orchestrator {
             String type = audio.getExportType();
             if(type.equals(ExportTypes.VANILLA.name())) {
 
-                int fontSize = 21;
+                int fontSize = 23;
                 int moodbarWidth = 1000;
-                int moodbarHeight = 120;
+                int moodbarHeight = 170;
 
                 renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
 
@@ -82,6 +83,10 @@ public class Orchestrator {
 
                 renderRain(audio);
 
+            } else if(type.equals(ExportTypes.MEDIA_ART_2022.name())) {
+
+                renderMediaArt(audio);
+
             }
         }
     }
@@ -93,7 +98,7 @@ public class Orchestrator {
         ArrayList<String> audioFiles = audio.getAudioFile();
         ArrayList<String> displayTexts = audio.getDisplayText();
 
-        String filename = "mood";
+        String filename = audio.getAudioFile().get(0);
         String testPath = Config.RESOURCE_DIR;
         try{
             ArrayList<BufferedImage> moodbars = new ArrayList<>();
@@ -154,7 +159,10 @@ public class Orchestrator {
 
             ImageSupporter.setBackgroundColor(Color.WHITE);
             ImageSupporter.setFontColor(Color.BLACK);
-            ImageSupporter.setFontSize(32);
+            ImageSupporter.setFontSize(48);
+
+            BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
+            ImageIO.write(circle2, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection_circle."+ Config.OUTPUT_IMAGE_FORMAT));
 
             LunarTear lunarTear = new LunarTear();
 
@@ -340,14 +348,68 @@ public class Orchestrator {
                 BufferedImage img = ImageIO.read(outputFile);
                 ImageSupporter.setBackgroundColor(Color.BLACK);
                 ImageSupporter.setFontColor(Color.WHITE);
-                ImageSupporter.setFontSize(110);
+                ImageSupporter.setFontSize(28);
 
-                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 265, 190);
+                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 50, 108);
 
-                if(audio.isHasBanner()) {
-                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
-                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
-                }
+//                if(audio.isHasBanner()) {
+//                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
+//                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
+//                }
+
+                ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderMediaArt(AudioDto audio) {
+        String path = Config.RESOURCE_DIR;
+
+        for(int i = 0; i < audio.getAudioFile().size(); i++) {
+            String songname = audio.getAudioFile().get(i);
+            String pathMp3 = path + songname + ".mp3";
+            String pathWav = path + songname + ".wav";
+            double audioDuration = 0;
+
+            System.out.println(pathMp3);
+            System.out.println(pathWav);
+
+            try {
+                AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+                audioDuration = AudioUtils.getDuration(pathWav);
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+                spectrumizer.applyMoodbar(moodbar);
+                spectrumizer.build();
+
+                int ray = audio.getRay();
+                File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+                LunarTearHqz hqz = new LunarTearHqz();
+                hqz.build(LunarTearHqz.Types.MEDIA_ART, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+                BufferedImage img = ImageIO.read(outputFile);
+                ImageSupporter.setBackgroundColor(Color.BLACK);
+                ImageSupporter.setFontColor(Color.WHITE);
+                ImageSupporter.setFontSize(28);
+
+                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 50, 108);
+
+//                if(audio.isHasBanner()) {
+//                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
+//                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
+//                }
 
                 ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
             } catch (Exception e) {
