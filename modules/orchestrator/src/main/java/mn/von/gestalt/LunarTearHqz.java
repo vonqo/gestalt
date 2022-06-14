@@ -17,13 +17,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class LunarTearHqz {
 
     public enum Types {
-        TEST1,
         TORNADO,
         TORNADO_WIDE,
-        MATRIX,
-        PYRAMID,
-        TESSERACT,
-        GRAPHTREE,
         BUBBLE2,
         BUBBLE2_PRINTABLE,
         MUCHKA_BDAY_PRINTABLE,
@@ -32,6 +27,7 @@ public class LunarTearHqz {
         CARDIAC,
         BLANK,
         MEDIA_ART,
+        DRAWING,
     }
 
     public void build(Types type, ArrayList<Color> moodbar, double[][] spectrumData, long rays, File output, double audioDuration) throws IOException {
@@ -61,6 +57,8 @@ public class LunarTearHqz {
         } else if(type == Types.MEDIA_ART) {
             System.out.println("media_art");
             buildMediaArt(totalFrame-1,totalColorFrame,moodbar, spectrumData, rays, output);
+        } else if(type == Types.DRAWING) {
+            System.out.println("drawing");
         }
     }
 
@@ -728,7 +726,6 @@ public class LunarTearHqz {
 
                 pointY += marginY;
                 pointX += marginX;
-
 
                 List<MaterialExtension> ext = new ArrayList<>();
 
