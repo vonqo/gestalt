@@ -3,7 +3,7 @@
     "moodbarExecuteable": "moodbar",
     "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/home/vonqo/Desktop/mood_test/ET/",
+    "resourceDir": "/home/vonqo/Desktop/media-art/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -14,13 +14,69 @@
     "fontName": "Interstate",
     "audio": [
       {
-        "exportType": "MOOD_RAIN",
-        "audioFile": ["tsahlai"],
-        "displayText": ["tsahlai"],
+        "exportType": "VANILLA",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
         "hasBanner": false,
-        "ray": 2500000,
+        "ray": 1,
         "extraDataFile": "dafuq.json"
-      }
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 100,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 500,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 1000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 3000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 5000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 100000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 300000,
+        "extraDataFile": "dafuq.json"
+      },
     ],
     "videoExport": {
       "isVideoExport": true,
