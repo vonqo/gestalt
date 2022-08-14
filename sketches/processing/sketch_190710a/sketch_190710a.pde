@@ -19,7 +19,7 @@ enum InputType {
 
 void intializeAudio(InputType type) {
   if(type == InputType.FILE_INPUT) {
-    file = new SoundFile(this, "../../resources/audio/test.mp3");
+    file = new SoundFile(this, "/home/vonqo/Desktop/gestalt/resources/audio/test.mp3");
     println("Duration= " + file.duration() + " seconds");
     audio_duration = int(file.duration());
     fft = new FFT(this, bands);
@@ -34,7 +34,7 @@ void intializeAudio(InputType type) {
 }
 
 void initializeAssets() {
-  image_asset_1 = loadImage("../../resources/image/emil-head.jpg");
+  image_asset_1 = loadImage("/home/vonqo/Desktop/gestalt/resources/image/emil-head.jpg");
 } 
 
 void setup() {
