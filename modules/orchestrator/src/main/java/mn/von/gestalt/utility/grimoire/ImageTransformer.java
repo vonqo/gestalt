@@ -141,6 +141,21 @@ public class ImageTransformer {
         return destination;
     }
 
+    public static BufferedImage invert(BufferedImage loadImg) {
+        for (int x = 0; x < loadImg.getWidth(); x++) {
+            for (int y = 0; y < loadImg.getHeight(); y++) {
+                int rgba = loadImg.getRGB(x, y);
+                Color col = new Color(rgba, true);
+                col = new Color(255 - col.getRed(),
+                        255 - col.getGreen(),
+                        255 - col.getBlue());
+                loadImg.setRGB(x, y, col.getRGB());
+            }
+        }
+
+        return loadImg;
+    }
+
 
     public static BufferedImage tint(BufferedImage loadImg, Color COLOR, int h1) {
         for(int x = 0; x < loadImg.getWidth(); x++)
