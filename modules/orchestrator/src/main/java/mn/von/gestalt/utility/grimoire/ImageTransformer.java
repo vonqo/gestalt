@@ -53,26 +53,49 @@ public class ImageTransformer {
         return scaled;
     }
 
+    public static BufferedImage gradientTransparent(BufferedImage source) {
+        BufferedImage gradient = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D ctx = (Graphics2D) gradient.getGraphics();
+//        ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        // ctx.setComposite(AlphaComposite.Clear);
+//
+//        ctx.dispose();
+
+        for(int x = 0; x < source.getWidth(); x++) {
+            for(int y = 0; y < source.getHeight(); y++) {
+                int color = source.getRGB(x,y);
+                int alpha = (color >> 24) & 0xff;
+                gradient.setRGB(x, y, color);
+            }
+        }
+
+        return gradient;
+    }
+
     public static BufferedImage rectangularToPolarCoordinate(BufferedImage source, int OUTER_SIZE, int INNER_SIZE) {
         int r = OUTER_SIZE / 2;
         int rr = INNER_SIZE / 2;
         int circularRadius = r - rr;
-        double x, y;
-        double unitSpace = 0.0005;
-        double fullCircle = Math.PI * 4;
-        int xScalar = (int)Math.ceil((Math.PI * 3) / unitSpace);
+        int size = (int)(2 * r * Math.PI) * 3;
 
-        BufferedImage destination = new BufferedImage(OUTER_SIZE, OUTER_SIZE, BufferedImage.TYPE_INT_ARGB);
-        BufferedImage scaled = ImageTransformer.scaleImage(source, xScalar, circularRadius);
+        double theta = Math.PI;
+        double unitSpace = 2 * Math.PI / size;
 
-        int scaledX = 0;
-        for(double theta = Math.PI; theta < fullCircle; theta+= unitSpace, scaledX++) {
-            for(int e = 0; e < circularRadius; e++) {
-                x = Math.cos(theta) * (r-e) + r;
-                y = Math.sin(theta) * (r-e) + r;
-                destination.setRGB((int)x, (int)y, scaled.getRGB(scaledX, e));
+        BufferedImage destination = new BufferedImage(OUTER_SIZE+1, OUTER_SIZE+1, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage scaled = ImageTransformer.scaleImage(source, size, circularRadius);
+
+        int scaledIndex = 0;
+
+        for(int i = 0; i < size; i++, theta+=unitSpace, scaledIndex++) {
+
+            // draw line
+            for(int ii = 0; ii < circularRadius; ii++) {
+                double x = Math.cos(theta) * (r-ii) + r;
+                double y = Math.sin(theta) * (r-ii) + r;
+                destination.setRGB((int)x, (int)y, scaled.getRGB(scaledIndex, ii));
             }
         }
+
         return destination;
     }
 

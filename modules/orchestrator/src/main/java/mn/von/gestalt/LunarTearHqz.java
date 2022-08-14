@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LunarTearHqz {
 
@@ -112,7 +113,7 @@ public class LunarTearHqz {
         List<Light> lightList = new ArrayList<Light>();
         ArrayList<Integer> polarDist = new ArrayList<Integer>();
         polarDist.add(0); polarDist.add(1000);
-        int radius = 85; int padding = 540-radius;
+        int radius = 45; int padding = 540-radius;
         double unitSpace = Math.PI * 2 / moodbar.size();
         double theta = Math.PI;
         float colorPower = 0.00045f;
@@ -160,6 +161,8 @@ public class LunarTearHqz {
         materials.add(material3);
         Material material4 = HQZUtils.buildMaterial(0,0.3f,.07f);
         materials.add(material4);
+        Material material5 = HQZUtils.buildMaterial(0.2f,0.3f,.05f);
+        materials.add(material5);
         scene.setMaterials(materials);
 
         // ================ OBJECTS =============== //
@@ -171,14 +174,22 @@ public class LunarTearHqz {
         int offset = 200;
         int distance = 1080;
 
+//        Random random = new Random();
+//
 //        List<MaterialExtension> ext = new ArrayList<>();
-//        ext.add(new MaterialExtension(0, 143));
-//        ext.add(new MaterialExtension(0, 164));
-//        ext.add(new MaterialExtension(0, 122));
-//        ext.add(new MaterialExtension(0, 139));
-//        ext.add(new MaterialExtension(0, 168));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
+//        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
 
-        objects.addAll(HQZUtils.buildRegularSquare(4, 1080 / 2, 1080 / 2, 410));
+        // objects.addAll(HQZUtils.buildCircle(5, 1080 / 2, 1080 / 2, 160));
+        objects.addAll(HQZUtils.buildRegularHexagon(5, 1080 / 2, 1080 / 2, 130));
+        objects.addAll(HQZUtils.buildRegularPentagon(5, 1080 / 2, 1080 / 2, 250));
+        objects.addAll(HQZUtils.buildRegularSquare(5, 1080 / 2, 1080 / 2, 400));
+        objects.addAll(HQZUtils.buildRegularTriangle(5, 1080 / 2, 1080 / 2, 500));
 //        objects.add(HQZUtils.buildObject(4,0,offset,720,distance,0,360));
 //        objects.add(HQZUtils.buildObject(4,offset,0,180,0,distance,180));
 //        objects.add(HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270));

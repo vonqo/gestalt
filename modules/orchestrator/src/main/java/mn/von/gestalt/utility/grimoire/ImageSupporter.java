@@ -73,7 +73,7 @@ public class ImageSupporter {
         System.out.println(rate);
     }
 
-    public static BufferedImage addTitle (BufferedImage image, String title) {
+    public static BufferedImage addTitle(BufferedImage image, String title) {
         BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight() + fontSize+50, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx2D = canvas.createGraphics();
         ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
