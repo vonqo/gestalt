@@ -73,7 +73,7 @@ public class ImageSupporter {
         System.out.println(rate);
     }
 
-    public static BufferedImage addTitle (BufferedImage image, String title) {
+    public static BufferedImage addTitle(BufferedImage image, String title) {
         BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight() + fontSize+50, BufferedImage.TYPE_INT_ARGB);
         Graphics2D ctx2D = canvas.createGraphics();
         ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -108,10 +108,11 @@ public class ImageSupporter {
         ctx2D.setColor(ImageSupporter.fontColor);
         ctx2D.drawImage(image, 0 , 0, null);
         ctx2D.drawImage(mark, paddingLeft, paddingTop, null);
+        ctx2D.dispose();
         return canvas;
     }
 
-    public static BufferedImage addMark(BufferedImage image, String text, int topPadding) throws IOException {
+    public static BufferedImage addMark(BufferedImage image, int topPadding) throws IOException {
         BufferedImage canvas = new BufferedImage(image.getWidth(), image.getHeight()+50+topPadding, BufferedImage.TYPE_INT_ARGB);
         BufferedImage logo = ImageIO.read(new File("logo_smoll.png"));
         Graphics2D ctx2D = canvas.createGraphics();
@@ -121,17 +122,11 @@ public class ImageSupporter {
         ctx2D.drawImage(image, 0 , 0, null);
         ctx2D.drawImage(logo, 0 , image.getHeight()+topPadding, null);
 
-        ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
-        ctx2D.setColor(ImageSupporter.fontColor);
-        ctx2D.drawString(text, 410, image.getHeight()+35+topPadding);
+//        ctx2D.setFont(new Font(fontName, Font.PLAIN, fontSize));
+//        ctx2D.setColor(ImageSupporter.fontColor);
+//        ctx2D.drawString(text, 410, image.getHeight()+35+topPadding);
+        ctx2D.dispose();
         return canvas;
-    }
-
-    private static BufferedImage addFootermark(BufferedImage image, String text) throws IOException {
-        ImageSupporter.setFontSize(28);
-        ImageSupporter.setFontColor(Color.black);
-        ImageSupporter.setFontName("Ubuntu");
-        return ImageSupporter.addMark(image, text, 0);
     }
 
     public static BufferedImage fillBlack(int width, int height) {
