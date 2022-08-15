@@ -18,7 +18,9 @@ import mn.von.gestalt.zenphoton.dto.ZObject;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.*;
 
 import java.util.ArrayList;
@@ -108,7 +110,8 @@ public class Orchestrator {
                 moodbars.add(scaledImage);
             }
 
-            ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
+            // ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
+            ImageSupporter.setBackgroundColor(new Color(255,255,255, 255));
             ImageSupporter.setFontColor(Color.BLACK);
             ImageSupporter.setFontSize(fontSize);
             BufferedImage image = new LunarTear().vanilla4Bar(moodbars, displayTexts, height, width, fontSize);
@@ -142,46 +145,98 @@ public class Orchestrator {
 
         try {
             ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
-            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            // Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
 
+//            // idk
+//            int len = spectrumizer.getDATA().length;
+//            double[] data = new double[len];
+//            System.out.println(len);
+//
+//            for(int i = 0; i < len; i++) {
+//                double sum = 0;
+//                for(int e = 0; e < spectrumizer.getDATA()[i].length; e++) {
+//                    sum += spectrumizer.getDATA()[i][e];
+//                }
+//                data[i] = sum;
+//            }
 
+            final int innerCircleSize = 700;
+            final int outerCircleSize = 2000;
 
-            // idk
-            int len = spectrumizer.getDATA().length;
-            double[] data = new double[len];
-            System.out.println(len);
+            ArrayList<Color> colors1 = MoodbarAdapter.groupColor(moodbar, 75);
+            ArrayList<Color> colors2 = MoodbarAdapter.groupColor(moodbar, 25);
+            BufferedImage moodbarGradient1 = MoodbarAdapter.toBufferedImage(colors1, 700, 5000);
+            BufferedImage moodbarGradient2 = MoodbarAdapter.toBufferedImage(colors2, 700, 5000);
 
-            for(int i = 0; i < len; i++) {
-                double sum = 0;
-                for(int e = 0; e < spectrumizer.getDATA()[i].length; e++) {
-                    sum += spectrumizer.getDATA()[i][e];
-                }
-                data[i] = sum;
-            }
+            // ======================================================= //
+            BufferedImage moodbarTransparent1 = ImageTransformer.gradientTransparentVertical(
+                    moodbarGradient1,
+                    0.0f,
+                    1.0f,
+                    ImageTransformer.EASING.Cubic
+            );
+            BufferedImage layer1 = ImageTransformer.rectangularToPolarCoordinate(
+                    moodbarTransparent1,
+                    innerCircleSize + (int)((outerCircleSize - innerCircleSize) * 0.13f),
+                    innerCircleSize
+            );
+            RescaleOp rescaleOp = new RescaleOp(1.9f, 10, null);
+            rescaleOp.filter(layer1, layer1);
+
+            // ======================================================= //
+            BufferedImage moodbarTransparent2 = ImageTransformer.gradientTransparentVertical(
+                    moodbarGradient2,
+                    0.0f,
+                    1.0f,
+                    ImageTransformer.EASING.Sine
+            );
+            BufferedImage layer2 = ImageTransformer.rectangularToPolarCoordinate(
+                    moodbarTransparent2,
+                    outerCircleSize,
+                    innerCircleSize
+            );
+            rescaleOp = new RescaleOp(1.5f, 0, null);
+            rescaleOp.filter(layer2, layer2);
+            // ======================================================= //
+
+            System.out.println("layer1:[" + layer1.getHeight() +"]["+ layer1.getWidth() + "]");
+            System.out.println("layer2:[" + layer2.getHeight() +"]["+ layer2.getWidth() + "]");
 
             // gg
-            BufferedImage image = new BufferedImage(2400, 3600, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage image = new BufferedImage((int)(outerCircleSize * 1.05), (int)(outerCircleSize * 1.2), BufferedImage.TYPE_INT_ARGB);
             Graphics2D ctx = (Graphics2D) image.getGraphics();
-            // ctx.setColor(new Color(0,0,0,255));
-            // ctx.fillRect(0, 0, image.getWidth(), image.getHeight());
-            // ctx.setComposite(AlphaComposite.Clear);
             ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            ctx.dispose();;
+            // ctx.setComposite(AlphaComposite.Clear);
+            ctx.setPaint (new Color(232, 232, 232));
+            ctx.fillRect(0,0,image.getWidth(),image.getHeight());
+            ctx.setComposite(AlphaComposite.SrcOver);
 
-            ArrayList<Color> colors = MoodbarAdapter.groupColor(moodbar, 50);
-            BufferedImage moodbarGradient = MoodbarAdapter.toBufferedImage(colors, 700, 5000);
-            BufferedImage moodbarTransparent = ImageTransformer.gradientTransparent(moodbarGradient);
+            int centerX = image.getWidth() / 2;
+            int centerY = image.getHeight() / 2;
 
-            BufferedImage eclipse = ImageTransformer.rectangularToPolarCoordinate(
-                moodbarTransparent,
-                2000,1000
+            ctx.drawImage(layer2, centerX - layer2.getWidth()/2, centerY - layer2.getHeight()/2, null);
+            ctx.drawImage(layer1, centerX - layer1.getWidth()/2, centerY - layer1.getHeight()/2, null);
+
+            Ellipse2D.Double circle = new Ellipse2D.Double(
+                    centerX - innerCircleSize/2 - 4,
+                    centerY - innerCircleSize/2 - 4,
+                    innerCircleSize + 8,
+                    innerCircleSize + 8
             );
+            ctx.setColor(Color.BLACK);
+            ctx.fill(circle);
+            ctx.dispose();
 
-            ImageIO.write(moodbarGradient, Config.OUTPUT_IMAGE_FORMAT,
-                new File(testPath+"/"+sogname+"_test."+ Config.OUTPUT_IMAGE_FORMAT)
+            ImageSupporter.setFontColor(Color.BLACK);
+            ImageSupporter.setFontSize(72);
+            image = ImageSupporter.addTitleOver(image, displayText, 100, 70);
+            // image = ImageSupporter.addMark(image, 50);
+
+            ImageIO.write(layer1, Config.OUTPUT_IMAGE_FORMAT,
+                new File(testPath+"/"+sogname+"_1."+ Config.OUTPUT_IMAGE_FORMAT)
             );
-            ImageIO.write(eclipse, Config.OUTPUT_IMAGE_FORMAT,
-                new File(testPath+"/"+sogname+"_circle."+ Config.OUTPUT_IMAGE_FORMAT)
+            ImageIO.write(layer2, Config.OUTPUT_IMAGE_FORMAT,
+                new File(testPath+"/"+sogname+"_2."+ Config.OUTPUT_IMAGE_FORMAT)
             );
             ImageIO.write(image, Config.OUTPUT_IMAGE_FORMAT,
                     new File(testPath+"/"+sogname+"_final."+ Config.OUTPUT_IMAGE_FORMAT)

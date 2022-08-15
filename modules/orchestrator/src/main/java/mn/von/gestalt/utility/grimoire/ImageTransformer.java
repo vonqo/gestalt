@@ -2,6 +2,7 @@ package mn.von.gestalt.utility.grimoire;
 
 import com.google.zxing.common.BitMatrix;
 import mn.von.gestalt.moodbar.MoodbarAdapter;
+import mn.von.gestalt.utility.easing.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -32,6 +34,19 @@ import static java.lang.StrictMath.sin;
  **/
 
 public class ImageTransformer {
+
+    public enum EASING {
+        Circ,
+        Cubic,
+        Linear,
+        Quad,
+        Quart,
+        Quint,
+        Sine,
+        Expo,
+        Bounce,
+        Back
+    }
 
     public static BufferedImage scaleImage(BufferedImage source, double scaleFactor) {
         int width = (int) (source.getWidth() * scaleFactor);
@@ -53,19 +68,63 @@ public class ImageTransformer {
         return scaled;
     }
 
-    public static BufferedImage gradientTransparent(BufferedImage source) {
+    public static BufferedImage gradientTransparentVertical(BufferedImage source, float start, float end, EASING easingMode) {
+        if(start <= 0.0 && start >= 1.0 && end <= 0.0 && end >= 1.0)
+            throw new InvalidParameterException("start, end range between 0.0 to 1.0");
+
         BufferedImage gradient = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 //        Graphics2D ctx = (Graphics2D) gradient.getGraphics();
 //        ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 //        // ctx.setComposite(AlphaComposite.Clear);
 //
 //        ctx.dispose();
+        int startPos = (int)(source.getHeight() - source.getHeight() * start);
+        int endPos = (int)(source.getHeight() - source.getHeight() * end);
 
         for(int x = 0; x < source.getWidth(); x++) {
             for(int y = 0; y < source.getHeight(); y++) {
                 int color = source.getRGB(x,y);
-                int alpha = (color >> 24) & 0xff;
-                gradient.setRGB(x, y, color);
+                if(y <= startPos && y >= endPos) {
+                    float alphaValue = 0;
+                    switch (easingMode) {
+                        case Linear:
+                            alphaValue = EasingLinear.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Circ:
+                            alphaValue = EasingCirc.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Cubic:
+                            alphaValue = EasingCubic.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Quad:
+                            alphaValue = EasingQuad.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Quart:
+                            alphaValue = EasingQuart.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Quint:
+                            alphaValue = EasingQuint.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Expo:
+                            alphaValue = EasingExpo.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Sine:
+                            alphaValue = EasingSine.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Bounce:
+                            alphaValue = EasingBounce.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                        case Back:
+                            alphaValue = EasingBack.easeIn(y-endPos,0,255,startPos-endPos);
+                            break;
+                    }
+                    int alpha = Math.round(alphaValue);
+                    int mc = (alpha << 24) | 0x00ffffff;
+                    int newColor = color & mc;
+                    gradient.setRGB(x, y, newColor);
+                } else {
+                    gradient.setRGB(x, y, color);
+                }
             }
         }
 
