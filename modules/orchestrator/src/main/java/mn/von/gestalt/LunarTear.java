@@ -41,6 +41,21 @@ public class LunarTear {
         return canvas;
     }
 
+    public BufferedImage moodbarRain(BufferedImage spectogramColorful, BufferedImage moodbar) {
+        BufferedImage canvas = new BufferedImage(1000, 1300, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D ctx2D = canvas.createGraphics();
+
+        // ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        moodbar = ImageTransformer.scaleImage(moodbar, 1000, 75);
+        ctx2D.drawImage(moodbar, -1, 0, null);
+
+        spectogramColorful = ImageTransformer.scaleImage(spectogramColorful, 1000, 500);
+        ctx2D.drawImage(spectogramColorful, 0, 75, null);
+
+        return canvas;
+    }
+
     public BufferedImage wirldwind(BufferedImage moodbar, BufferedImage spectrum, BufferedImage tornadoHqz) {
         int spectrumHeight = (int) Math.round(spectrum.getHeight() * 0.5);
         BufferedImage canvas = new BufferedImage(

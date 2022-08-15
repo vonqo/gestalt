@@ -1,9 +1,9 @@
 {
   "system": {
     "moodbarExecuteable": "moodbar",
-    "hqzExecutable": "/Users/von/gestalt/modules/zenphoton/hqz/hqz",
+    "hqzExecutable": "/home/vonqo/Desktop/gestalt/modules/zenphoton/hqz/hqz",
     "ffmpegExecutable": "ffmpeg",
-    "resourceDir": "/Users/von/Desktop/mood_test/REQUEST/",
+    "resourceDir": "/home/vonqo/Desktop/media-art/",
     "neuralStyle": {
       "executable": "/home/vonqo/Desktop/neural-style/neural-style.lua",
       "styleDir": "/home/vonqo/Desktop/style_img/",
@@ -14,18 +14,75 @@
     "fontName": "Interstate",
     "audio": [
       {
-        "exportType": "BUBBLE_BAR_2DRT",
-        "audioFile": ["alive2"],
-        "displayText": ["Portal - Still Alive (Portal OST)"],
-        "hasBanner": true,
-        "ray": 200000,
+        "exportType": "VANILLA",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 1,
         "extraDataFile": "dafuq.json"
-      }
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 100,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 500,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 1000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 3000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 5000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 100000,
+        "extraDataFile": "dafuq.json"
+      },
+      {
+        "exportType": "MEDIA_ART_2022",
+        "audioFile": ["sound1"],
+        "displayText": ["Nx - sound1"],
+        "hasBanner": false,
+        "ray": 300000,
+        "extraDataFile": "dafuq.json"
+      },
     ],
     "videoExport": {
-      "isVideoExport": false,
+      "isVideoExport": true,
+      "fps": 24,
       "usableCore": 1,
-      "startFrame": 0,
+      "startFrame": 5975,
       "endFrame": 0
     }
   }

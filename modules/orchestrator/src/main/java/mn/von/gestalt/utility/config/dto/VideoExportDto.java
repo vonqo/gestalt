@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class VideoExportDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private int fps;
     private boolean isVideoExport;
     private int usableCore;
     private int startFrame;
@@ -12,6 +13,14 @@ public class VideoExportDto implements Serializable {
 
     public boolean isVideoExport() {
         return isVideoExport;
+    }
+
+    public int getFps() {
+        return fps;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
     }
 
     public void setVideoExport(boolean videoExport) {
