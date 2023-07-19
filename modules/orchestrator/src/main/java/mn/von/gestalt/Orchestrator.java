@@ -44,6 +44,8 @@ public class Orchestrator {
         WHIRLWIND_2DRT,
         DRAWING_2DRT,
         CARDIAC,
+        BUBBLE_BAR_2DRT_COVER,
+        WATERFALL
     }
 
     /* ============================================================================================ */
@@ -57,9 +59,9 @@ public class Orchestrator {
             String type = audio.getExportType();
             if(type.equals(ExportTypes.VANILLA.name())) {
 
-                int fontSize = 28;
+                int fontSize = 32;
                 int moodbarWidth = 1000;
-                int moodbarHeight = 170;
+                int moodbarHeight = 110;
 
                 renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
 
@@ -87,6 +89,14 @@ public class Orchestrator {
 
                 renderEclipse(audio);
 
+            } else if(type.equals(ExportTypes.BUBBLE_BAR_2DRT_COVER.name())) {
+
+                renderBubbleBarZenphotonCover(audio);
+
+            } else if(type.equals(ExportTypes.WATERFALL.name())) {
+
+                renderWaterfall(audio);
+
             }
         }
     }
@@ -110,9 +120,9 @@ public class Orchestrator {
                 moodbars.add(scaledImage);
             }
 
-            // ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
-            ImageSupporter.setBackgroundColor(new Color(255,255,255, 255));
-            ImageSupporter.setFontColor(Color.BLACK);
+            // ImageSupporter.setBackgroundColor(new Color(16, 21, 25, 255));
+            ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
+            ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(fontSize);
             BufferedImage image = new LunarTear().vanilla4Bar(moodbars, displayTexts, height, width, fontSize);
 
@@ -160,40 +170,40 @@ public class Orchestrator {
 //                data[i] = sum;
 //            }
 
-            final int innerCircleSize = 700;
+            final int innerCircleSize = 1500;
             final int outerCircleSize = 2000;
 
             ArrayList<Color> colors1 = MoodbarAdapter.groupColor(moodbar, 75);
-            ArrayList<Color> colors2 = MoodbarAdapter.groupColor(moodbar, 25);
+            ArrayList<Color> colors2 = MoodbarAdapter.groupColor(moodbar, 45);
             BufferedImage moodbarGradient1 = MoodbarAdapter.toBufferedImage(colors1, 700, 5000);
             BufferedImage moodbarGradient2 = MoodbarAdapter.toBufferedImage(colors2, 700, 5000);
 
             // ======================================================= //
             BufferedImage moodbarTransparent1 = ImageTransformer.gradientTransparentVertical(
-                    moodbarGradient1,
-                    0.0f,
-                    1.0f,
-                    ImageTransformer.EASING.Cubic
+                moodbarGradient1,
+                0.0f,
+                1.0f,
+                ImageTransformer.EASING.Cubic
             );
             BufferedImage layer1 = ImageTransformer.rectangularToPolarCoordinate(
-                    moodbarTransparent1,
-                    innerCircleSize + (int)((outerCircleSize - innerCircleSize) * 0.13f),
-                    innerCircleSize
+                moodbarTransparent1,
+                innerCircleSize + (int)((outerCircleSize - innerCircleSize) * 0.13f),
+                innerCircleSize
             );
             RescaleOp rescaleOp = new RescaleOp(1.9f, 10, null);
             rescaleOp.filter(layer1, layer1);
 
             // ======================================================= //
             BufferedImage moodbarTransparent2 = ImageTransformer.gradientTransparentVertical(
-                    moodbarGradient2,
-                    0.0f,
-                    1.0f,
-                    ImageTransformer.EASING.Sine
+                moodbarGradient2,
+                0.0f,
+                1.0f,
+                ImageTransformer.EASING.Sine
             );
             BufferedImage layer2 = ImageTransformer.rectangularToPolarCoordinate(
-                    moodbarTransparent2,
-                    outerCircleSize,
-                    innerCircleSize
+                moodbarTransparent2,
+                outerCircleSize,
+                innerCircleSize
             );
             rescaleOp = new RescaleOp(1.5f, 0, null);
             rescaleOp.filter(layer2, layer2);
@@ -207,7 +217,8 @@ public class Orchestrator {
             Graphics2D ctx = (Graphics2D) image.getGraphics();
             ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             // ctx.setComposite(AlphaComposite.Clear);
-            ctx.setPaint (new Color(232, 232, 232));
+            // ctx.setPaint(new Color(232, 232, 232));
+            ctx.setPaint(Color.BLACK);
             ctx.fillRect(0,0,image.getWidth(),image.getHeight());
             ctx.setComposite(AlphaComposite.SrcOver);
 
@@ -227,17 +238,17 @@ public class Orchestrator {
             ctx.fill(circle);
             ctx.dispose();
 
-            ImageSupporter.setFontColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(72);
             image = ImageSupporter.addTitleOver(image, displayText, 100, 70);
             // image = ImageSupporter.addMark(image, 50);
 
-            ImageIO.write(layer1, Config.OUTPUT_IMAGE_FORMAT,
-                new File(testPath+"/"+sogname+"_1."+ Config.OUTPUT_IMAGE_FORMAT)
-            );
-            ImageIO.write(layer2, Config.OUTPUT_IMAGE_FORMAT,
-                new File(testPath+"/"+sogname+"_2."+ Config.OUTPUT_IMAGE_FORMAT)
-            );
+//            ImageIO.write(layer1, Config.OUTPUT_IMAGE_FORMAT,
+//                new File(testPath+"/"+sogname+"_1."+ Config.OUTPUT_IMAGE_FORMAT)
+//            );
+//            ImageIO.write(layer2, Config.OUTPUT_IMAGE_FORMAT,
+//                new File(testPath+"/"+sogname+"_2."+ Config.OUTPUT_IMAGE_FORMAT)
+//            );
             ImageIO.write(image, Config.OUTPUT_IMAGE_FORMAT,
                     new File(testPath+"/"+sogname+"_final."+ Config.OUTPUT_IMAGE_FORMAT)
             );
@@ -330,33 +341,30 @@ public class Orchestrator {
 
     /* ============================================================================================ */
     /* ============================================================================================ */
-    private static  void renderNoise() {
-        String songname = "1982";
-        String displayText = "\"Улаан Бүч\" Чуулга - Угтагчийн Дуу (1982)";
-        String pathMp3 = Config.RESOURCE_DIR+songname+".mp3";
-        String pathWav = Config.RESOURCE_DIR+songname+".wav";
-        double audioDuration = 0;
-
+    private static void renderWaterfall(AudioDto audio) {
+        String sogname = audio.getAudioFile().get(0);
+        String displayText = audio.getDisplayText().get(0);
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+sogname+".mp3";
+        String pathWav = testPath+sogname+".wav";
         try {
             AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-            audioDuration = AudioUtils.getDuration(pathWav);
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(Config.RESOURCE_DIR+songname+".mp3",Config.RESOURCE_DIR+"/bar");
-            BufferedImage image = NoiseGenerator.testNoise(moodbar);
-            BufferedImage outputImage = ImageTransformer.scaleImage(image, 1500, 1500);
-            ImageIO.write(
-                outputImage, Config.OUTPUT_IMAGE_FORMAT,
-                new File(Config.RESOURCE_DIR+"/noise_test."+ Config.OUTPUT_IMAGE_FORMAT)
-            );
-        } catch (Exception ex) {
+        } catch (UnsupportedAudioFileException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
+
+        Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4);
+        double[][] data = spectrumizer.getDATA();
+        double max = 0;
+        for(int i = 0; i < data.length; i++) {
+            if(data[i][0] > max) {
+                max = data[i][0];
+            }
+        }
+        System.out.println(max);
+
     }
 
     /* ============================================================================================ */
@@ -451,8 +459,66 @@ public class Orchestrator {
 
                 if(audio.isHasBanner()) {
                     BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
-                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 4290);
+                    bannerImg = ImageTransformer.scaleImage(bannerImg, 0.6);
+                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight() - 50, 5906 - bannerImg.getWidth() - 100);
                 }
+
+                ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderBubbleBarZenphotonCover(AudioDto audio) {
+        String path = Config.RESOURCE_DIR;
+
+        for(int i = 0; i < audio.getAudioFile().size(); i++) {
+            String songname = audio.getAudioFile().get(i);
+            String pathMp3 = path + songname + ".mp3";
+            String pathWav = path + songname + ".wav";
+            double audioDuration = 0;
+
+            System.out.println(pathMp3);
+            System.out.println(pathWav);
+
+            try {
+                AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+                audioDuration = AudioUtils.getDuration(pathWav);
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+                spectrumizer.applyMoodbar(moodbar);
+                spectrumizer.build();
+
+                int ray = audio.getRay();
+                File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+                LunarTearHqz hqz = new LunarTearHqz();
+                hqz.build(LunarTearHqz.Types.BUBBLE2_COVER, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+                BufferedImage img = ImageIO.read(outputFile);
+                ImageSupporter.setBackgroundColor(Color.BLACK);
+                ImageSupporter.setFontColor(new Color(255,255,255,200));
+                ImageSupporter.setFontSize(54);
+//                img = ImageSupporter.addTitleOver(img, "Mood & Music month September '22", 100, 14);
+//                ImageSupporter.setFontSize(30);
+//                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i) + "   //   ColorNoteCode visual", 790, 14);
+
+
+//                if(audio.isHasBanner()) {
+//                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
+//                    bannerImg = ImageTransformer.scaleImage(bannerImg, 0.3);
+//                    // img = ImageSupporter.addMarkOver(img, bannerImg, 1640 - bannerImg.getHeight(), 720);
+//                    img = ImageSupporter.addMarkOver(img, bannerImg, 500 - bannerImg.getHeight(), 720);
+//                }
 
                 ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
             } catch (Exception e) {

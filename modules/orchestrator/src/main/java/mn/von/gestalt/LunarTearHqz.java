@@ -26,6 +26,7 @@ public class LunarTearHqz {
         GRAPHTREE,
         BUBBLE2,
         BUBBLE2_PRINTABLE,
+        BUBBLE2_COVER,
         MUCHKA_BDAY_PRINTABLE,
         PHOTON_CUBE,
         PULSE,
@@ -57,6 +58,9 @@ public class LunarTearHqz {
         } else if(type == Types.PHOTON_CUBE) {
             System.out.println("photon_cube");
             buildPhotonCube(totalFrame-1,totalColorFrame, moodbar, spectrumData, rays, output);
+        } else if(type == Types.BUBBLE2_COVER) {
+            System.out.println("bubble2_cover");
+            buildBubble2Cover(totalFrame-1,totalColorFrame, moodbar, spectrumData, rays, output);
         }
     }
 
@@ -186,10 +190,25 @@ public class LunarTearHqz {
 //        ext.add(new MaterialExtension(random.nextInt(360)-90, random.nextInt(360)-90));
 
         // objects.addAll(HQZUtils.buildCircle(5, 1080 / 2, 1080 / 2, 160));
-        objects.addAll(HQZUtils.buildRegularHexagon(5, 1080 / 2, 1080 / 2, 130));
-        objects.addAll(HQZUtils.buildRegularPentagon(5, 1080 / 2, 1080 / 2, 250));
-        objects.addAll(HQZUtils.buildRegularSquare(5, 1080 / 2, 1080 / 2, 400));
-        objects.addAll(HQZUtils.buildRegularTriangle(5, 1080 / 2, 1080 / 2, 500));
+        objects.addAll(HQZUtils.buildRegularHexagon(5, 1080 / 2, 1080 / 2, 480));
+
+        /// ==================== >IDK<
+        int cardiacSize = 8;
+        int extensionSize = 60;
+        List<MaterialExtension> ext = new ArrayList<>();
+        for(int i = 0; i < extensionSize+1; i++) {
+            ext.add(new MaterialExtension(DataUtils.getRandomNumberInRange(-90, 90), DataUtils.getRandomNumberInRange(-90, 90)));
+        }
+
+        objects.addAll(HQZUtils.buildCardiac(2, extensionSize, (1080 / 2),(1080 / 2), cardiacSize, ext));
+
+        cardiacSize = 20;
+        extensionSize = 110;
+        ext = new ArrayList<>();
+        for(int i = 0; i < extensionSize+1; i++) {
+            ext.add(new MaterialExtension(DataUtils.getRandomNumberInRange(-90, 90), DataUtils.getRandomNumberInRange(-90, 90)));
+        }
+        objects.addAll(HQZUtils.buildCardiac(2, extensionSize, (1080 / 2),(1080 / 2), cardiacSize, ext));
 //        objects.add(HQZUtils.buildObject(4,0,offset,720,distance,0,360));
 //        objects.add(HQZUtils.buildObject(4,offset,0,180,0,distance,180));
 //        objects.add(HQZUtils.buildObject(4,1080-offset,0,480,0,distance,270));
@@ -523,6 +542,100 @@ public class LunarTearHqz {
 
         for(int y = 1, i = 0; y <= 37 && i <= completedColors; y++) {
             for(int x = 1; x <= 27 && i <= completedColors; x++, i++) {
+
+                int pointY = y * ((radius+padding) * 2) - radius;
+                int pointX = x * ((radius+padding) * 2) - radius;
+
+                pointY += marginY;
+                pointX += marginX;
+
+                objects.addAll(HQZUtils.buildCircle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
+
+                Light lightRed = new Light();
+                Light lightGreen = new Light();
+                Light lightBlue = new Light();
+                MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+                if(i == completedColors && inProgressColor != 0) {
+                    float power =  colorPower * inProgressColor;
+                    HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, pointX, pointY, power);
+                } else {
+                    HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, pointX, pointY, colorPower);
+                }
+
+                lightList.add(lightRed);
+                lightList.add(lightGreen);
+                lightList.add(lightBlue);
+            }
+        }
+        scene.setLights(lightList);
+        scene.setMaterials(materials);
+        scene.setObjects(objects);
+        HQZAdapter adapter = new HQZAdapter();
+        adapter.buildPhoton(scene, output);
+        long endTime = System.currentTimeMillis();
+        long timeElapsed = endTime - startTime;
+        System.out.println("frame "+frameIndex+" in milliseconds: " + timeElapsed);
+    }
+
+    /**
+     * Printable size:B2 quality:300dpi
+     * @param frameIndex
+     * @param totalColorFrame
+     * @param moodbar
+     * @param spectrumData
+     * @param rays
+     * @param output
+     * @throws IOException
+     */
+    private void buildBubble2Cover(int frameIndex, float totalColorFrame, ArrayList<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
+        long startTime = System.currentTimeMillis();
+        float frame = frameIndex / totalColorFrame;
+        int completedColors = (int)frame;
+        float inProgressColor = frame - completedColors;
+
+        int screenWidth = 1640;
+        int screenHeight = 856;
+
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.3f, 1.0f);
+
+        // ================ MATERIALS =============== //
+        List<Material> materials = new ArrayList<Material>();
+        materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
+//        Material material1 = HQZUtils.buildMaterial(0.0f,0.1f,0.9f);
+        Material material1 = HQZUtils.buildMaterial(0.1f,0.8f,0.002f);
+        materials.add(material1);
+
+        // ================ OBJECTS =============== // // ================ LIGHTS =============== //
+        List<ZObject> objects = new ArrayList<ZObject>();
+        objects.add(HQZUtils.buildObject(0,0,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
+
+        int padding = 2;
+        int baseRadius = 4;
+        int dynamicRadius = 10;
+        int radius = baseRadius + dynamicRadius;
+        ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectrumData, moodbar.size());
+
+        List<Light> lightList = new ArrayList<Light>();
+        ArrayList<Integer> polarDist = new ArrayList<Integer>();
+        polarDist.add(2); polarDist.add(35);
+
+        ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+        polarAngle.add(0); polarAngle.add(360);
+
+        ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+        rayAngle.add(0); rayAngle.add(360);
+
+        int marginY = 110;
+        int marginX = 10;
+
+        float colorPower = 0.00070f;
+
+        for(int y = 1, i = 0; y <= 20 && i <= completedColors; y++) {
+            for(int x = 1; x <= 50 && i <= completedColors; x++, i++) {
 
                 int pointY = y * ((radius+padding) * 2) - radius;
                 int pointX = x * ((radius+padding) * 2) - radius;
