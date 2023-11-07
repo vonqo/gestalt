@@ -1,7 +1,5 @@
 # <img height="42px" src="https://github.com/punkowl/gestalt/blob/master/public/cnc-logo.png" />
 
-
-[![Gitter][gitter-badge]][gitter]
 [![Shitcoded][ulaanbaatar-badge]][ub-wiki]
 
 Definition of **gestalt**: "*something that is made of many parts and yet is somehow more than or different from the combination of its parts*"
