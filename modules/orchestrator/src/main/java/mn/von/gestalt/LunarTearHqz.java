@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LunarTearHqz {
 
@@ -486,8 +487,8 @@ public class LunarTearHqz {
         int completedColors = (int)frame;
         float inProgressColor = frame - completedColors;
 
-        int screenWidth = 1920;
-        int screenHeight = 1080;
+        int screenWidth = 5906;
+        int screenHeight = 8350;
 
         Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.3f, 1.0f);
 
@@ -505,9 +506,9 @@ public class LunarTearHqz {
         objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
         objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
 
-        int padding = 2;
-        int baseRadius = 5;
-        int dynamicRadius = 14;
+        int padding = 14;
+        int baseRadius = 25;
+        int dynamicRadius = 65;
         int radius = baseRadius + dynamicRadius;
         ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectrumData, moodbar.size());
 
@@ -521,13 +522,13 @@ public class LunarTearHqz {
         ArrayList<Integer> rayAngle = new ArrayList<Integer>();
         rayAngle.add(0); rayAngle.add(360);
 
-        int marginY = 20;
-        int marginX = 100;
+        int marginY = 350;
+        int marginX = 150;
 
         float colorPower = 0.00050f;
 
-        for(int y = 1, i = 0; y <= 25 && i <= completedColors; y++) {
-            for(int x = 1; x <= 40 && i <= completedColors; x++, i++) {
+        for(int y = 1, i = 0; y <= 37 && i <= completedColors; y++) {
+            for(int x = 1; x <= 27 && i <= completedColors; x++, i++) {
 
                 int pointY = y * ((radius+padding) * 2) - radius;
                 int pointX = x * ((radius+padding) * 2) - radius;
@@ -535,18 +536,7 @@ public class LunarTearHqz {
                 pointY += marginY;
                 pointX += marginX;
 
-                int randomNum = ThreadLocalRandom.current().nextInt(1, 4 + 1);
-
-                if(randomNum == 1) {
-                    objects.addAll(HQZUtils.buildCircle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
-                } else if(randomNum == 2) {
-                    objects.addAll(HQZUtils.buildRegularPentagon(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
-                } else if(randomNum == 3) {
-                    objects.addAll(HQZUtils.buildRegularTriangle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
-                } else if(randomNum == 4) {
-                    objects.addAll(HQZUtils.buildRegularSquare(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
-                }
-
+                objects.addAll(HQZUtils.buildCircle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
 
                 Light lightRed = new Light();
                 Light lightGreen = new Light();

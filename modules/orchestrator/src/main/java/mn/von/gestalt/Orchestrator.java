@@ -66,9 +66,9 @@ public class Orchestrator {
                 String type = audio.getExportType();
                 if(type.equals(ExportTypes.VANILLA.name())) {
 
-                int fontSize = 28;
-                int moodbarWidth = 1000;
-                int moodbarHeight = 170;
+                    int fontSize = 28;
+                    int moodbarWidth = 1000;
+                    int moodbarHeight = 170;
 
                     renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
 
@@ -94,10 +94,12 @@ public class Orchestrator {
                   
                 } else if(type.equals(ExportTypes.MOOD_RAIN.name())) {
 
-            } else if(type.equals(ExportTypes.ECLIPSE.name())) {
+                    renderRain(audio);
 
-                renderEclipse(audio);
+                } else if(type.equals(ExportTypes.ECLIPSE.name())) {
 
+                    renderEclipse(audio);
+                }
             }
         }
     }
@@ -106,7 +108,6 @@ public class Orchestrator {
     /* ============================================================================================ */
     /* ============================================================================================ */
     private static void renderVanillaMoodbars(AudioDto audio, int fontSize, int height, int width) {
-
         ArrayList<String> audioFiles = audio.getAudioFile();
         ArrayList<String> displayTexts = audio.getDisplayText();
         String filename = audio.getAudioFile().get(0) + "_" + audio.getAudioFile().size();
@@ -123,9 +124,11 @@ public class Orchestrator {
             }
 
             // ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
-            ImageSupporter.setBackgroundColor(new Color(255,255,255, 255));
-            ImageSupporter.setFontColor(Color.BLACK);
+            ImageSupporter.setBackgroundColor(new Color(0,0,0, 255));
+            ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(fontSize);
+            ImageSupporter.setFontName("JetBrains Mono");
+
             BufferedImage image = new LunarTear().vanilla4Bar(moodbars, displayTexts, height, width, fontSize);
 
             ImageIO.write(
@@ -303,7 +306,7 @@ public class Orchestrator {
             ImageIO.write(circle2, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection_circle."+ Config.OUTPUT_IMAGE_FORMAT));
 
             // circle = ImageTransformer.invert(circle);
-            BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
+            // BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
             ImageTransformer.invert(circle2);
             ImageIO.write(circle2, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_circle."+ Config.OUTPUT_IMAGE_FORMAT));
 
@@ -492,16 +495,17 @@ public class Orchestrator {
                 hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
                 BufferedImage img = ImageIO.read(outputFile);
+                ImageSupporter.setFontName("JetBrains Mono");
                 ImageSupporter.setBackgroundColor(Color.BLACK);
                 ImageSupporter.setFontColor(Color.WHITE);
-                ImageSupporter.setFontSize(28);
+                ImageSupporter.setFontSize(110);
 
-                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 50, 108);
+                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 158, 108);
 
-//                if(audio.isHasBanner()) {
-//                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
-//                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
-//                }
+                if(audio.isHasBanner()) {
+                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
+                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
+                }
 
                 ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
             } catch (Exception e) {
@@ -651,9 +655,9 @@ public class Orchestrator {
                 ImageSupporter.setFontColor(Color.WHITE);
                 ImageSupporter.setFontSize(32);
                 ImageIO.write(
-                    ImageSupporter.addTitle(img, audio.getDisplayText().get(i)),
-                    Config.OUTPUT_IMAGE_FORMAT,
-                    outputFile
+                        ImageSupporter.addTitle(img, audio.getDisplayText().get(i)),
+                        Config.OUTPUT_IMAGE_FORMAT,
+                        outputFile
                 );
             } catch (Exception e) {
                 e.printStackTrace();
@@ -687,13 +691,12 @@ public class Orchestrator {
 
             LunarTearHqz2 hqz = new LunarTearHqz2();
             hqz.buildFrames(
-                LunarTearHqz2.Types.DRAWING,
-                moodbar, spectrumizer.getDATA(), audioDuration,
-                audioDto, videoExportDto
+                    LunarTearHqz2.Types.DRAWING,
+                    moodbar, spectrumizer.getDATA(), audioDuration,
+                    audioDto, videoExportDto
             );
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

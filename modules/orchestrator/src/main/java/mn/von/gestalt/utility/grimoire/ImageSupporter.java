@@ -9,7 +9,7 @@ import java.io.IOException;
 public class ImageSupporter {
 
     public static int fontSize = 26;
-    public static String fontName = "Roboto Mono";
+    public static String fontName = "JetBrains Mono";
     public static Color fontColor = new Color(255,255,255);
     public static Color backgroundColor = new Color(0,0,0);
 
