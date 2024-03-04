@@ -1,11 +1,6 @@
-# <img height="42px" src="https://github.com/punkowl/gestalt/blob/master/public/gestalt-logo.png" />  <img height="42px" src="https://github.com/punkowl/gestalt/blob/master/public/cnc-logo.png" />
+# <img height="42px" src="https://github.com/punkowl/gestalt/blob/master/public/cnc-logo.png" />
 
-
-[![Codacy Badge][codacy-badge]][codacy]
-[![Gitter][gitter-badge]][gitter]
 [![Shitcoded][ulaanbaatar-badge]][ub-wiki]
-[![Linux][linux-badge]][linux-badge]
-[![macOS][osx-badge]][osx-badge]
 
 Definition of **gestalt**: "*something that is made of many parts and yet is somehow more than or different from the combination of its parts*"
 
