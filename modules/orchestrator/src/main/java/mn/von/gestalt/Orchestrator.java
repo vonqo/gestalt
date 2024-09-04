@@ -49,7 +49,7 @@ public class Orchestrator {
     /* ============================================================================================ */
     /* ============================================================================================ */
     @LoadOrchestrator
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         ParamDto paramDto = Config.loadConfig();
         VideoExportDto videoExportDto = paramDto.getVideoExportDto();
@@ -68,7 +68,7 @@ public class Orchestrator {
 
                     int fontSize = 28;
                     int moodbarWidth = 1000;
-                    int moodbarHeight = 170;
+                    int moodbarHeight = 110;
 
                     renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
 
@@ -300,7 +300,7 @@ public class Orchestrator {
 
             ImageSupporter.setBackgroundColor(Color.WHITE);
             ImageSupporter.setFontColor(Color.BLACK);
-            ImageSupporter.setFontSize(48);
+            ImageSupporter.setFontSize(28);
 
             BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
             ImageIO.write(circle2, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection_circle."+ Config.OUTPUT_IMAGE_FORMAT));
@@ -498,9 +498,9 @@ public class Orchestrator {
                 ImageSupporter.setFontName("JetBrains Mono");
                 ImageSupporter.setBackgroundColor(Color.BLACK);
                 ImageSupporter.setFontColor(Color.WHITE);
-                ImageSupporter.setFontSize(110);
+                ImageSupporter.setFontSize(120);
 
-                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 158, 108);
+                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 260, 180);
 
                 if(audio.isHasBanner()) {
                     BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));

@@ -225,6 +225,18 @@ public class LunarTearHqz {
         double theta = Math.PI;
         float colorPower = 0.00215f;
 
+        /*
+          ⢿⣿⣿⣿⣭⠹⠛⠛⠛⢿⣿⣿⣿⣿⡿⣿⠷⠶⠿⢻⣿⣛⣦⣙⠻⣿
+          ⣿⣿⢿⣿⠏⠀⠀⡀⠀⠈⣿⢛⣽⣜⠯⣽⠀⠀⠀⠀⠙⢿⣷⣻⡀⢿
+          ⠐⠛⢿⣾⣖⣤⡀⠀⢀⡰⠿⢷⣶⣿⡇⠻⣖⣒⣒⣶⣿⣿⡟⢙⣶⣮
+          ⣤⠀⠀⠛⠻⠗⠿⠿⣯⡆⣿⣛⣿⡿⠿⠮⡶⠼⠟⠙⠊⠁⠀⠸⢣⣿
+          ⣿⣷⡀⠀⠀⠀⠀⠠⠭⣍⡉⢩⣥⡤⠥⣤⡶⣒⠀⠀⠀⠀⠀⢰⣿⣿
+          ⣿⣿⡽⡄⠀⠀⠀⢿⣿⣆⣿⣧⢡⣾⣿⡇⣾⣿⡇⠀⠀⠀⠀⣿⡇⠃
+          ⣿⣿⣷⣻⣆⢄⠀⠈⠉⠉⠛⠛⠘⠛⠛⠛⠙⠛⠁⠀⠀⠀⠀⣿⡇⢸
+          ⢞⣿⣿⣷⣝⣷⣝⠦⡀⠀⠀⠀⠀⠀⠀⠀⡀⢀⠀⠀⠀⠀⠀⠛⣿⠈
+          ⣦⡑⠛⣟⢿⡿⣿⣷⣝⢧⡀⠀⠀⣶⣸⡇⣿⢸⣧⠀⠀⠀⠀⢸⡿⡆
+          ⣿⣿⣷⣮⣭⣍⡛⠻⢿⣷⠿⣶⣶⣬⣬⣁⣉⣀⣀⣁⡤⢴⣺⣾⣽⡇
+         */
         for(int i = 0; i <= completedColors; i++, theta += unitSpace) {
             Light lightRed = new Light();
             Light lightGreen = new Light();
@@ -482,7 +494,6 @@ public class LunarTearHqz {
      */
     private void buildBubble2Printable(int frameIndex, float totalColorFrame, ArrayList<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
         long startTime = System.currentTimeMillis();
-        System.out.println("KYzDAR");
         float frame = frameIndex / totalColorFrame;
         int completedColors = (int)frame;
         float inProgressColor = frame - completedColors;
@@ -490,7 +501,8 @@ public class LunarTearHqz {
         int screenWidth = 5906;
         int screenHeight = 8350;
 
-        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.3f, 1.0f);
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.28f, 1.2f);
+        // Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.2f, 1.8f);
 
         // ================ MATERIALS =============== //
         List<Material> materials = new ArrayList<Material>();
@@ -506,9 +518,9 @@ public class LunarTearHqz {
         objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
         objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
 
-        int padding = 14;
-        int baseRadius = 25;
-        int dynamicRadius = 65;
+        int padding = 4;
+        int baseRadius = 10;
+        int dynamicRadius = 90;
         int radius = baseRadius + dynamicRadius;
         ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectrumData, moodbar.size());
 
@@ -537,6 +549,8 @@ public class LunarTearHqz {
                 pointX += marginX;
 
                 objects.addAll(HQZUtils.buildCircle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
+                // objects.addAll(HQZUtils.buildRegularSquare(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
+                // objects.addAll(HQZUtils.buildRegularTriangle(1,pointX,pointY,baseRadius+(int)(dynamicRadius * bubbleSizeList.get(i))));
 
                 Light lightRed = new Light();
                 Light lightGreen = new Light();
