@@ -29,6 +29,7 @@ public class LunarTearHqz {
         BLANK,
         MEDIA_ART,
         DRAWING,
+        LEAF,
     }
 
     public void build(Types type, ArrayList<Color> moodbar, double[][] spectrumData, long rays, File output, double audioDuration) throws IOException {
@@ -60,6 +61,14 @@ public class LunarTearHqz {
             buildMediaArt(totalFrame-1,totalColorFrame,moodbar, spectrumData, rays, output);
         } else if(type == Types.DRAWING) {
             System.out.println("drawing");
+        } else if(type == Types.LEAF) {
+            List<List<ZObject>> objects = new ArrayList<>();
+            objects.add(HQZUtils.getObjectsFromFile("obj/leaf1.json"));
+            objects.add(HQZUtils.getObjectsFromFile("obj/leaf2.json"));
+            objects.add(HQZUtils.getObjectsFromFile("obj/leaf3.json"));
+            objects.add(HQZUtils.getObjectsFromFile("obj/leaf4.json"));
+            objects.add(HQZUtils.getObjectsFromFile("obj/leaf5.json"));
+            buildCustomObjects(totalFrame-1,totalColorFrame,moodbar, spectrumData, rays, objects, output);
         }
     }
 
@@ -579,6 +588,106 @@ public class LunarTearHqz {
         System.out.println("frame "+frameIndex+" in milliseconds: " + timeElapsed);
     }
 
+    private void buildCustomObjects(int frameIndex, float totalColorFrame, ArrayList<Color> moodbar, double[][] spectrumData, long rays, List<List<ZObject>> zobjects, File output) throws IOException {
+        long startTime = System.currentTimeMillis();
+        float frame = frameIndex / totalColorFrame;
+        int completedColors = (int)frame;
+        float inProgressColor = frame - completedColors;
+
+        int screenWidth = 5906;
+        int screenHeight = 8350;
+
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.28f, 1.2f);
+
+        // ================ MATERIALS =============== //
+        List<Material> materials = new ArrayList<Material>();
+        materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
+        Material material1 = HQZUtils.buildMaterial(0.1f,0.8f,0.020f);
+        Material material2 = HQZUtils.buildMaterial(0.95f,0.0f,0.1f);
+        materials.add(material1);
+        materials.add(material2);
+
+        // ================ OBJECTS =============== // // ================ LIGHTS =============== //
+        List<ZObject> objects = new ArrayList<ZObject>();
+        objects.add(HQZUtils.buildObject(0,0,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,screenWidth,0));
+        objects.add(HQZUtils.buildObject(0,0,0,0,screenHeight));
+        objects.add(HQZUtils.buildObject(0,screenWidth,0,0,screenHeight));
+
+        int padding = 4;
+        int baseRadius = 10;
+        int dynamicRadius = 90;
+        int radius = baseRadius + dynamicRadius;
+        ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectrumData, moodbar.size());
+
+        List<Light> lightList = new ArrayList<Light>();
+        ArrayList<Integer> polarDist = new ArrayList<Integer>();
+        polarDist.add(2); polarDist.add(35);
+
+        ArrayList<Integer> polarAngle = new ArrayList<Integer>();
+        polarAngle.add(0); polarAngle.add(360);
+
+        ArrayList<Integer> rayAngle = new ArrayList<Integer>();
+        rayAngle.add(0); rayAngle.add(360);
+
+        int marginY = 350;
+        int marginX = 150;
+
+        float colorPower = 0.00050f;
+
+        for(int y = 1, i = 0; y <= 37 && i <= completedColors; y++) {
+            for(int x = 1; x <= 27 && i <= completedColors; x++, i++) {
+
+                int pointY = y * ((radius+padding) * 2) - radius;
+                int pointX = x * ((radius+padding) * 2) - radius;
+
+                pointY += marginY;
+                pointX += marginX;
+
+                int objectIndex = DataUtils.getRandomNumberInRange(0, zobjects.size()-1);
+                int randomAngle = DataUtils.getRandomNumberInRange(0, 360);
+
+                List<ZObject> obj = zobjects.get(objectIndex);
+                obj = HQZUtils.rotateObjectWithAnchor(obj, randomAngle, 400, 400);
+
+                double scale = 0.2; // 150
+                obj = HQZUtils.scaleObject(obj, scale);
+
+                // LEAF 800 x 800 (scaled 80)
+                // System.out.println(pointX + "x" +pointY);
+
+                int offsetX = pointX;
+                int offsetY = pointY;
+                obj = HQZUtils.reposition(obj, offsetX, offsetY);
+                objects.addAll(obj);
+
+                Light lightRed = new Light();
+                Light lightGreen = new Light();
+                Light lightBlue = new Light();
+                MixedLight mixedLight = new MixedLight(lightRed,lightGreen,lightBlue);
+
+                if(i == completedColors && inProgressColor != 0) {
+                    float power =  colorPower * inProgressColor;
+                    HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, pointX, pointY, power);
+                } else {
+                    HQZUtils.buildRGBLight(mixedLight, moodbar.get(i), polarDist, polarAngle, rayAngle, pointX, pointY, colorPower);
+                }
+
+                lightList.add(lightRed);
+                lightList.add(lightGreen);
+                lightList.add(lightBlue);
+            }
+        }
+        scene.setLights(lightList);
+        scene.setMaterials(materials);
+        scene.setObjects(objects);
+        HQZAdapter adapter = new HQZAdapter();
+        adapter.buildPhoton(scene, output);
+        long endTime = System.currentTimeMillis();
+        long timeElapsed = endTime - startTime;
+        System.out.println("frame "+frameIndex+" in milliseconds: " + timeElapsed);
+    }
+
     private void buildMuchkaBdayPrintable(int frameIndex, float totalColorFrame, ArrayList<Color> moodbar, double[][] spectrumData, long rays, File output) throws IOException {
         long startTime = System.currentTimeMillis();
         float frame = frameIndex / totalColorFrame;
@@ -658,8 +767,6 @@ public class LunarTearHqz {
                 }
 
                 objects.addAll(objs);
-
-
 
                 Light lightRed = new Light();
                 Light lightGreen = new Light();

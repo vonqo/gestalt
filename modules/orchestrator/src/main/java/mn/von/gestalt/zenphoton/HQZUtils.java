@@ -1,12 +1,21 @@
 package mn.von.gestalt.zenphoton;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import mn.von.gestalt.utility.grimoire.DataUtils;
 import mn.von.gestalt.zenphoton.dto.*;
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class HQZUtils {
 
@@ -32,6 +41,45 @@ public class HQZUtils {
         scene.setExposure(exposure);
         scene.setGamma(gamma);
         return scene;
+    }
+
+    public static List<ZObject> getObjectsFromFile(String file) {
+        StringBuilder fileBuilder = new StringBuilder();
+        try (Stream<String> stream = Files.lines(Paths.get(file), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> fileBuilder.append(s).append("\n"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<ZObject> objects = new ArrayList<>();
+        JsonArray array = JsonParser.parseString(fileBuilder.toString()).getAsJsonArray();
+        for(int i = 0; i < array.size(); i++) {
+            JsonArray values = array.get(i).getAsJsonArray();
+            ZObject obj;
+            if(values.size() == 5) {
+                obj = buildObject(
+                        values.get(0).getAsInt(),
+                        values.get(1).getAsInt(),
+                        values.get(2).getAsInt(),
+                        values.get(3).getAsInt(),
+                        values.get(4).getAsInt()
+                );
+            } else {
+                obj = buildObject(
+                        values.get(0).getAsInt(),
+                        values.get(1).getAsInt(),
+                        values.get(2).getAsInt(),
+                        values.get(3).getAsInt(),
+                        values.get(4).getAsInt(),
+                        values.get(5).getAsInt(),
+                        values.get(6).getAsInt()
+                );
+            }
+
+            objects.add(obj);
+        }
+
+        return objects;
     }
 
     public static Material buildMaterial(float transmissive, float reflective, float diffuse) {
@@ -132,6 +180,79 @@ public class HQZUtils {
         red.toList(); blue.toList(); green.toList();
     }
 
+    public static List<ZObject> reposition(List<ZObject> objects, int offsetX, int offsetY) {
+        List<ZObject> newObjects = new ArrayList<>();
+
+        for (ZObject obj : objects) {
+            ZObject newObject = buildObject(
+                    obj.getMaterialIndex(),
+                    obj.getX0() + offsetX,
+                    obj.getY0() + offsetY,
+                    obj.getDx(),
+                    obj.getDy(),
+                    obj.getA0(),
+                    obj.getDa()
+            );
+            newObjects.add(newObject);
+        }
+        return newObjects;
+    }
+
+    public static List<ZObject> rotateObjectWithAnchor(List<ZObject> objects, double angle, int x, int y) {
+        return rotateObject(reposition(objects, -x, -y), angle);
+    }
+
+    public static List<ZObject> rotateObject(List<ZObject> objects, double angle) {
+        List<ZObject> newObjects = new ArrayList<>();
+        double rad = angle * Math.PI/180;
+
+        for (ZObject obj : objects) {
+            int x1 = obj.getX0();
+            int y1 = obj.getY0();
+
+            int x2 = obj.getDx() + x1;
+            int y2 = obj.getDy() + y1;
+
+            double x1New = x1 * Math.cos(rad) - y1 * Math.sin(rad);
+            double y1New = y1 * Math.cos(rad) + x1 * Math.sin(rad);
+
+            double x2New = (x2 * Math.cos(rad) - y2 * Math.sin(rad)) - x1New;
+            double y2New = (y2 * Math.cos(rad) + x2 * Math.sin(rad)) - y1New;
+
+
+            ZObject newObject = buildObject(
+                    obj.getMaterialIndex(),
+                    (int) Math.round(x1New),
+                    (int) Math.round(y1New),
+                    (int) Math.round(x2New),
+                    (int) Math.round(y2New),
+                    obj.getA0(),
+                    obj.getDa()
+            );
+            newObjects.add(newObject);
+        }
+        return newObjects;
+    }
+
+    public static List<ZObject> scaleObject(List<ZObject> objects, double scale) {
+        List<ZObject> newObjects = new ArrayList<>();
+
+        for (ZObject obj : objects) {
+            ZObject newObject = buildObject(
+                    obj.getMaterialIndex(),
+                    (int) Math.round(obj.getX0() * scale),
+                    (int) Math.round(obj.getY0() * scale),
+                    (int) Math.round(obj.getDx() * scale),
+                    (int) Math.round(obj.getDy() * scale),
+                    obj.getA0(),
+                    (int) Math.round(obj.getDa() * scale)
+            );
+            newObjects.add(newObject);
+        }
+
+        return  newObjects;
+    }
+
     public static List<ZObject> buildCircle(int materialIndex, int x, int y, int radius) {
         int lineCount = findCircleOptimalLineCount(radius);
         return buildRegularPolygons(materialIndex, lineCount, x, y, radius,null);
@@ -216,22 +337,6 @@ public class HQZUtils {
         return (int)(p/Math.log(radius) * 1.5);
     }
 
-    /*
-    * ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢀⠎⠀⠀⠀⠘⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢠⣾⡖⢦⣰⣿⢲⠸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢨⠻⢷⣟⠙⠿⠞⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢸⠦⠤⠷⠶⠶⠂⠀⢸⠀⠀⠀⠀⠀⠀⢀⢀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⡆⡄⢸⠀⠀⠀⠀⠀⢠⠃⢸⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⡇⡇⢸⣇⡀⠀⠀⡠⠁⢠⠃⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⣸⠃⢻⠈⠈⠉⢙⣳⣥⣄⣀⠔⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠸⡆⠀⠀⠰⣧⣶⠌⠂⠀⠀⠉⠁⠀⠀⠉⠳⡄⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠹⢦⣀⣀⣀⡀⠀⢀⣀⣀⡀⠀⢀⣀⡠⠚⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠉⡹⠉⠉⠉⠉⢉⠇⢠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠰⡉⠑⠁⢠⠃⠀⠀⣟⠓⠋⢠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠈⠛⠒⠁⠀⠀⠀⠈⠓⠒⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-    * */
     public static List<ZObject> buildCardiac(int materialIndex, int lineCount, int x, int y, int size, List<MaterialExtension> ext) {
         boolean isUsingExt = (ext != null && ext.size() == lineCount+1);
 
@@ -255,8 +360,7 @@ public class HQZUtils {
 
             if(preX > 0 && preY > 0) {
                 if(isUsingExt) {
-                    objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY,
-                            ext.get(i).getA0(), ext.get(i).getDa()));
+                    objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY, ext.get(i).getA0(), ext.get(i).getDa()));
                 } else {
                     objects.add(buildObject(materialIndex, preX, preY, postX-preX, postY-preY));
                 }

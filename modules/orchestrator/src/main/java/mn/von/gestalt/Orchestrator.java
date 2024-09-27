@@ -44,6 +44,7 @@ public class Orchestrator {
         CARDIAC,
         MOOD_RAIN,
         MEDIA_ART_2022,
+        LEAF,
     }
 
     /* ============================================================================================ */
@@ -99,6 +100,10 @@ public class Orchestrator {
                 } else if(type.equals(ExportTypes.ECLIPSE.name())) {
 
                     renderEclipse(audio);
+
+                } else if(type.equals(ExportTypes.LEAF.name())) {
+
+                    renderCustomObjZenphoton(audio);
                 }
             }
         }
@@ -493,6 +498,60 @@ public class Orchestrator {
                 File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
                 LunarTearHqz hqz = new LunarTearHqz();
                 hqz.build(LunarTearHqz.Types.BUBBLE2_PRINTABLE, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
+
+                BufferedImage img = ImageIO.read(outputFile);
+                ImageSupporter.setFontName("JetBrains Mono");
+                ImageSupporter.setBackgroundColor(Color.BLACK);
+                ImageSupporter.setFontColor(Color.WHITE);
+                ImageSupporter.setFontSize(120);
+
+                img = ImageSupporter.addTitleOver(img, audio.getDisplayText().get(i), 260, 180);
+
+                if(audio.isHasBanner()) {
+                    BufferedImage bannerImg = ImageIO.read(new File("gestalt_banner.png"));
+                    img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
+                }
+
+                ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderCustomObjZenphoton(AudioDto audio) {
+        String path = Config.RESOURCE_DIR;
+
+        for(int i = 0; i < audio.getAudioFile().size(); i++) {
+            String songname = audio.getAudioFile().get(i);
+            String pathMp3 = path + songname + ".mp3";
+            String pathWav = path + songname + ".wav";
+            double audioDuration = 0;
+
+            System.out.println(pathMp3);
+            System.out.println(pathWav);
+
+            try {
+                AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+                audioDuration = AudioUtils.getDuration(pathWav);
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+                spectrumizer.applyMoodbar(moodbar);
+                spectrumizer.build();
+
+                int ray = audio.getRay();
+                File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
+                LunarTearHqz hqz = new LunarTearHqz();
+                hqz.build(LunarTearHqz.Types.LEAF, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
 
                 BufferedImage img = ImageIO.read(outputFile);
                 ImageSupporter.setFontName("JetBrains Mono");
