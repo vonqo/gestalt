@@ -597,13 +597,13 @@ public class LunarTearHqz {
         int screenWidth = 5906;
         int screenHeight = 8350;
 
-        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.28f, 1.2f);
+        Scene scene = HQZUtils.initializeScene(rays, screenWidth, screenHeight, 0.31f, 0.9f);
 
         // ================ MATERIALS =============== //
         List<Material> materials = new ArrayList<Material>();
         materials.add(HQZUtils.buildMaterial(0.0f,0.0f,1.0f));
-        Material material1 = HQZUtils.buildMaterial(0.1f,0.8f,0.020f);
-        Material material2 = HQZUtils.buildMaterial(0.95f,0.0f,0.1f);
+        Material material1 = HQZUtils.buildMaterial(0.0f,0.65f,0.25f);
+        Material material2 = HQZUtils.buildMaterial(0.6f,0.2f,0.2f);
         materials.add(material1);
         materials.add(material2);
 
@@ -635,6 +635,10 @@ public class LunarTearHqz {
 
         float colorPower = 0.00050f;
 
+        double baseScale = (double) 30 / 800;
+        double dynamicScale = (double) 220 / 800;
+
+
         for(int y = 1, i = 0; y <= 37 && i <= completedColors; y++) {
             for(int x = 1; x <= 27 && i <= completedColors; x++, i++) {
 
@@ -648,16 +652,17 @@ public class LunarTearHqz {
                 int randomAngle = DataUtils.getRandomNumberInRange(0, 360);
 
                 List<ZObject> obj = zobjects.get(objectIndex);
-                obj = HQZUtils.rotateObjectWithAnchor(obj, randomAngle, 400, 400);
 
-                double scale = 0.2; // 150
-                obj = HQZUtils.scaleObject(obj, scale);
+                         // 30              // 90       *   (0 <~> 1);
+                int r2 = 15+(int)(110 * bubbleSizeList.get(i));
+                double scale2 = baseScale + (dynamicScale * bubbleSizeList.get(i));
+                obj = HQZUtils.scaleObject(obj, scale2);
 
-                // LEAF 800 x 800 (scaled 80)
-                // System.out.println(pointX + "x" +pointY);
+                // 100 = 200 / 2
+                obj = HQZUtils.rotateObject(obj, randomAngle, r2, r2);
 
-                int offsetX = pointX;
-                int offsetY = pointY;
+                int offsetX = pointX - 100;
+                int offsetY = pointY - 100;
                 obj = HQZUtils.reposition(obj, offsetX, offsetY);
                 objects.addAll(obj);
 
@@ -678,6 +683,7 @@ public class LunarTearHqz {
                 lightList.add(lightBlue);
             }
         }
+
         scene.setLights(lightList);
         scene.setMaterials(materials);
         scene.setObjects(objects);

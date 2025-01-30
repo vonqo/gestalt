@@ -22,6 +22,9 @@ import java.awt.image.RescaleOp;
 import java.io.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  This is the place where all magic works
@@ -45,6 +48,7 @@ public class Orchestrator {
         MOOD_RAIN,
         MEDIA_ART_2022,
         LEAF,
+        NOTE,
     }
 
     /* ============================================================================================ */
@@ -69,7 +73,7 @@ public class Orchestrator {
 
                     int fontSize = 28;
                     int moodbarWidth = 1000;
-                    int moodbarHeight = 110;
+                    int moodbarHeight = 200;
 
                     renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
 
@@ -104,6 +108,11 @@ public class Orchestrator {
                 } else if(type.equals(ExportTypes.LEAF.name())) {
 
                     renderCustomObjZenphoton(audio);
+
+                } else if(type.equals(ExportTypes.NOTE.name())) {
+
+                    renderNote(audio);
+
                 }
             }
         }
@@ -130,7 +139,7 @@ public class Orchestrator {
 
             // ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
             ImageSupporter.setBackgroundColor(new Color(0,0,0, 255));
-            ImageSupporter.setFontColor(Color.WHITE);
+            ImageSupporter.setFontColor(Color.BLACK);
             ImageSupporter.setFontSize(fontSize);
             ImageSupporter.setFontName("JetBrains Mono");
 
@@ -145,6 +154,137 @@ public class Orchestrator {
             ex.printStackTrace();
         }
     }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderNote(AudioDto audio) {
+        String songname = audio.getAudioFile().get(0);
+        String displayText = audio.getDisplayText().get(0);
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+songname+".mp3";
+        String pathWav = testPath+songname+".wav";
+        double songDuartion = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            songDuartion = AudioUtils.getDuration(pathMp3);
+        } catch (UnsupportedAudioFileException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        try {
+            final int width = 1600;
+            final int height = 2000;
+            final int grid = 10;
+            final int durationGrid = 5;
+
+            final int moodbarStartX = 50;
+            final int moodbarEndX = 1400;
+
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + songname + ".mp3", testPath + "/bar");
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+
+            double maxEnergy = 0;
+            double minEnergy = 2048;
+            double[][] data = spectrumizer.getDATA();
+            double[] dataEnergy = new double[data.length];
+
+            for(int i = 0; i < data.length; i++) {
+                double sum = 0;
+                for(int ii = 0; ii < data[i].length; ii++) {
+                    double value = data[i][ii];
+                    sum += value;
+                }
+                dataEnergy[i] = sum;
+                if(maxEnergy < sum) { maxEnergy = sum; }
+                if(minEnergy > sum && sum > 0) { minEnergy = sum; }
+            }
+
+            System.out.println(maxEnergy);
+            System.out.println(minEnergy);
+
+            for(int i = 0; i < dataEnergy.length; i++) {
+                double e = dataEnergy[i] - minEnergy;
+                if(e <= 0) {
+                    dataEnergy[i] = 0;
+                } else {
+                    dataEnergy[i] = e;
+                }
+            }
+
+            Color[] colors = DataUtils.bicubicResize(moodbar.toArray(new Color[0]), height);
+            dataEnergy = DataUtils.bicubicResize(dataEnergy, height);
+
+            List<Integer> reds = moodbar.stream().map(Color::getRed).toList();
+            List<Integer> greens = moodbar.stream().map(Color::getGreen).toList();
+            List<Integer> blues = moodbar.stream().map(Color::getBlue).toList();
+
+            int medR = reds.get((reds.size()/2));
+            int medG = greens.get((greens.size()/2));
+            int medB = blues.get((blues.size()/2));
+
+            Color medColor = new Color(medR, medG, medB);
+            BufferedImage texture = ImageIO.read(new File("texture2.jpg"));
+
+            BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D ctx2D = img.createGraphics();
+            ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            ctx2D.setPaint(new Color(0,0,0));
+            ctx2D.drawImage(texture, 0, 0, null);
+            OpenSimplexNoise noise = new OpenSimplexNoise(1234);
+
+            noise.eval(1, 10);
+
+            // Grid
+            for(int i = 0; i < grid; i++) {
+
+            }
+
+            // Moodbar
+            int ww = moodbarEndX - moodbarStartX;
+            double energyRatio = ww / (maxEnergy-minEnergy);
+            for(int i = 0; i < height; i++) {
+                int w = (int) Math.round(dataEnergy[i] * energyRatio);
+                ctx2D.setPaint(colors[i]);
+                ctx2D.fillRect(moodbarStartX, i,moodbarStartX + w, 1);
+            }
+
+
+            // Time info
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 24));
+            ctx2D.setColor(new Color(0,0,0));
+            double durationOffset = songDuartion / durationGrid;
+            for(int i = 1; i <= durationGrid; i++) {
+                double dur = (durationOffset * i);
+                int min = (int) Math.floor(dur / 60);
+                int sec = (int) (dur % 60);
+                String timeMark = addZero(min) + ":" + addZero(sec);
+                ctx2D.drawString(timeMark, 0, 0);
+            }
+
+            // Median
+            ctx2D.setPaint(medColor);
+            ctx2D.fillRect(100, 100, 100, 100);
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 24));
+            ctx2D.setColor(new Color(0,0,0));
+            ctx2D.drawString("Median", 0, 0);
+
+            // Title
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 24));
+            ctx2D.setColor(new Color(0,0,0));
+            ctx2D.drawString(displayText, 0, 0);
+
+            ctx2D.dispose();
+            ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+songname+"_note."+ Config.OUTPUT_IMAGE_FORMAT));
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static String addZero(int val) { return  val < 10 ? "0"+val : String.valueOf(val); }
 
     /* ============================================================================================ */
     /* ============================================================================================ */

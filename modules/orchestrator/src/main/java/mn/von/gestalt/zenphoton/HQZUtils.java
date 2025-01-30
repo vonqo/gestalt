@@ -198,11 +198,7 @@ public class HQZUtils {
         return newObjects;
     }
 
-    public static List<ZObject> rotateObjectWithAnchor(List<ZObject> objects, double angle, int x, int y) {
-        return rotateObject(reposition(objects, -x, -y), angle);
-    }
-
-    public static List<ZObject> rotateObject(List<ZObject> objects, double angle) {
+    public static List<ZObject> rotateObject(List<ZObject> objects, double angle, int anchorX, int anchorY) {
         List<ZObject> newObjects = new ArrayList<>();
         double rad = angle * Math.PI/180;
 
@@ -213,6 +209,11 @@ public class HQZUtils {
             int x2 = obj.getDx() + x1;
             int y2 = obj.getDy() + y1;
 
+            x1 -= anchorX;
+            y1 -= anchorY;
+            x2 -= anchorX;
+            y2 -= anchorY;
+
             double x1New = x1 * Math.cos(rad) - y1 * Math.sin(rad);
             double y1New = y1 * Math.cos(rad) + x1 * Math.sin(rad);
 
@@ -222,8 +223,8 @@ public class HQZUtils {
 
             ZObject newObject = buildObject(
                     obj.getMaterialIndex(),
-                    (int) Math.round(x1New),
-                    (int) Math.round(y1New),
+                    (int) Math.round(x1New+anchorX),
+                    (int) Math.round(y1New+anchorY),
                     (int) Math.round(x2New),
                     (int) Math.round(y2New),
                     obj.getA0(),
