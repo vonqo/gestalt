@@ -16,6 +16,7 @@ import mn.von.gestalt.zenphoton.dto.ZObject;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -167,7 +168,8 @@ public class Orchestrator {
 
         try {
             AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
-            songDuartion = AudioUtils.getDuration(pathMp3);
+            songDuartion = AudioUtils.getDuration(pathWav);
+            System.out.println("DURATION:"+songDuartion);
         } catch (UnsupportedAudioFileException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -179,8 +181,10 @@ public class Orchestrator {
             final int grid = 10;
             final int durationGrid = 5;
 
-            final int moodbarStartX = 50;
+            final int moodbarStartX = 100;
             final int moodbarEndX = 1400;
+
+            final Color fontColor = new Color(255,255,255, 210);
 
             ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + songname + ".mp3", testPath + "/bar");
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
@@ -200,9 +204,6 @@ public class Orchestrator {
                 if(maxEnergy < sum) { maxEnergy = sum; }
                 if(minEnergy > sum && sum > 0) { minEnergy = sum; }
             }
-
-            System.out.println(maxEnergy);
-            System.out.println(minEnergy);
 
             for(int i = 0; i < dataEnergy.length; i++) {
                 double e = dataEnergy[i] - minEnergy;
@@ -225,57 +226,198 @@ public class Orchestrator {
             int medB = blues.get((blues.size()/2));
 
             Color medColor = new Color(medR, medG, medB);
-            BufferedImage texture = ImageIO.read(new File("texture2.jpg"));
+
+            int sumRed = Arrays.stream(reds.toArray(new Integer[0])).reduce(0, Integer::sum);
+            int sumGreen = Arrays.stream(greens.toArray(new Integer[0])).reduce(0, Integer::sum);
+            int sumBlue = Arrays.stream(blues.toArray(new Integer[0])).reduce(0, Integer::sum);
+            int avgRed = (int)Math.round(sumRed/moodbar.size() * 1.1);
+            int avgGreen = (int)Math.round(sumGreen/moodbar.size() * 1.1);
+            int avgBlue = (int)Math.round(sumBlue/moodbar.size() * 1.1);
+
+            Color avgColor = new Color(Math.min(avgRed, 255), Math.min(avgGreen, 255), Math.min(avgBlue, 255));
 
             BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D ctx2D = img.createGraphics();
+            ctx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
             ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            ctx2D.setPaint(new Color(0,0,0));
+            ctx2D.setPaint(new Color(9,9,9,255));
+            ctx2D.fillRect(0,0,width,height);
+
+            BufferedImage texture = ImageIO.read(new File("texture2.jpg"));
             ctx2D.drawImage(texture, 0, 0, null);
+
             OpenSimplexNoise noise = new OpenSimplexNoise(1234);
 
-            noise.eval(1, 10);
-
             // Grid
-            for(int i = 0; i < grid; i++) {
+            BufferedImage gridImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D gridCtx2D = gridImage.createGraphics();
+            gridCtx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+            gridCtx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            gridCtx2D.setPaint(new Color(0,0,0,0));
+            gridCtx2D.fillRect(0,0,width,height);
+            gridCtx2D.setPaint(new Color(255,255,255,140));
 
+            int offset = height / grid;
+            int gridWidth = 1;
+            for(int i = 1; i < grid; i++) {
+                gridCtx2D.fillRect(0,offset*i, width, gridWidth);
+                gridCtx2D.fillRect(offset*i,0, gridWidth, height);
             }
+            for(int x = 0; x < width; x++) {
+                for(int y = 0; y < height; y++) {
+                    Color pixel = new Color(gridImage.getRGB(x,y));
+
+                    int alpha;
+                    if(pixel.getAlpha() == 0 || (pixel.getRed() == 0 && pixel.getGreen() == 0 && pixel.getBlue() == 0)) {
+                        alpha = 0;
+                    } else {
+                        alpha = (int) Math.round((noise.eval(x, y) + 1) * 235);
+                        if(alpha > 255) alpha = 255;
+                    }
+
+                    Color newPixel = new Color(
+                            pixel.getRed(),
+                            pixel.getGreen(),
+                            pixel.getBlue(),
+                            alpha
+                    );
+
+                    gridImage.setRGB(x, y, newPixel.getRGB());
+                }
+            }
+
+            gridCtx2D.dispose();
+            ctx2D.drawImage(gridImage, 0,0, null);
 
             // Moodbar
             int ww = moodbarEndX - moodbarStartX;
             double energyRatio = ww / (maxEnergy-minEnergy);
+            double energyRatioMin = (double) moodbarStartX / ww;
+
+            BufferedImage moodImage = new BufferedImage(moodbarEndX, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D moodCtx2D = moodImage.createGraphics();
+            moodCtx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+            moodCtx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            moodCtx2D.setPaint(new Color(0,0,0,0));
+            moodCtx2D.fillRect(0,0,ww,height);
+
+            // colors = DataUtils.bicubicResize(DataUtils.sortColorsByHSV(moodbar).toArray(new Color[0]), height);
+
             for(int i = 0; i < height; i++) {
                 int w = (int) Math.round(dataEnergy[i] * energyRatio);
-                ctx2D.setPaint(colors[i]);
-                ctx2D.fillRect(moodbarStartX, i,moodbarStartX + w, 1);
+                int w2 = (int) Math.round(w * energyRatioMin * 0.75);
+                moodCtx2D.setPaint(colors[i]);
+                moodCtx2D.fillRect(moodbarStartX - w2, i, w + w2, 1);
             }
+
+            for(int x = 0; x < ww; x++) {
+                for(int y = 0; y < height; y++) {
+                    Color pixel = new Color(moodImage.getRGB(x,y));
+
+                    int alpha;
+                    if(pixel.getAlpha() == 0 || (pixel.getRed() == 0 && pixel.getGreen() == 0 && pixel.getBlue() == 0)) {
+                        alpha = 0;
+                    } else {
+                        alpha = (int) Math.round((noise.eval(x, y) + 1) * 235);
+                        if(alpha > 255) alpha = 255;
+                    }
+
+                    Color newPixel = new Color(
+                            pixel.getRed(),
+                            pixel.getGreen(),
+                            pixel.getBlue(),
+                            alpha
+                    );
+
+                    moodImage.setRGB(x, y, newPixel.getRGB());
+                }
+            }
+
+            moodCtx2D.dispose();
+            ctx2D.drawImage(moodImage, 0,0, null);
 
 
             // Time info
-            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 24));
-            ctx2D.setColor(new Color(0,0,0));
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 48));
+            ctx2D.setColor(fontColor);
             double durationOffset = songDuartion / durationGrid;
+
+            int offsetY = height / durationGrid;
+            ctx2D.drawString("00:00", 25, 44);
+
             for(int i = 1; i <= durationGrid; i++) {
                 double dur = (durationOffset * i);
                 int min = (int) Math.floor(dur / 60);
                 int sec = (int) (dur % 60);
+
+                System.out.println(min+":"+sec);
                 String timeMark = addZero(min) + ":" + addZero(sec);
-                ctx2D.drawString(timeMark, 0, 0);
+
+                if(i == durationGrid) {
+                    ctx2D.drawString(timeMark, 25, (offsetY * i) - 10);
+                } else {
+                    ctx2D.drawString(timeMark, 25, (offsetY * i) + 17);
+                }
             }
 
-            // Median
-            ctx2D.setPaint(medColor);
-            ctx2D.fillRect(100, 100, 100, 100);
-            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 24));
-            ctx2D.setColor(new Color(0,0,0));
-            ctx2D.drawString("Median", 0, 0);
-
             // Title
-            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 24));
-            ctx2D.setColor(new Color(0,0,0));
-            ctx2D.drawString(displayText, 0, 0);
+            String[] str = displayText.split(" - ");
+            System.out.println(str.length);
+
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 48));
+            ctx2D.setColor(new Color(255,255,255,128));
+            ctx2D.drawString(str[0], width/2, 190);
+
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 58));
+            ctx2D.setColor(fontColor);
+            ctx2D.drawString(str[1], width/2, 250);
+
+            // Median
+            ArrayList<Color> sortedColors = DataUtils.sortColorsByHSV(moodbar);
+            Color hsvMedian = sortedColors.get(sortedColors.size()/2);
+
+            BufferedImage medianImage = new BufferedImage(220, 220, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D medianCtx2D = medianImage.createGraphics();
+            medianCtx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+            medianCtx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            medianCtx2D.setPaint(new Color(0,0,0,255));
+            medianCtx2D.fillRect(0,0,220,220);
+
+            GradientPaint primary = new GradientPaint(0f, 0f, medColor, 220, 0f, hsvMedian);
+            GradientPaint shade = new GradientPaint(
+                    0f, 0f, new Color(0, 0, 0, 0),
+                    0f, 220f, avgColor);
+
+            medianCtx2D.setPaint(primary);
+            medianCtx2D.fillRect(0, 0, 220, 220);
+            medianCtx2D.setPaint(shade);
+            medianCtx2D.fillRect(0, 0, 220, 220);
+
+            medianCtx2D.dispose();
+
+            ctx2D.setColor(medColor);
+            ctx2D.fillRect(width-370-55, 525, 110, 110);
+            ctx2D.setColor(hsvMedian);
+            ctx2D.fillRect(width-370+165, 525, 110, 110);
+            ctx2D.setColor(avgColor);
+            ctx2D.fillRect(width-370+55, 745, 110, 110);
+
+            ctx2D.drawImage(medianImage, width-370, 580, null);
+
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 38));
+            ctx2D.setColor(new Color(255,255,255,80));
+            ctx2D.drawString("MEDIAN", width - 330, 900);
+
+            // Stamp
+            AffineTransform originTransform = ctx2D.getTransform();
+            ctx2D.rotate(Math.toRadians(90));
+            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 42));
+            ctx2D.setColor(new Color(255,255,255,80));
+            ctx2D.drawString("COLOR/NOTE/CODE", Math.round(height * 0.65), Math.round(-width * 0.88));
+            ctx2D.setTransform(originTransform);
 
             ctx2D.dispose();
+
             ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+songname+"_note."+ Config.OUTPUT_IMAGE_FORMAT));
 
 
