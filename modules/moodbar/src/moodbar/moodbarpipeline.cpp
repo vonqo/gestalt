@@ -179,7 +179,7 @@ void MoodbarPipeline::Stop(bool success) {
   success_ = success;
   running_ = false;
   if (builder_ != nullptr) {
-    data_ = builder_->Finish(1000);
+    data_ = builder_->Finish(width_);
     builder_.reset();
   }
 
