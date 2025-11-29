@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   } else if (argc == 4 and argv[1] == "-o"s) {
     isCorrectUsage = true;
     moodbarSize = 1000;
-  } else if (argc == 5) {
+  } else if (argc == 6) {
     if (argv[1] == "-o"s and argv[4] == "-s"s) {
       isCorrectUsage = true;
       moodbarSize = std::stoi(argv[5]);
