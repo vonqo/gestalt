@@ -37,24 +37,34 @@ using GFileOutputStreamH =
 
 namespace {
 void printUsage(std::ostream &stream, const char *exe) {
-  stream << "Usage: " << exe << " -o OUTPUT INPUT" << std::endl;
+  stream << "Usage: " << exe << " -o OUTPUT INPUT -s SIZE" << std::endl;
 }
 } // namespace
 
 int main(int argc, char *argv[]) {
   bool isCorrectUsage = false;
+  int moodbarSize = 0;
+
   if (argc == 2) {
     std::string argv1 = argv[1];
     if (argv1 == "--version") {
       std::cout << "moodbar " MOODBAR_VERSION_STR << std::endl;
       return 0;
-    } else if (argv1 == "--help") {
+    }
+    if (argv1 == "--help") {
       printUsage(std::cout, argv[0]);
       return 0;
     }
   } else if (argc == 4 and argv[1] == "-o"s) {
     isCorrectUsage = true;
+    moodbarSize = 1000;
+  } else if (argc == 5) {
+    if (argv[1] == "-o"s and argv[4] == "-s"s) {
+      isCorrectUsage = true;
+      moodbarSize = std::stoi(argv[5]);
+    }
   }
+
   if (not isCorrectUsage) {
     printUsage(std::cerr, (argc > 0 ? argv[0] : "moodbar"));
     return 1;
@@ -76,7 +86,7 @@ int main(int argc, char *argv[]) {
   mood.Finished = [&moodAvailablePromise](bool success) {
     moodAvailablePromise.set_value(success);
   };
-  mood.Start();
+  mood.Start(moodbarSize);
 
   moodAvailable.wait();
   if (not moodAvailable.get())

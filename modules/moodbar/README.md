@@ -1,15 +1,8 @@
 # Moodbar | Gestalt
 
 Forked from [exaile/moodbar](https://github.com/exaile/moodbar).
+And made little update for more readable code color and finish range.
 
-And made little update for more readable code color (**vonqo edit**):
-
-```c
-for(unsigned int i = 0; i < data.size(); i++){
-    if(i%3 == 0) std::cout << std::endl;
-    std::cout << unsigned(data[i]) << " ";
-}
-```
 
 Moodbar is a music visualization method that assigns colors to different parts of a track and presents them as a timeline.
 Applied to a music player, the main goal is to help the user navigate within a particular track.
@@ -87,7 +80,7 @@ See the [Meson documentation](http://mesonbuild.com/Quick-guide.html#using-meson
 ## Usage
 
 ```sh
-moodbar -o OUTPUT INPUT
+moodbar -o OUTPUT INPUT -s 1000
 ```
 
 This creates an output file containing pixel values in `R1 G1 B1 R2 G2 B2 ...` format.

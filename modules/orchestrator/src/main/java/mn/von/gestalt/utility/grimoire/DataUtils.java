@@ -2,6 +2,7 @@ package mn.von.gestalt.utility.grimoire;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 
 public class DataUtils {
@@ -175,5 +176,22 @@ public class DataUtils {
         double a3 = p1;
 
         return a0 * (t * t * t) + a1 * (t * t) + a2 * t + a3;
+    }
+
+    public static ArrayList<Color> sortColorsByHSV(ArrayList<Color> colors) {
+        ArrayList<Color> tmpColors = (ArrayList)colors.clone();
+
+        tmpColors.sort(Comparator.comparing((Color c) -> {
+            float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+            return hsb[0]; // Sort by Hue
+        }).thenComparing(c -> {
+            float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+            return hsb[1]; // Sort by Saturation
+        }).thenComparing(c -> {
+            float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+            return hsb[2]; // Sort by Value (Brightness)
+        }));
+
+        return  tmpColors;
     }
 }

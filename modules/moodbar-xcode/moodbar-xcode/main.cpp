@@ -36,16 +36,18 @@ using GFileOutputStreamH =
 
 namespace {
 void printUsage(std::ostream &stream, const char *exe) {
-  stream << "Usage: " << exe << " -o OUTPUT INPUT" << std::endl;
+  stream << "Usage: " << exe << " -o OUTPUT INPUT -s SIZE" << std::endl;
 }
 } // namespace
 
 int main(int argc, char *argv[]) {
   bool isCorrectUsage = false;
+  int moodbarSize = 0;
+    
   if (argc == 2) {
     std::string argv1 = argv[1];
     if (argv1 == "--version") {
-      std::cout << "moodbar osx port" << std::endl;
+      std::cout << "moodbar 1.2.1 osx port" << std::endl;
       return 0;
     } else if (argv1 == "--help") {
       printUsage(std::cout, argv[0]);
@@ -53,6 +55,12 @@ int main(int argc, char *argv[]) {
     }
   } else if (argc == 4 and argv[1] == "-o"s) {
     isCorrectUsage = true;
+    moodbarSize = 1000;
+  } else if(argc == 5) {
+      if (argv[1] == "-o"s and argv[4] == "-s"s) {
+        isCorrectUsage = true;
+        moodbarSize = std::stoi(argv[5]);
+      }
   }
   if (not isCorrectUsage) {
     printUsage(std::cerr, (argc > 0 ? argv[0] : "moodbar"));
@@ -61,7 +69,7 @@ int main(int argc, char *argv[]) {
 
   const char *argOut = argv[2];
   const char *argIn = argv[3];
-
+    
   // Process input file
 
   GFileH fileIn{g_file_new_for_commandline_arg(argIn), &g_object_unref};
@@ -69,13 +77,13 @@ int main(int argc, char *argv[]) {
 
   std::promise<bool> moodAvailablePromise; // The bool indicates success.
   auto moodAvailable = moodAvailablePromise.get_future();
-
+  
   moodbar_init();
   MoodbarPipeline mood{uriIn.get()};
   mood.Finished = [&moodAvailablePromise](bool success) {
     moodAvailablePromise.set_value(success);
   };
-  mood.Start();
+  mood.Start(moodbarSize);
 
   moodAvailable.wait();
   if (not moodAvailable.get())
@@ -94,7 +102,7 @@ int main(int argc, char *argv[]) {
   }
   const auto &data = mood.data();
     
-    // Enkh-Amar edit for more readable color code
+    // vonqo edit for more readable colors for terminal
     for(unsigned int i = 0; i < data.size(); i++){
       if(i%3 == 0) std::cout << std::endl;
       std::cout << unsigned(data[i]) << " ";
