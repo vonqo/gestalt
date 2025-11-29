@@ -53,6 +53,10 @@ enum {
 #define gst_fastspectrum_parent_class parent_class
 G_DEFINE_TYPE (GstFastSpectrum, gst_fastspectrum, GST_TYPE_AUDIO_FILTER);
 
+// Static lock for creating & destroying FFTW plans.
+// Moved outside GstFastSpectrumClass due to https://github.com/exaile/moodbar/issues/12
+static std::mutex fftw_lock;
+
 static void gst_fastspectrum_finalize (GObject * object);
 static void gst_fastspectrum_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec);
@@ -135,11 +139,9 @@ gst_fastspectrum_alloc_channel_data (GstFastSpectrum * spectrum)
       fftw_malloc(sizeof(fftw_complex) * (nfft/2+1)));
 
   spectrum->spect_magnitude = new double[bands]{};
-
-  GstFastSpectrumClass* klass = reinterpret_cast<GstFastSpectrumClass*>(
-      G_OBJECT_GET_CLASS(spectrum));
   {
-    std::lock_guard<decltype(klass->fftw_lock)> l(klass->fftw_lock);
+    std::lock_guard<decltype(fftw_lock)> l(fftw_lock);
+
     spectrum->plan = fftw_plan_dft_r2c_1d(
         nfft,
         spectrum->fft_input,
@@ -156,7 +158,7 @@ gst_fastspectrum_free_channel_data (GstFastSpectrum * spectrum)
       G_OBJECT_GET_CLASS(spectrum));
   if (spectrum->channel_data_initialised) {
     {
-      std::lock_guard<decltype(klass->fftw_lock)> l(klass->fftw_lock);
+      std::lock_guard<decltype(fftw_lock)> l(fftw_lock);
       fftw_destroy_plan(spectrum->plan);
     }
     fftw_free(spectrum->fft_input);
