@@ -62,11 +62,12 @@ GstElement* MoodbarPipeline::CreateElement(const std::string& factory_name) {
   return ret;
 }
 
-void MoodbarPipeline::Start() {
+void MoodbarPipeline::Start(int width) {
   if (pipeline_) {
     return;
   }
 
+  width_ = width;
   pipeline_ = gst_pipeline_new("moodbar-pipeline");
 
   GstElement* decodebin = CreateElement("uridecodebin");
@@ -178,7 +179,7 @@ void MoodbarPipeline::Stop(bool success) {
   success_ = success;
   running_ = false;
   if (builder_ != nullptr) {
-    data_ = builder_->Finish(1000);
+    data_ = builder_->Finish(width_);
     builder_.reset();
   }
 

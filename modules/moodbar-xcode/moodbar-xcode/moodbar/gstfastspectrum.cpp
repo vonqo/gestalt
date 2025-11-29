@@ -41,18 +41,14 @@ GST_DEBUG_CATEGORY_STATIC (gst_fastspectrum_debug);
   "channels = 1"
 
 /* Spectrum properties */
-#define DEFAULT_INTERVAL		(GST_SECOND / 10)
-#define DEFAULT_BANDS			128
+#define DEFAULT_INTERVAL        (GST_SECOND / 10)
+#define DEFAULT_BANDS            128
 
 enum {
   PROP_0,
   PROP_INTERVAL,
   PROP_BANDS
 };
-
-// Static lock for creating & destroying FFTW plans.
-// Moved outside GstFastSpectrumClass due to https://github.com/exaile/moodbar/issues/12
-static std::mutex fftw_lock;
 
 #define gst_fastspectrum_parent_class parent_class
 G_DEFINE_TYPE (GstFastSpectrum, gst_fastspectrum, GST_TYPE_AUDIO_FILTER);
@@ -143,12 +139,7 @@ gst_fastspectrum_alloc_channel_data (GstFastSpectrum * spectrum)
   GstFastSpectrumClass* klass = reinterpret_cast<GstFastSpectrumClass*>(
       G_OBJECT_GET_CLASS(spectrum));
   {
-    // lupino22::Debug: mutex lock failed - trace;
-    // ===================================================
-    // std::lock_guard<decltype(klass->fftw_lock)> l(klass->fftw_lock);
-    std::lock_guard<decltype(fftw_lock)> l(fftw_lock);
-    // ===================================================
-      
+    std::lock_guard<decltype(klass->fftw_lock)> l(klass->fftw_lock);
     spectrum->plan = fftw_plan_dft_r2c_1d(
         nfft,
         spectrum->fft_input,
@@ -165,8 +156,7 @@ gst_fastspectrum_free_channel_data (GstFastSpectrum * spectrum)
       G_OBJECT_GET_CLASS(spectrum));
   if (spectrum->channel_data_initialised) {
     {
-      // std::lock_guard<decltype(klass->fftw_lock)> l(klass->fftw_lock);
-      std::lock_guard<decltype(fftw_lock)> l(fftw_lock);
+      std::lock_guard<decltype(klass->fftw_lock)> l(klass->fftw_lock);
       fftw_destroy_plan(spectrum->plan);
     }
     fftw_free(spectrum->fft_input);
@@ -448,11 +438,8 @@ gst_fastspectrum_transform_ip (GstBaseTransform * trans, GstBuffer * buffer)
    */
   if (!spectrum->channel_data_initialised) {
     GST_DEBUG_OBJECT (spectrum, "allocating for bands %u", bands);
-      
-    // lupino22::Debug: Mutex lock fail: Invalid arguments
-    // ===================================================
+
     gst_fastspectrum_alloc_channel_data (spectrum);
-    // ===================================================
 
     /* number of sample frames we process before posting a message
      * interval is in ns */

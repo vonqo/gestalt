@@ -39,7 +39,7 @@ class MoodbarPipeline {
   bool success() const { return success_; }
   const std::vector<std::uint8_t>& data() const { return data_; }
 
-  void Start();
+  void Start(int width);
 
   std::function<void(bool success)> Finished;
 
@@ -58,6 +58,7 @@ class MoodbarPipeline {
   static bool sIsAvailable;
   static const int kBands;
 
+  int width_;
   std::string local_filename_;
   GstElement* pipeline_;
   GstElement* convert_element_;
