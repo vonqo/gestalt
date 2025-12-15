@@ -23,19 +23,18 @@ import java.util.logging.Logger;
  Moodbar executable's output adapter to java awt color
 
  @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
- @version $Revision: 1.0
+ @version $Revision: 1.1
  @see [https://github.com/lupino22/gestalt]
  **/
 public class MoodbarAdapter {
 
-    public static ArrayList<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT) throws IOException {
-
+    public static ArrayList<Color> buildMoodbar(String AUDIO_PATH, String OUTPUT, int MOOD_SIZE) throws IOException {
         ProcessBuilder processBuilder;
         Process process;
 
-        ArrayList<Color> moodbar = new ArrayList<Color>(1000);
+        ArrayList<Color> moodbar = new ArrayList<Color>(MOOD_SIZE);
 
-        processBuilder = new ProcessBuilder(Config.MOODBAR_EXEC, "-o" ,OUTPUT, AUDIO_PATH);
+        processBuilder = new ProcessBuilder(Config.MOODBAR_EXEC, "-o" ,OUTPUT, AUDIO_PATH, "-s", String.valueOf(MOOD_SIZE));
         process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 

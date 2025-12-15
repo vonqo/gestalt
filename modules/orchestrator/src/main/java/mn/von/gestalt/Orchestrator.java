@@ -22,13 +22,12 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- This is the place where all magic works
+ This is the place where all shit works
 
  @author <A HREF="mailto:[enkh-amar.g@must.edu.mn]">[Enkh-Amar.G]</A>
  @version $Revision: 1.0
@@ -50,6 +49,7 @@ public class Orchestrator {
         MEDIA_ART_2022,
         LEAF,
         NOTE,
+        PLY,
     }
 
     /* ============================================================================================ */
@@ -74,7 +74,7 @@ public class Orchestrator {
 
                     int fontSize = 28;
                     int moodbarWidth = 1000;
-                    int moodbarHeight = 200;
+                    int moodbarHeight = 110;
 
                     renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
 
@@ -114,11 +114,14 @@ public class Orchestrator {
 
                     renderNote(audio);
 
+                } else if(type.equals(ExportTypes.PLY.name())) {
+
+                    renderPlyMoodbar(audio);
+
                 }
             }
         }
     }
-
 
     /* ============================================================================================ */
     /* ============================================================================================ */
@@ -132,7 +135,7 @@ public class Orchestrator {
 
             for (String audioFile : audioFiles) {
                 System.out.println(audioFile);
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile + ".mp3", testPath + "/tmp_moodbar");
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile + ".mp3", testPath + "/tmp_moodbar", 1000);
                 FileUtils.moodbarToFile(moodbar, testPath + audioFile + ".txt");
                 BufferedImage scaledImage = ImageTransformer.scaleImage(MoodbarAdapter.toBufferedImage(moodbar, height), width, height);
                 moodbars.add(scaledImage);
@@ -140,7 +143,7 @@ public class Orchestrator {
 
             // ImageSupporter.setBackgroundColor(new Color(255,255,255, 0));
             ImageSupporter.setBackgroundColor(new Color(0,0,0, 255));
-            ImageSupporter.setFontColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(fontSize);
             ImageSupporter.setFontName("JetBrains Mono");
 
@@ -178,15 +181,27 @@ public class Orchestrator {
         try {
             final int width = 1600;
             final int height = 2000;
-            final int grid = 10;
+            final int grid = 20;
             final int durationGrid = 5;
+            final int gridWidth = 3;
 
             final int moodbarStartX = 100;
             final int moodbarEndX = 1400;
 
-            final Color fontColor = new Color(255,255,255, 210);
+            final Color backgroundColor = new Color(9,9,9,255);
+            final Color gridColor = new Color(255,255,255,175);
+            final Color fontColor = new Color(255,255,255, 255);
+            final Color labelColor = new Color(255,255,255,80);
 
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + songname + ".mp3", testPath + "/bar");
+
+//            final Color backgroundColor = new Color(255,255,255,255);
+//            final Color gridColor = new Color(0,0,0,140);
+//            final Color fontColor = new Color(0,0,0, 210);
+//            final Color labelColor = new Color(255,255,255,80);
+            final Color artistTextColor = new Color(255,255,255,185);
+            final Color songTextColor = new Color(255,255,255,255);
+
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + songname + ".mp3", testPath + "/bar", 1000);
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
 
             double maxEnergy = 0;
@@ -221,6 +236,10 @@ public class Orchestrator {
             List<Integer> greens = moodbar.stream().map(Color::getGreen).toList();
             List<Integer> blues = moodbar.stream().map(Color::getBlue).toList();
 
+            reds = reds.stream().sorted().toList();
+            greens = greens.stream().sorted().toList();
+            blues = blues.stream().sorted().toList();
+
             int medR = reds.get((reds.size()/2));
             int medG = greens.get((greens.size()/2));
             int medB = blues.get((blues.size()/2));
@@ -240,7 +259,7 @@ public class Orchestrator {
             Graphics2D ctx2D = img.createGraphics();
             ctx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
             ctx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            ctx2D.setPaint(new Color(9,9,9,255));
+            ctx2D.setPaint(backgroundColor);
             ctx2D.fillRect(0,0,width,height);
 
             BufferedImage texture = ImageIO.read(new File("texture2.jpg"));
@@ -253,12 +272,12 @@ public class Orchestrator {
             Graphics2D gridCtx2D = gridImage.createGraphics();
             gridCtx2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
             gridCtx2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            gridCtx2D.setPaint(new Color(0,0,0,0));
+            gridCtx2D.setPaint(backgroundColor);
             gridCtx2D.fillRect(0,0,width,height);
-            gridCtx2D.setPaint(new Color(255,255,255,140));
+
+            gridCtx2D.setPaint(gridColor);
 
             int offset = height / grid;
-            int gridWidth = 1;
             for(int i = 1; i < grid; i++) {
                 gridCtx2D.fillRect(0,offset*i, width, gridWidth);
                 gridCtx2D.fillRect(offset*i,0, gridWidth, height);
@@ -268,7 +287,10 @@ public class Orchestrator {
                     Color pixel = new Color(gridImage.getRGB(x,y));
 
                     int alpha;
-                    if(pixel.getAlpha() == 0 || (pixel.getRed() == 0 && pixel.getGreen() == 0 && pixel.getBlue() == 0)) {
+                    if(pixel.getAlpha() == 0 || (pixel.getRed() == backgroundColor.getRed() &&
+                                                 pixel.getGreen() == backgroundColor.getGreen() &&
+                                                 pixel.getBlue() == backgroundColor.getBlue()))
+                    {
                         alpha = 0;
                     } else {
                         alpha = (int) Math.round((noise.eval(x, y) + 1) * 235);
@@ -362,15 +384,22 @@ public class Orchestrator {
 
             // Title
             String[] str = displayText.split(" - ");
-            System.out.println(str.length);
 
-            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 48));
-            ctx2D.setColor(new Color(255,255,255,128));
-            ctx2D.drawString(str[0], width/2, 190);
+            if(str.length > 1) {
+                ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 48));
+                ctx2D.setColor(artistTextColor);
+                ctx2D.drawString(str[0], width/2, 255);
 
-            ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 58));
-            ctx2D.setColor(fontColor);
-            ctx2D.drawString(str[1], width/2, 250);
+                ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 58));
+                ctx2D.setColor(songTextColor);
+                drawStringMultiline(ctx2D, str[1], width/2, 250);
+                // ctx2D.drawString(displayText, width/2, 250);
+            } else {
+                ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 58));
+                ctx2D.setColor(fontColor);
+                drawStringMultiline(ctx2D, displayText, width/2, 250);
+                // ctx2D.drawString(displayText, width/2, 250);
+            }
 
             // Median
             ArrayList<Color> sortedColors = DataUtils.sortColorsByHSV(moodbar);
@@ -405,14 +434,14 @@ public class Orchestrator {
             ctx2D.drawImage(medianImage, width-370, 580, null);
 
             ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 38));
-            ctx2D.setColor(new Color(255,255,255,80));
+            ctx2D.setColor(labelColor);
             ctx2D.drawString("MEDIAN", width - 330, 900);
 
             // Stamp
             AffineTransform originTransform = ctx2D.getTransform();
             ctx2D.rotate(Math.toRadians(90));
             ctx2D.setFont(new Font("JetBrains Mono", Font.BOLD, 42));
-            ctx2D.setColor(new Color(255,255,255,80));
+            ctx2D.setColor(labelColor);
             ctx2D.drawString("COLOR/NOTE/CODE", Math.round(height * 0.65), Math.round(-width * 0.88));
             ctx2D.setTransform(originTransform);
 
@@ -427,6 +456,10 @@ public class Orchestrator {
     }
 
     private static String addZero(int val) { return  val < 10 ? "0"+val : String.valueOf(val); }
+    private static void drawStringMultiline(Graphics g, String text, int x, int y) {
+        for (String line : text.split("\n"))
+            g.drawString(line, x, y += g.getFontMetrics().getHeight());
+    }
 
     /* ============================================================================================ */
     /* ============================================================================================ */
@@ -446,7 +479,7 @@ public class Orchestrator {
 
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar", 1000);
             // Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
 
 //            // idk
@@ -565,13 +598,32 @@ public class Orchestrator {
             ex.printStackTrace();
         }
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar", 1000);
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
 
-//            ImageSupporter.setBackgroundColor(Color.BLACK);
-//            ImageSupporter.setFontColor(Color.WHITE);
+//            for(int i = 1; i <= 1000; i++) {
+//                BufferedImage bubbleBar = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50, i);
+//
+//                String num;
+//                if(i < 10) {
+//                    num = "000" + i;
+//                } else if(i < 100) {
+//                    num = "00" + i;
+//                } else if(i < 1000) {
+//                    num = "0" + i;
+//                } else {
+//                    num = String.valueOf(i);
+//                }
+//                ImageIO.write(bubbleBar, Config.OUTPUT_IMAGE_FORMAT,
+//                    new File(testPath+"/test_"+num+"."+ Config.OUTPUT_IMAGE_FORMAT)
+//                );
+//            }
+
+
+            ImageSupporter.setBackgroundColor(Color.BLACK);
+            ImageSupporter.setFontColor(Color.WHITE);
 
             BufferedImage circle = ImageTransformer.rectangularToPolarCoordinate(
                 spectrumizer.asBufferedImage(),
@@ -580,7 +632,7 @@ public class Orchestrator {
 
             BufferedImage circleMood = ImageTransformer.rectangularToPolarCoordinate(
                 spectrumizer.asBufferedMoodbar(),
-                1000,100
+                1000,160
             );
 
             ImageSupporter.setFontSize(32);
@@ -589,12 +641,14 @@ public class Orchestrator {
             ImageSupporter.setFontColor(Color.BLACK);
             ImageSupporter.setFontSize(28);
 
-            BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
-            ImageIO.write(circle2, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection_circle."+ Config.OUTPUT_IMAGE_FORMAT));
+//            BufferedImage circle = ImageSupporter.addTitle(circle, displayText);
+            // ImageIO.write(circle, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection_circle."+ Config.OUTPUT_IMAGE_FORMAT));
+
+            ImageIO.write(circle, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_collection_circle."+ Config.OUTPUT_IMAGE_FORMAT));
 
             // circle = ImageTransformer.invert(circle);
-            // BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
-            ImageTransformer.invert(circle2);
+            BufferedImage circle2 = ImageSupporter.addTitle(circle, displayText);
+            ImageTransformer.invert(circle);
             ImageIO.write(circle2, Config.OUTPUT_IMAGE_FORMAT, new File(testPath+"/"+sogname+"_circle."+ Config.OUTPUT_IMAGE_FORMAT));
 
             ImageSupporter.setBackgroundColor(Color.WHITE);
@@ -614,7 +668,7 @@ public class Orchestrator {
             ImageSupporter.setBackgroundColor(Color.BLACK);
             ImageSupporter.setFontColor(Color.WHITE);
 
-            BufferedImage bubbleBar = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50);
+            BufferedImage bubbleBar = ImageTransformer.bubbleMoodbar(spectrumizer.getDATA(), moodbar, 50, 1000);
             bubbleBar = ImageSupporter.addTitle(bubbleBar, displayText);
 
             ImageSupporter.setFontSize(38);
@@ -625,9 +679,9 @@ public class Orchestrator {
                     new File(testPath+"/"+sogname+"_bubble."+ Config.OUTPUT_IMAGE_FORMAT)
             );
 
-//            ImageIO.write(hanzBar, Config.OUTPUT_IMAGE_FORMAT,
-//                    new File(testPath+"/"+sogname+"_hanz."+ Config.OUTPUT_IMAGE_FORMAT)
-//            );
+            ImageIO.write(hanzBar, Config.OUTPUT_IMAGE_FORMAT,
+                    new File(testPath+"/"+sogname+"_hanz."+ Config.OUTPUT_IMAGE_FORMAT)
+            );
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -650,7 +704,7 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + sogname + ".mp3", testPath + "/bar", 1000);
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
@@ -686,7 +740,7 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(Config.RESOURCE_DIR+songname+".mp3",Config.RESOURCE_DIR+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(Config.RESOURCE_DIR+songname+".mp3",Config.RESOURCE_DIR+"/bar", 1000);
             BufferedImage image = NoiseGenerator.testNoise(moodbar);
             BufferedImage outputImage = ImageTransformer.scaleImage(image, 1500, 1500);
             ImageIO.write(
@@ -717,7 +771,7 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+songname+".mp3",testPath+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath+songname+".mp3",testPath+"/bar", 1000);
 
             final String objectFile = Config.RESOURCE_DIR + extraDataFile;
             Gson gson = new Gson();
@@ -771,7 +825,7 @@ public class Orchestrator {
             }
 
             try {
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar", 1000);
                 Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
                 spectrumizer.applyMoodbar(moodbar);
                 spectrumizer.build();
@@ -825,7 +879,7 @@ public class Orchestrator {
             }
 
             try {
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar", 1000);
                 Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
                 spectrumizer.applyMoodbar(moodbar);
                 spectrumizer.build();
@@ -880,7 +934,7 @@ public class Orchestrator {
             }
 
             try {
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar", 1000);
                 Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
                 spectrumizer.applyMoodbar(moodbar);
                 spectrumizer.build();
@@ -929,7 +983,7 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar", 1000);
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
@@ -974,7 +1028,7 @@ public class Orchestrator {
             }
 
             try {
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar");
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(path+songname+".mp3",path+"/bar", 1000);
                 Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
                 spectrumizer.applyMoodbar(moodbar);
                 spectrumizer.build();
@@ -1025,7 +1079,7 @@ public class Orchestrator {
         }
 
         try {
-            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(pathMp3,testPath+"/bar");
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(pathMp3,testPath+"/bar", 1000);
             Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
             spectrumizer.applyMoodbar(moodbar);
             spectrumizer.build();
@@ -1036,6 +1090,99 @@ public class Orchestrator {
                     moodbar, spectrumizer.getDATA(), audioDuration,
                     audioDto, videoExportDto
             );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* ============================================================================================ */
+    /* ============================================================================================ */
+    private static void renderPlyMoodbar(AudioDto audioDto) {
+        String songname = audioDto.getAudioFile().get(0);
+        String testPath = Config.RESOURCE_DIR;
+        String pathMp3 = testPath+songname+".mp3";
+        String pathWav = testPath+songname+".wav";
+        double audioDuration = 0;
+
+        try {
+            AudioUtils.mp3ToWav(new File(pathMp3), pathWav);
+            audioDuration = AudioUtils.getDuration(pathWav);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(pathMp3,testPath+"/bar", 1000);
+            Spectrumizer spectrumizer = new Spectrumizer(pathWav, 4096);
+            spectrumizer.applyMoodbar(moodbar);
+            spectrumizer.build();
+
+            OpenSimplexNoise simplexNoise = new OpenSimplexNoise(1234);
+            int octaves = 4;
+            float frequency = 0.1f;
+            float amplitude = 0.5f;
+            float persistence = 0.5f;
+
+            final double distZ = 0.2f;
+            final double distXY = 1.2;
+            final int sizeX = 50;
+            final int sizeY = 50;
+            List<PointData> points = new ArrayList<>();
+
+            for(int z = 0; z < moodbar.size(); z++) {
+                Color color = moodbar.get(z);
+                for(int x = 0; x < sizeX; x++) {
+                    for(int y = 0; y < sizeY; y++) {
+                        double finalNoiseValue = 0.0f;
+                        double currentAmplitude = amplitude;
+                        double currentFrequency = frequency;
+
+
+                        for(int i = 0; i < octaves; i++) {
+                            // The noise function needs coordinates scaled by frequency
+                            finalNoiseValue += simplexNoise.eval(x * currentFrequency,
+                                    y * currentFrequency,
+                                    z * currentFrequency) * currentAmplitude;
+
+                            currentFrequency *= 2.0f; // Increase frequency (more detail)
+                            currentAmplitude *= persistence; // Decrease amplitude (less impact)
+                        }
+
+                        // Map the noise value to a density/alpha range (0.0 to 1.0)
+                        // Noise is typically [-1, 1], so we normalize to [0, 1]
+                        double density = (finalNoiseValue / 2.0f) + 0.5f;
+
+                        // Clamp density to [0, 1] (optional but safe)
+                        density = Math.min(1.0f, Math.max(0.0f, density));
+
+                        // Convert density to UCHAR alpha (0-255)
+                        int alpha = (int) (density * 255);
+
+                        Color clr = new Color(
+                            color.getRed(),
+                            color.getGreen(),
+                            color.getBlue(),
+                            alpha
+                        );
+
+                        points.add(new PointData(x * distXY, y * distXY, z * distZ, clr));
+
+//                        if(alpha > 25) {
+//                            points.add(new PointData(x * distXY, y * distXY, z * distZ, clr));
+//                        }
+
+
+                    }
+                }
+            }
+
+            int total = sizeX * sizeY * moodbar.size();
+
+            File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+total+".ply");
+            PolygonUtils.createBinaryPlyFile(points, outputFile);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

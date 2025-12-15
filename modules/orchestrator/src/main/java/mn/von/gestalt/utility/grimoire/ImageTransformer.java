@@ -158,7 +158,7 @@ public class ImageTransformer {
         return destination;
     }
 
-    public static BufferedImage bubbleMoodbar(double[][] spectogramData, ArrayList<Color> moodbar, int bubbleSize) {
+    public static BufferedImage bubbleMoodbar(double[][] spectogramData, ArrayList<Color> moodbar, int bubbleSize, int limit) {
         ArrayList<Double> bubbleSizeList = DataUtils.spectogramMinMaxToPercent(spectogramData, moodbar.size());
 
         BufferedImage destination = new BufferedImage((bubbleSize * 40 / 2) + bubbleSize, bubbleSize * 25, BufferedImage.TYPE_INT_ARGB);
@@ -167,8 +167,12 @@ public class ImageTransformer {
         ctx.fillRect(0, 0, destination.getWidth(), destination.getHeight());
         ctx.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         ctx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        int bubbleCount = 0;
         for(int y = 0, i = 0; y < 25; y++) {
             for(int x = 0; x < 40; x++, i++) {
+                if(bubbleCount >= limit) {
+                    break;
+                }
                 Color clr = moodbar.get(i);
                 ctx.setColor(new Color(clr.getRed(), clr.getGreen(), clr.getBlue(), 230));
                 int pixelSize = (int)(bubbleSizeList.get(i) * bubbleSize);
@@ -176,6 +180,7 @@ public class ImageTransformer {
                 Ellipse2D.Double circle = new Ellipse2D.Double(
                         (x*(bubbleSize/2)) + gap,(y*bubbleSize) + gap, pixelSize, pixelSize);
                 ctx.fill(circle);
+                bubbleCount++;
             }
         }
 
