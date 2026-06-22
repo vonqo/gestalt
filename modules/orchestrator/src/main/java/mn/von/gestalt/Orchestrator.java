@@ -59,6 +59,7 @@ public class Orchestrator {
 
         ParamDto paramDto = Config.loadConfig();
         VideoExportDto videoExportDto = paramDto.getVideoExportDto();
+        System.out.println("WTF?1");
 
         if(videoExportDto.isVideoExport()) {
             for(AudioDto audio : paramDto.getAudioDtos()) {
@@ -73,10 +74,10 @@ public class Orchestrator {
                 if(type.equals(ExportTypes.VANILLA.name())) {
 
                     int fontSize = 28;
-                    int moodbarWidth = 1000;
-                    int moodbarHeight = 110;
+                    int moodbarWidth = 1200;
+                    int moodbarHeight = 140;
 
-                    renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth);
+                    renderVanillaMoodbars(audio, fontSize, moodbarHeight, moodbarWidth, paramDto.getFontName());
 
                 } else if(type.equals(ExportTypes.COLLECTION.name())) {
 
@@ -125,7 +126,7 @@ public class Orchestrator {
 
     /* ============================================================================================ */
     /* ============================================================================================ */
-    private static void renderVanillaMoodbars(AudioDto audio, int fontSize, int height, int width) {
+    private static void renderVanillaMoodbars(AudioDto audio, int fontSize, int height, int width, String fontName) {
         ArrayList<String> audioFiles = audio.getAudioFile();
         ArrayList<String> displayTexts = audio.getDisplayText();
         String filename = audio.getAudioFile().get(0) + "_" + audio.getAudioFile().size();
@@ -135,7 +136,7 @@ public class Orchestrator {
 
             for (String audioFile : audioFiles) {
                 System.out.println(audioFile);
-                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile + ".mp3", testPath + "/tmp_moodbar", 1000);
+                ArrayList<Color> moodbar = MoodbarAdapter.buildMoodbar(testPath + audioFile + ".mp3", testPath + "/tmp_moodbar", width);
                 FileUtils.moodbarToFile(moodbar, testPath + audioFile + ".txt");
                 BufferedImage scaledImage = ImageTransformer.scaleImage(MoodbarAdapter.toBufferedImage(moodbar, height), width, height);
                 moodbars.add(scaledImage);
@@ -145,7 +146,7 @@ public class Orchestrator {
             ImageSupporter.setBackgroundColor(new Color(0,0,0, 255));
             ImageSupporter.setFontColor(Color.WHITE);
             ImageSupporter.setFontSize(fontSize);
-            ImageSupporter.setFontName("JetBrains Mono");
+            ImageSupporter.setFontName(fontName);
 
             BufferedImage image = new LunarTear().vanilla4Bar(moodbars, displayTexts, height, width, fontSize);
 
@@ -848,6 +849,9 @@ public class Orchestrator {
                     img = ImageSupporter.addMarkOver(img, bannerImg, 8350 - bannerImg.getHeight(), 5906-bannerImg.getWidth()-140);
                 }
 
+
+                ImageSupporter
+
                 ImageIO.write(img, Config.OUTPUT_IMAGE_FORMAT, outputFile);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1040,7 +1044,6 @@ public class Orchestrator {
                 int ray = audio.getRay();
                 File outputFile = new File(Config.RESOURCE_DIR+"/"+songname+"_"+ray+"."+ Config.OUTPUT_IMAGE_FORMAT);
                 hqz.build(LunarTearHqz.Types.TORNADO, moodbar, spectrumizer.getDATA(), ray, outputFile, audioDuration);
-
                 BufferedImage tornadoHqz = ImageIO.read(outputFile);
 
                 LunarTear lunarTear = new LunarTear();

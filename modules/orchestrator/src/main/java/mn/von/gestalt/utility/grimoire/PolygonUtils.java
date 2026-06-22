@@ -54,7 +54,6 @@ public class PolygonUtils {
             for (PointData point : points) {
 
                 // --- Write X, Y, Z (float, 4 bytes each) ---
-
                 // Write X
                 buffer.clear();
                 buffer.putFloat((float) point.x);

@@ -41,7 +41,7 @@ public class MoodbarAdapter {
         String line = null;
 
         while ((line = reader.readLine()) != null) {
-            if(!"".equals(line)) moodbar.add(colorize(line));
+            if(line.length() >= 5) moodbar.add(colorize(line));
         }
 
         try{
